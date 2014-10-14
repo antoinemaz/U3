@@ -1,0 +1,58 @@
+#main{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    margin-top:0px;
+    margin-bottom:10px;
+    background-color: #FFFFFF;
+    border-color: #ef7f01;
+    border-radius: 7px;
+    border: 1px solid #c7c7c7;
+    box-shadow: 3px 3px 3px 3px #a9a9a9;
+    margin-top: 35px;
+}
+
+#header{
+	/*color: #00609f;
+      background-image: linear-gradient(to right, white, white 12%, #00609f); 
+      */
+    font-weight: bold;
+    text-align: center;
+    margin: 20px;
+    /*background-color: #428bca; */
+    color:00609f;
+    height: 110px;
+}
+
+.img-header{
+    height: 110px;
+}
+
+.inscription{
+    padding: 20px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.custom-danger{
+    margin-top: 4px;
+    padding: 0px;
+}
+
+.custom-panel{
+    margin: 40px auto;
+    max-width: 900px;
+}
+
+.bandeau{
+    background-image: linear-gradient(to right, white 12%, #EF7F01);
+    border-radius: 4px;
+    color: #3B3B3B;
+    font-size: 10px;
+    margin-left: 11px;
+}
+
+.form-group label{
+    /**color:#003866; */
+    color:black;
+}
