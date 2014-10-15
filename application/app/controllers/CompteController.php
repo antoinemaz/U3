@@ -65,4 +65,42 @@ class CompteController extends BaseController {
 		}
 		return Redirect::route('index')->with('compte-impossible-active', 'Impossible d\'activer le compte');
 	}
+
+	public function getConnexion(){
+		return View::make('pages.compte.connexion');
+	}
+
+	public function postConnexion(){
+
+		$validator = Validator::make(Input::all(), array(
+			'email' => 'required|email',
+			'password' => 'required'));
+
+		if($validator->fails()){
+			return Redirect::route('connexion-get')
+			->withErrors($validator)
+			->withInput();
+
+			}else{
+
+				$auth = Auth::attempt(array(
+					'email' => Input::get('email'),
+					'password' => Input::get('password'),
+					'active' => 1));
+
+				if($auth){
+					return Redirect::intended('/');
+				}else{;
+					return Redirect::route('connexion-get')->with('connexion-mauvais', 'Echec de connexion')->withInput();
+				}
+			}
+
+			return Redirect::route('connexion-get')->with('connexion-probleme', 'Un problème a eu lieu lors de la connexion.
+				Avez-vous activer votre compte ?')->withInput();
+		}
+
+		public function getDeconnexion(){
+			Auth::logout();
+			return Redirect::route('index');
+		}
 }

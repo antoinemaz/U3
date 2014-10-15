@@ -7,7 +7,12 @@
 	@endif
 	@if(Session::has('compte-active'))
 		<p>{{Session::get('compte-active')}}</p>
-	@endif
+	@endif	
 
-	Page d'accueil
+	@if(Auth::check())
+		<p>Salut {{Auth::user()->email}} </p>
+	@else
+		<p> Vous n'êtes pas connecté</p>
+	@endif
+	{{$test}}
 @stop

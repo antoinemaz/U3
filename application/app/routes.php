@@ -22,6 +22,10 @@ Route::group(array('before' => 'guest'), function(){
 		Route::post('/creerCompte', array(
 			'as' => 'creerCompte-post',
 			'uses' => 'CompteController@postCreateCompte'));
+
+		Route::post('/compte/connexion', array(
+		'as' => 'connexion-post',
+		'uses' => 'CompteController@postConnexion'));
 	});
 
 		/*
@@ -30,8 +34,20 @@ Route::group(array('before' => 'guest'), function(){
 	Route::get('compte/creer', array(
 		'as' => 'creerCompte-get',
 		'uses' => 'CompteController@getCreateCompte'));
-});
 
-Route::get('compte/activation/{code}', array(
+	Route::get('compte/activation/{code}', array(
 	'as' => 'activerCompte',
 	'uses' => 'CompteController@getActivationCompte'));
+
+	Route::get('/compte/connexion', array(
+		'as' => 'connexion-get',
+		'uses' => 'CompteController@getConnexion'));
+});
+
+Route::group(array('before' => 'auth'), function(){
+
+		Route::get('/compte/deconnexion', array(
+		'as' => 'deconnexion-get',
+		'uses' => 'CompteController@getDeconnexion'));
+
+});
