@@ -14,5 +14,4 @@
 	@else
 		<p> Vous n'êtes pas connecté</p>
 	@endif
-	{{$test}}
 @stop
