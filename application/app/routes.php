@@ -44,10 +44,25 @@ Route::group(array('before' => 'guest'), function(){
 		'uses' => 'CompteController@getConnexion'));
 });
 
+/*Si on est authentifié*/
 Route::group(array('before' => 'auth'), function(){
 
 		Route::get('/compte/deconnexion', array(
 		'as' => 'deconnexion-get',
 		'uses' => 'CompteController@getDeconnexion'));
+
+		Route::get('/creerCandidature', array(
+
+			'as' => 'creationCandidature-get',
+			'uses' => 'CandidatureController@getCreateCandidature'));	
+
+		/*Protection */
+		Route::group(array('before' => 'csrf'), function(){
+
+		Route::post('/creerCandidature', array(
+
+			'as' => 'creationCandidature-post',
+			'uses' => 'CandidatureController@postCreateCandidature'));
+		});
 
 });

@@ -2,7 +2,13 @@
 
 class CandidatureController extends BaseController {
 
-	public function createIncident()
+	public function getCreateCandidature()
+	{
+		return View::make('pages.Candidatures.Candidatures');
+	}
+
+
+	public function creerCandidature()
 	{
 
 
