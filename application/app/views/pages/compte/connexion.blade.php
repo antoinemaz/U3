@@ -32,11 +32,14 @@
 			@endif
 		</div>
 
+		<div class="form-group">
+			{{Form::checkbox('remember', 'value')}};
+			<label for="remember">Se souvenir de moi</label>
+		</div>
+
 		<button type="submit" class="btn btn-primary">Connexion</button>
 		{{Form::token()}}
 	</form>	
-
-
   		</div>
 	</div>	
 @stop
