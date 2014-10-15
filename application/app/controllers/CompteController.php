@@ -105,4 +105,16 @@ class CompteController extends BaseController {
 			Auth::logout();
 			return Redirect::route('index');
 		}
+
+		public function getChangerPassword(){
+			return View::make('pages.compte.changerPassword');
+		}
+
+		public function postChangerPassword(){
+			$validator = Validator::make(Input::all(),
+			array(
+				'oldpassword' => 'required|max:50|email|unique:users',
+				'password' => 'required|max:20|min:3|unique:users',
+				'password_again' => 'required|min:6'));
+		}
 }

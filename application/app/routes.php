@@ -46,8 +46,18 @@ Route::group(array('before' => 'guest'), function(){
 
 Route::group(array('before' => 'auth'), function(){
 
+		Route::group(array('before' => 'csrf'), function(){
+
+			 Route::post('/compte/changerpassword', array(
+			'as' => 'changerpassword-post',
+			'uses' => 'CompteController@postChangerPassword'));
+		});
+
 		Route::get('/compte/deconnexion', array(
 		'as' => 'deconnexion-get',
 		'uses' => 'CompteController@getDeconnexion'));
 
+		Route::get('/compte/changerpassword', array(
+		'as' => 'changerpassword-get',
+		'uses' => 'CompteController@getChangerPassword'));
 });
