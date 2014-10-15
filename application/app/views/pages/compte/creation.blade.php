@@ -18,14 +18,6 @@
 		</div>
 
 		<div class="form-group">
-			<label for="username">Login :</label>
-			{{ Form::text("username", Input::get("username"), array('class' => 'form-control')) }}
-			@if($errors->has('username'))
-				<div class="alert alert-danger custom-danger" role="alert">{{$errors->first('username')}}</div>
-			@endif
-		</div>
-
-		<div class="form-group">
 			<label for="password">Mot de passe :</label>
 			{{ Form::password("password", array('class' => 'form-control'), Input::get("password")) }}
 			@if($errors->has('password'))
