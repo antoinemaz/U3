@@ -83,10 +83,12 @@ class CompteController extends BaseController {
 
 			}else{
 
+				$remember = (Input::has('remember')) ? true : false;
+
 				$auth = Auth::attempt(array(
 					'email' => Input::get('email'),
 					'password' => Input::get('password'),
-					'active' => 1));
+					'active' => 1),$remember);
 
 				if($auth){
 					return Redirect::intended('/');
