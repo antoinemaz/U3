@@ -135,8 +135,35 @@ class CompteController extends BaseController {
 		public function postChangerPassword(){
 			$validator = Validator::make(Input::all(),
 			array(
-				'oldpassword' => 'required|max:50|email|unique:candidatures',
-				'password' => 'required|max:20|min:3|unique:candidatures',
-				'password_again' => 'required|min:6'));
+				'oldpassword' => 'required',
+				'password' => 'required|min:6',
+				'password_again' => 'required|same:password'));
+
+			if($validator->fails()){
+				return Redirect::route('changerpassword-get')
+				->withErrors($validator);
+			}else{
+
+				$user = Candidature::find(Auth::user()->id);
+
+				$oldpassword = Input::get('oldpassword');
+				$password = Input::get('password');
+
+				if(Hash::check($oldpassword, $user->password)){
+					$user->password = Hash::make($password);
+
+					if($user->save()){
+						return Redirect::route('index')
+						->with('password_changed', 'Votre mot de passe a bien été changé');
+					}
+				}else{
+					return Redirect::route('changerpassword-get')
+					->with('ancien_passord_incorrect', 'Votre ancien mot de passe n\'est pas correct');
+				}
+
+			}
+
+			return Redirect::route('changerpassword-get')
+				->with('error_change_password', 'Impossible de changer votre mot de passe');
 		}
 }

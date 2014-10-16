@@ -8,7 +8,9 @@
 	@if(Session::has('compte-active'))
 		<p>{{Session::get('compte-active')}}</p>
 	@endif	
-
+	@if(Session::has('password_changed'))
+		<p>{{Session::get('password_changed')}}</p>
+	@endif	
 	@if(Auth::check())
 		<p>Salut {{Auth::user()->email}} </p>
 	@else

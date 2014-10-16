@@ -7,6 +7,12 @@
  		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de connexion</div>
 		<div class="panel-body">
 
+		@if(Session::has('error_change_password'))
+			<p>{{Session::get('error_change_password')}}</p>
+		@endif
+		@if(Session::has('ancien_passord_incorrect'))
+			<p>{{Session::get('ancien_passord_incorrect')}}</p>
+		@endif
 		<form action="{{URL::route('changerpassword-post')}}" method="POST" class="form-horizontal inscription">
 			
 		<div class="form-group">
