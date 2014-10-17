@@ -11,6 +11,20 @@ Route::get("/", array(
 	'as' => 'index',
 	'uses' => 'HomeController@index'));
 
+Route::get("/pjs", array('as' => 'pjs', function(){
+	if(Request::ajax()){
+			return App::make('HomeController')->showPjs(); 
+	}
+}));
+
+Route::post("/upload", array(
+	'as' => 'upload-post',
+	'uses' => 'HomeController@upload'));
+
+Route::get("/upload/delete/{id}", array(
+	'as' => 'deletepj',
+	'uses' => 'HomeController@deletePj'));
+
 // Ensemble des routes NON authentifiées
 Route::group(array('before' => 'guest'), function(){
 

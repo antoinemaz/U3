@@ -6,6 +6,8 @@
 
 	{{ HTML::style('style/css/bootstrap.css') }}
 	{{ HTML::style('style/css/u3.css') }}
+	{{ HTML::script('style/js/jquery-1.11.1.min.js') }}
+	
 
 </head>
 <body>
