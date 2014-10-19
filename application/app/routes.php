@@ -25,6 +25,9 @@ Route::get("/upload/delete/{id}", array(
 	'as' => 'deletepj',
 	'uses' => 'HomeController@deletePj'));
 
+
+//////////////////////////////////////////////////////
+
 // Ensemble des routes NON authentifiées
 Route::group(array('before' => 'guest'), function(){
 
@@ -58,6 +61,9 @@ Route::group(array('before' => 'guest'), function(){
 	});
 });
 
+
+///////////////////////////////////////////////////////////
+
 // Ensemble des routes authentifiées
 Route::group(array('before' => 'auth'), function(){
 
@@ -87,6 +93,6 @@ Route::group(array('before' => 'auth'), function(){
 		 // POST Création de candidature
 		 Route::post('/creerCandidature', array(
 		'as' => 'creationCandidature-post',
-		'uses' => 'CandidatureController@postCreateCandidature'));
+		'uses' => 'CandidatureController@creerCandidature'));
 	});
 });
