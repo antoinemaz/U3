@@ -14,7 +14,7 @@ class CreateCandidatures extends Migration {
 		Schema::create('candidatures', function(Blueprint $table)
 		{
 			/*Creation d'un champs de type autoincrement et en clé primaire*/
-			$table->increments('id')->unisgned();
+			$table->increments('id')->unsigned();
 
 		    $table->string('nom');
 		    $table->string('prenom');
@@ -38,7 +38,11 @@ class CreateCandidatures extends Migration {
 		    $table->string('commentaire_gestionnaire');
 		    $table->string('erreur_info');
 		    $table->integer('redmine_id');
-		  
+
+		    $table->integer('id_etat');
+		    $table->foreign('id_etat')->references('id')->on('etats');
+		    $table->integer('id_user');	
+		    $table->foreign('id_user')->references('id')->on('utilisateurs');	  
 
 			/*  created at et updated at sont créé à l'aide de timestamp()  */
 			$table->timestamps();
@@ -46,27 +50,7 @@ class CreateCandidatures extends Migration {
 		
 		});
 
-        /* Il y a possiblité de mettre des infos dans le post afin de rentrer des
-        occurences directement dans la table 
-		Post::create([
-			'nom' => 'nomtest',
-			'prenom' => 'prenomtest',
-			'annee_naissance' => '1991',
-			'regime_inscription' => 'apprentissage',
-			'sexe' => 'M',
-			'dossier_etrange' => '1',
-			'nationalite' => 'francaise',
-			'mail' => 'mat2leuleu@hotmail.fr',
-			'telephone' => '0170653412',
-			'pj' => 'ajouter une PJ',
-			'adresse' => '40 rue de la pommeraie',
-			'codePostal' => '91630',
-			'dernier_diplome' => 'Licence MIAGE',
-			'annee_dernier_diplome' => '2013',
-			'redmine_id' => '1',
-			]);
-
-			*/
+       
 	}
 	
 
