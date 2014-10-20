@@ -9,7 +9,7 @@
 
 </table>
 
-	  <script>
+ <script>
 
 	$('.cn').click(function (e) {
 
@@ -17,10 +17,9 @@
 	    var pic_id = $(this).attr('id');
 
 	    $.get('/U3/upload/delete/'+pic_id, function(){
-	    	$("#aaa").load( {{ "'".URL::route('pjs')."'" }} );
-
+	    	$("#listPjs").load( {{ "'".URL::route('pjs')."'" }} );
+	    	$("#charg").hide();
 	    });
-
 	});
 
-	  </script>
+ </script>

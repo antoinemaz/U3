@@ -8,7 +8,8 @@
 			<li class="{{Active::route(array('creationCandidature-get'), 'active')}}"><a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a></li>
 		@else
 			<li class="{{Active::route(array('connexion-get'), 'active')}}"><a href="{{URL::route('connexion-get')}}">Se connecter</a></li>
-			<li class="{{Active::route(array('creerCompte-get'), 'active')}}"><a href="{{URL::route('creerCompte-get')}}">Créer un compte</a></li>		
+			<li class="{{Active::route(array('creerCompte-get'), 'active')}}"><a href="{{URL::route('creerCompte-get')}}">Créer un compte</a></li>
+			<li class="{{Active::route(array('password-oublie-get'), 'active')}}"><a href="{{URL::route('password-oublie-get')}}">Mot de passe oublié</a></li>				
 		@endif
 	</ul>
 </div>

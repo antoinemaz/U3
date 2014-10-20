@@ -46,6 +46,16 @@ Route::group(array('before' => 'guest'), function(){
 		'as' => 'connexion-get',
 		'uses' => 'CompteController@getConnexion'));
 
+	// GET Page de mot de passe oublié
+	Route::get('compte/password-oublie', array(
+		'as' => 'password-oublie-get',
+		'uses' => 'CompteController@getPasswordOublie'));
+
+	// GET Page réinitialisation de mot de passe
+	Route::get('compte/reinitialisationPassword/{code}', array(
+	'as' => 'reinitialisationPassword',
+	'uses' => 'CompteController@getReinitialisationPassword'));
+
 	// Ensemble des routes de formulaire
 	Route::group(array('before' => 'csrf'), function(){
 		
@@ -58,6 +68,11 @@ Route::group(array('before' => 'guest'), function(){
 		Route::post('/compte/connexion', array(
 		'as' => 'connexion-post',
 		'uses' => 'CompteController@postConnexion'));
+
+		// POST Page de mot de passe oublié
+		Route::post('compte/password-oublie', array(
+		'as' => 'password-oublie-post',
+		'uses' => 'CompteController@postPasswordOublie'));
 	});
 });
 

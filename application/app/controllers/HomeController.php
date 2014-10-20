@@ -9,37 +9,47 @@ class HomeController extends BaseController {
 
 	public function upload(){
 
-		if(Request::ajax())
-    	{
+		ini_set('upload_max_filesize', '100M');
+		ini_set('post_max_size', '100M');
 
-		$file = Input::file('file');
-		$filename = $file->getClientOriginalName();
-		$path = 'uploads';
+		if(Request::ajax()){
 
-		// code de fichier
-		$code = str_random(10);
+    				$validator = Validator::make(Input::all(),
+			array('file' => 'required|max:10000|mimes:pdf'));
+	
+			// Si la validation échoue, on redirige vers la même page avec les erreurs
+			if($validator->fails()){
+				// REDIRIGER VERS PAGE CANDIDATURE AVEC MESSAGE D'ERREUR
+			}else{
+			    $file = Input::file('file');
+				$filename = $file->getClientOriginalName();
+				$path = 'uploads';
 
-		$file->move($path, $filename);
-		$fileModel = new Piece;
-		$fileModel->uid = $code."_".$filename;
-		$fileModel->filename = $filename;
-		$fileModel->candidature_id = Auth::user()->id;
-		$fileModel->save();
+				// code de fichier
+				$code = str_random(15);
 
+				$uid = Auth::user()->id.'-'.$code.'-'.$filename;
+
+				$file->move($path, $uid);
+				$fileModel = new Piece;
+				$fileModel->uid = $uid;
+				$fileModel->filename = $filename;
+				$fileModel->candidature_id = Auth::user()->id;
+				$fileModel->save();
+			}
 		}
-    }
+	}
 
     public function deletePj($id){
 
     	$file = Piece::find($id);
-    	File::delete('uploads/'.$file->filename);
+    	File::delete('uploads/'.$file->uid);
     	DB::table('pieces')->where('id', '=', $id)->delete();
     }
 
     public function showPjs(){
 
     	$fichiers = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
-    	//DB::table('pieces')->where('candidature_id', Auth::user()->id);
     	return View::make('pages.pjs')->with('pjs', $fichiers);
     }
 

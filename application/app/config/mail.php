@@ -93,7 +93,7 @@ return array(
 	|
 	*/
 
-	'password' => 'XXX',
+	'password' => 'monamour91',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -119,6 +119,6 @@ return array(
 	|
 	*/
 
-	'pretend' => true,
+	'pretend' => false,
 
 );

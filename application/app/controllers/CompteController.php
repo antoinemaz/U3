@@ -57,20 +57,20 @@ class CompteController extends BaseController {
 	public function getActivationCompte($code){
 
 		// On récupère l'instance de l'utilisateur à partir du code d'acrivation
-		$user = Candidature::where('code', '=', $code)->where('active','=', 0);
+		$candidature = Candidature::where('code', '=', $code)->where('active','=', 0);
 
-		if($user->count()){
+		if($candidature->count()){
 
 			// Si on a une occurence en BDD, on récupère l'objet Utilisateur
-			$user = $user->first();
+			$candidature = $candidature->first();
 		
 			// active à 1 signifie activation du comppte. 
 			// On set le code à vide car le compte est activé
-			$user->active = 1;
-			$user->code='';
+			$candidature->active = 1;
+			$candidature->code='';
 
 			// MAJ des infos de l'utilisateur
-			if($user->save()){
+			if($candidature->save()){
 
 				// Si ca c'est bien passé, redirection vers la page d'accueil
 				return Redirect::route('index')->with('compte-active', 'Compte activé');
@@ -165,5 +165,76 @@ class CompteController extends BaseController {
 
 			return Redirect::route('changerpassword-get')
 				->with('error_change_password', 'Impossible de changer votre mot de passe');
+		}
+
+		public function getPasswordOublie(){
+
+			return View::make('pages.compte.passwordOublie');
+		}
+
+		public function postPasswordOublie(){
+
+			$validator = Validator::make(Input::all(), array(
+				'email' => 'required|email'
+			));
+
+			if($validator->fails()){
+				return Redirect::route('password-oublie-get')
+					->withErrors($validator)
+					->withInput();
+			}else{
+
+				$candidature = Candidature::where('email', '=', Input::get('email'));
+
+				if($candidature->count()){
+					$candidature = $candidature->first();
+
+					$code = str_random(60);
+					$password = str_random(10);
+
+					$candidature->code = $code;
+					$candidature->password_tmp = Hash::make($password);
+
+					if($candidature->save()){
+						
+					// Envoi du mail avec le nouveau mot de passe
+					Mail::send('emails.passwordOublie', array('lien' => URL::route('reinitialisationPassword', $code), 
+						'password' => $password), 
+						function($message) use ($candidature){
+						$message->to($candidature->email, $candidature->email)->subject('Réinitialisation du mode de passe');
+						});
+					
+						return Redirect::route('index')
+						->with('password_reinit', 'Un nouveau mot de passe a été envoyé par mail');
+					}
+
+				}
+			}
+		
+			return Redirect::route('password-oublie-get')
+			->with('erreur_passord_oublie', 'Impossible de satisfaire votre demande');
+		}
+
+		public function getReinitialisationPassword($code){
+			
+			$candidature = Candidature::where('code', '=', $code)
+							->where('password_tmp', '!=', '');
+
+			if($candidature->count()){
+
+				$candidature = $candidature->first();
+				$candidature->password = $candidature->password_tmp;
+				$candidature->password_tmp = '';
+				$candidature->code = '';
+
+				if($candidature->save()){
+					return Redirect::route('index')
+							->with('validation_password_oublie', 'Votre mot de passe a bien été modifié');
+				}
+
+				return Redirect::route('index')
+						->with('error_forget_password_init', 'Impossible de valider le changement de mot de passe');
+			}
+
 		}
 }
