@@ -1,4 +1,4 @@
-Bonjour {{$username}}, <br/></br/>,
+Bonjour, <br/></br/>,
 
 Activer votre compte en suivant le lien suivant :
 

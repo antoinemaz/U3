@@ -12,7 +12,7 @@ class CompteController extends BaseController {
 	{
 		$validator = Validator::make(Input::all(),
 			array(
-				'email' => 'required|max:50|email|unique:candidatures',
+				'email' => 'required|max:50|email|unique:utilisateurs',
 				'password' => 'required|min:6',
 				'password_again' => 'required|same:password'));
 	
@@ -24,24 +24,23 @@ class CompteController extends BaseController {
 		}else{
 			// on set les valeurs des inputs dans des variables
 			$email = Input::get('email');
-			$username = Input::get('username');
 			$password = Input::get('password');
 
 			// code d'activation
 			$code = str_random(60);
 
 			// Enregistrement en base de données
-			$create = Candidature::create(array(
+			$create = Utilisateur::create(array(
 				'email' => $email,
-				'username' => $username,
 				'password' => Hash::make($password),
 				'code' => $code,
-				'active' => 0));
+				'active' => 0,
+				'role_id' => 1));
 
 			if($create){
 
 				// Envoi du mail d'activation du compte
-				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code), 'username' => $username), 
+				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
 					function($message) use ($create){
 					$message->to($create->email, $create->username)->subject('Ativation du compte');
 				});
@@ -57,20 +56,20 @@ class CompteController extends BaseController {
 	public function getActivationCompte($code){
 
 		// On récupère l'instance de l'utilisateur à partir du code d'acrivation
-		$candidature = Candidature::where('code', '=', $code)->where('active','=', 0);
+		$Utilisateur = Utilisateur::where('code', '=', $code)->where('active','=', 0);
 
-		if($candidature->count()){
+		if($Utilisateur->count()){
 
 			// Si on a une occurence en BDD, on récupère l'objet Utilisateur
-			$candidature = $candidature->first();
+			$Utilisateur = $Utilisateur->first();
 		
 			// active à 1 signifie activation du comppte. 
 			// On set le code à vide car le compte est activé
-			$candidature->active = 1;
-			$candidature->code='';
+			$Utilisateur->active = 1;
+			$Utilisateur->code='';
 
 			// MAJ des infos de l'utilisateur
-			if($candidature->save()){
+			if($Utilisateur->save()){
 
 				// Si ca c'est bien passé, redirection vers la page d'accueil
 				return Redirect::route('index')->with('compte-active', 'Compte activé');
@@ -144,7 +143,7 @@ class CompteController extends BaseController {
 				->withErrors($validator);
 			}else{
 
-				$user = Candidature::find(Auth::user()->id);
+				$user = Utilisateur::find(Auth::user()->id);
 
 				$oldpassword = Input::get('oldpassword');
 				$password = Input::get('password');
@@ -184,24 +183,24 @@ class CompteController extends BaseController {
 					->withInput();
 			}else{
 
-				$candidature = Candidature::where('email', '=', Input::get('email'));
+				$Utilisateur = Utilisateur::where('email', '=', Input::get('email'));
 
-				if($candidature->count()){
-					$candidature = $candidature->first();
+				if($Utilisateur->count()){
+					$Utilisateur = $Utilisateur->first();
 
 					$code = str_random(60);
 					$password = str_random(10);
 
-					$candidature->code = $code;
-					$candidature->password_tmp = Hash::make($password);
+					$Utilisateur->code = $code;
+					$Utilisateur->password_tmp = Hash::make($password);
 
-					if($candidature->save()){
+					if($Utilisateur->save()){
 						
 					// Envoi du mail avec le nouveau mot de passe
 					Mail::send('emails.passwordOublie', array('lien' => URL::route('reinitialisationPassword', $code), 
 						'password' => $password), 
-						function($message) use ($candidature){
-						$message->to($candidature->email, $candidature->email)->subject('Réinitialisation du mode de passe');
+						function($message) use ($Utilisateur){
+						$message->to($Utilisateur->email, $Utilisateur->email)->subject('Réinitialisation du mode de passe');
 						});
 					
 						return Redirect::route('index')
@@ -217,17 +216,17 @@ class CompteController extends BaseController {
 
 		public function getReinitialisationPassword($code){
 			
-			$candidature = Candidature::where('code', '=', $code)
+			$Utilisateur = Utilisateur::where('code', '=', $code)
 							->where('password_tmp', '!=', '');
 
-			if($candidature->count()){
+			if($Utilisateur->count()){
 
-				$candidature = $candidature->first();
-				$candidature->password = $candidature->password_tmp;
-				$candidature->password_tmp = '';
-				$candidature->code = '';
+				$Utilisateur = $Utilisateur->first();
+				$Utilisateur->password = $Utilisateur->password_tmp;
+				$Utilisateur->password_tmp = '';
+				$Utilisateur->code = '';
 
-				if($candidature->save()){
+				if($Utilisateur->save()){
 					return Redirect::route('index')
 							->with('validation_password_oublie', 'Votre mot de passe a bien été modifié');
 				}
