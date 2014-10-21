@@ -97,6 +97,24 @@ Route::group(array('before' => 'auth'), function(){
 	'as' => 'changerpassword-get',
 	'uses' => 'CompteController@getChangerPassword'));
 
+	// SI c'est un gestionnaire
+	Route::group(array('before' => 'role'), function() {
+
+		// GET Page de gestion des gestionnaires
+		Route::get('compte/gestionnaires', array(
+			'as' => 'gestionnaires-get',
+			'uses' => 'CompteController@getGestionGestionnaires'));
+
+		// Ensemble des routes de formulaire gestionnaire
+		Route::group(array('before' => 'csrf'), function(){
+			
+			// POST Création de compte gestionnaire
+			Route::post('/creerCompteGestionnaire', array(
+				'as' => 'creerCompteGestionnaire-post',
+				'uses' => 'CompteController@postCreateCompteGestionnaire'));
+		});
+	});
+
 	// Ensemble des routes de formulaire
 	Route::group(array('before' => 'csrf'), function(){
 

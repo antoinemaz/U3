@@ -48,6 +48,13 @@ Route::filter('auth', function()
 	}
 });
 
+Route::filter('role', function()
+{ 
+  // Si c'est un gestionnaire, il a accès à la page demandée	
+  if ( Auth::user()->role_id == 1) {
+     return Response::make('Unauthorized', 401);
+   }
+}); 
 
 Route::filter('auth.basic', function()
 {
