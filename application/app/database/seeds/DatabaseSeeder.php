@@ -9,9 +9,14 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
 	{
-		Eloquent::unguard();
 
-		// $this->call('UserTableSeeder');
+		Role::create(array('libelle' => 'Etudiant'));
+		Role::create(array('libelle' => 'Gestionnaire'));
+
+		Etat::create(array('libelle' => 'Brouillon'));
+		Etat::create(array('libelle' => 'Validé'));
+		Etat::create(array('libelle' => 'Refusé'));
+
 	}
 
 }

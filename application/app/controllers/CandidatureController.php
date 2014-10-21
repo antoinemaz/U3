@@ -50,7 +50,7 @@ class CandidatureController extends BaseController {
 		
 		    $candidature = Candidature::find(Auth::user()->id);
 
-			$candidature -> save();
+			$candidature -> Candidature::save();
 
 
 			//Redirection avec message d'indication que le brouillion est crée (l'insertion en base à eu lieu

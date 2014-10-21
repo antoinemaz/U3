@@ -39,10 +39,10 @@ class CreateCandidatures extends Migration {
 		    $table->string('erreur_info');
 		    $table->integer('redmine_id');
 
-		    $table->integer('id_etat')->unsigned();
-		    $table->foreign('id_etat')->references('id')->on('etats');
-		    $table->integer('id_user')->unsigned();
-		    $table->foreign('id_user')->references('id')->on('utilisateurs');	  
+		    $table->integer('etat_id')->unsigned();
+		    $table->foreign('etat_id')->references('id')->on('etats');
+		    $table->integer('utilisateur_id')->unsigned();
+		    $table->foreign('utilisateur_id')->references('id')->on('utilisateurs');	  
 
 			/*  created at et updated at sont créé à l'aide de timestamp()  */
 			$table->timestamps();

@@ -42,10 +42,27 @@ class HomeController extends BaseController {
 
     public function deletePj($id){
 
-    	$file = Piece::find($id);
-    	File::delete('uploads/'.$file->uid);
-    	DB::table('pieces')->where('id', '=', $id)->delete();
-    }
+    	if($id != null){
+
+    		$piece = Piece::where('id', '=', $id);
+
+    		if($piece->count()){
+    			$piece = $piece->first();
+
+    			$candidature = Candidature::where('id', "=", $piece->candidature_id);
+    			if($candidature->count()){
+    				$candidature = $candidature->first();
+
+    					if(Auth::user()->id == $candidature->utilisateur_id){
+    						File::delete('uploads/'.$piece->uid);
+    						DB::table('pieces')->where('id', '=', $id)->delete();
+    					}else{
+    						App::abort(403, 'Unauthorized action.');
+    					}
+    				}
+    			}
+    		}
+    	}
 
     public function showPjs(){
 

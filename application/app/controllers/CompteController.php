@@ -39,6 +39,10 @@ class CompteController extends BaseController {
 
 			if($create){
 
+				$candidature = Candidature::create(array(
+					'utilisateur_id' => $create->id,
+					'etat_id' => 1));
+
 				// Envoi du mail d'activation du compte
 				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
 					function($message) use ($create){

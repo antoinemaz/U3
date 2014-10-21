@@ -9,7 +9,7 @@ class Candidature extends Eloquent {
 	protected $guarded = array('id');
 
 	// Liste des champs que l'utilisateur peut setter
-	protected $fillable = array('email', 'password', 'password_tmp', 'code', 'active');
+	#protected $fillable = array('email', 'password', 'password_tmp', 'code', 'active');
 	
 	public $timestamps = false;
 }
