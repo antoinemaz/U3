@@ -54,26 +54,37 @@
 
 	  		$('#form').on('submit',(function(e){
 
+	  			// Désactive l'action par défaut de l'évènement (du submit du form dans ce cas)
 	  			e.preventDefault();
 
 	  			if(!$('#file').val()){
 	  			    $("#erreurPj").show();
 	  				$("#erreurPj").html("Choisissez une pièce jointe")
+
+	  			// Test sur la taille du fichier (en Mo)	
 	  			}else if( ($("#file")[0].files[0].size) /1048576 >= 10 ){
 	  				$("#erreurPj").show();
 	  				$("#erreurPj").html("Le fichier ne peut pas excéder 10 Mo.")
 	  				$("#charg").hide();
+
+	  			// Test du format du fichier à tester	
 	  			}else if($("#file")[0].files[0].name.split('.').pop() != 'pdf'){
 	  				$("#erreurPj").show();
 	  				$("#erreurPj").html("Le fichier doit être au format PDF")
 	  				$("#charg").hide();
 	  			}else{
+
+	  			// Fonction ajax de jquery	
 	  			 $.ajax({
+	  			 // Appel une fonction callback (fonction ajax, qui appelle la fonction suivante)
 		  		  xhr: function(){
+		  		  	// Création d'un objet XMLHTTPREQUEST (objet permettant d'échanger des données entre client et serveur)
 				    var xhr = new window.XMLHttpRequest();
-				    //Upload progress
+				    // évènement de progression pour l'envoi et la récéption de données
 				    xhr.upload.addEventListener("progress", function(evt){
+				      // si l'évènement d'upload a une taille 
 				      if (evt.lengthComputable) {
+				      	// calcul de la taille chargée / taille totale
 				        var percentComplete = evt.loaded / evt.total;
 				        $("#charg").show();
 				      	$("#charg").html("   Téléchargement du fichier : "+percentComplete*100+" %");
@@ -81,9 +92,13 @@
 				    }, false);
 				    return xhr; },
 	             type: 'POST',
+	             // Url de la route de traitement post
 	             url: {{"'".URL::route('upload-post')."'"}},
+	             // les données envoyées seront les données du formulaire
 	             data: new FormData( this ),
+	             // Empeche l'envoie d'une string à l'attribue data
      			 processData: false,
+     			 // Cela permet de passer le formulaire en multipart/form-data 
       			 contentType: false,
 	             success: function () {
 	           
@@ -92,7 +107,6 @@
   					  this.reset();
 				   });
 
-	              //$("#charg").hide();
 	              $("#erreurPj").hide();
 	            }
        		   });

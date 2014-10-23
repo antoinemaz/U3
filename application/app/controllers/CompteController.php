@@ -59,7 +59,9 @@ class CompteController extends BaseController {
 		// Vue de création d'un compte 
 	public function getGestionGestionnaires()
 	{
-		return View::make('pages.compte.gestionnaires');
+		$gestionnaires = DB::table('utilisateurs')->where('role_id', 2)->get();
+
+		return View::make('pages.compte.gestionnaires')->with('gestionnaires', $gestionnaires);
 	}
 
 	public function postCreateCompteGestionnaire()
@@ -101,6 +103,22 @@ class CompteController extends BaseController {
 				return Redirect::route('gestionnaires-get')
 						->with('global', 'Compte créé');
 			}
+		}
+	}
+
+	public function deleteGestionnaire($id){
+
+		$gestionnaire = Utilisateur::where('role_id', '=', 2)->where('id', '=', $id);
+		
+		if($gestionnaire->count()){
+			$gestionnaire = $gestionnaire->first();
+			$gestionnaire->delete();
+
+			return Redirect::route('gestionnaires-get');
+
+		}else{
+			//return App::abort(404);
+			return Redirect::route('gestionnaires-get');
 		}
 	}
 

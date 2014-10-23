@@ -14,7 +14,7 @@ class HomeController extends BaseController {
 
 		if(Request::ajax()){
 
-    				$validator = Validator::make(Input::all(),
+    		$validator = Validator::make(Input::all(),
 			array('file' => 'required|max:10000|mimes:pdf'));
 	
 			// Si la validation échoue, on redirige vers la même page avec les erreurs

@@ -5,8 +5,6 @@
 		<td><a class="cn" id="{{$pj->id}}" class="file" href="">Supprimer</a></td>
 	</tr>
 @endforeach	
-
-
 </table>
 
  <script>

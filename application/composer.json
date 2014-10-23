@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"hieu-le/active": "~1.0"
+		"hieu-le/active": "~1.0",
+		"bllim/datatables": "*"
 	},
 	"autoload": {
 		"classmap": [

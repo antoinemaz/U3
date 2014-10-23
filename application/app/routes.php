@@ -25,6 +25,13 @@ Route::get("/upload/delete/{id}", array(
 	'as' => 'deletepj',
 	'uses' => 'HomeController@deletePj'));
 
+Route::get("/redmine", array(
+	'as' => 'redmine',
+	'uses' => 'RedmineController@getFilieres'));
+
+Route::get("/pushCandidatureToRedmine/{id}", array(
+	'as' => 'pushCandidatureToRedmine-get',
+	'uses' => 'RedmineController@pushCandidatureToRedmine'));
 
 //////////////////////////////////////////////////////
 
@@ -104,6 +111,10 @@ Route::group(array('before' => 'auth'), function(){
 		Route::get('compte/gestionnaires', array(
 			'as' => 'gestionnaires-get',
 			'uses' => 'CompteController@getGestionGestionnaires'));
+
+	    Route::get("/compte/gestionnaire/delete/{id}", array(
+			'as' => 'deletegestionnaire',
+			'uses' => 'CompteController@deleteGestionnaire'));
 
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){

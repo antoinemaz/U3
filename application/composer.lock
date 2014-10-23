@@ -4,8 +4,63 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1990cb41be911e6131f4a1abc48b7be9",
+    "hash": "e63f06ad1e658749f912cdf7d185751a",
     "packages": [
+        {
+            "name": "bllim/datatables",
+            "version": "v1.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bllim/laravel4-datatables-package.git",
+                "reference": "93bba1836b1fa5039137aa3dab4049c7f1c09d4d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bllim/laravel4-datatables-package/zipball/93bba1836b1fa5039137aa3dab4049c7f1c09d4d",
+                "reference": "93bba1836b1fa5039137aa3dab4049c7f1c09d4d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": ">=4.0.0",
+                "illuminate/filesystem": ">=4.0.0",
+                "illuminate/support": ">=4.0.0",
+                "illuminate/view": ">=4.0.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "laravel/laravel": ">=4.0.0",
+                "mockery/mockery": "0.7.2",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/migrations"
+                ],
+                "psr-0": {
+                    "Bllim\\Datatables": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bilal Gultekin",
+                    "email": "bilal@bilal.im"
+                }
+            ],
+            "description": "Server-side handler of DataTables Jquery Plugin for Laravel 4",
+            "keywords": [
+                "datatable",
+                "datatables",
+                "datatables jquery plugin",
+                "laravel",
+                "laravel4"
+            ],
+            "time": "2014-09-05 07:55:04"
+        },
         {
             "name": "classpreloader/classpreloader",
             "version": "1.0.2",
