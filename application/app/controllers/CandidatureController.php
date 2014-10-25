@@ -45,7 +45,7 @@ class CandidatureController extends BaseController {
 		    $candidature -> adresse = Input::get('mail');
 		    $candidature -> codePostal = Input::get('mail');
 		    $candidature -> dernier_diplome = Input::get('mail');
-		    $candidature -> anee_dernier_diplome = Input::get('mail');
+		    $candidature -> annee_dernier_diplome = Input::get('mail');
 		    $candidature -> email = Input::get('mail');
 		
 		    $candidature = Candidature::find(Auth::user()->id);
