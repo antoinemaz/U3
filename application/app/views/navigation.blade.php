@@ -10,6 +10,7 @@
 				<li class="{{Active::route(array('creationCandidature-get'), 'active')}}"><a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a></li>
 			@else
 				<li class="{{Active::route(array('gestionnaires-get'), 'active')}}"><a href="{{URL::route('gestionnaires-get')}}">Gérer les gestionnaires</a></li>
+				<li class="{{Active::route(array('listeCandidatures-get'), 'active')}}"><a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a></li>
 			@endif
 
 		@else

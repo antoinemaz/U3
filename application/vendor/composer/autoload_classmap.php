@@ -7,9 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
-    'Bllim\\Datatables\\Datatables' => $vendorDir . '/bllim/datatables/src/Bllim/Datatables/Datatables.php',
-    'Bllim\\Datatables\\DatatablesServiceProvider' => $vendorDir . '/bllim/datatables/src/Bllim/Datatables/DatatablesServiceProvider.php',
-    'Bllim\\Datatables\\Facade\\Datatables' => $vendorDir . '/bllim/datatables/src/Bllim/Datatables/Facade/Datatables.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
     'Boris\\ColoredInspector' => $vendorDir . '/d11wtq/boris/lib/Boris/ColoredInspector.php',
@@ -56,6 +53,7 @@ return array(
     'File_ASN1' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
     'File_ASN1_Element' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
     'File_X509' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/X509.php',
+    'GestionController' => $baseDir . '/app/controllers/GestionController.php',
     'HieuLe\\Active\\Active' => $vendorDir . '/hieu-le/active/src/Active.php',
     'HieuLe\\Active\\ActiveServiceProvider' => $vendorDir . '/hieu-le/active/src/ActiveServiceProvider.php',
     'HieuLe\\Active\\Facades\\Active' => $vendorDir . '/hieu-le/active/src/Facades/Active.php',

@@ -8,7 +8,9 @@
 	{{ HTML::style('style/css/u3.css') }}
 	{{ HTML::script('style/js/jquery-1.11.1.min.js') }}
 	{{ HTML::script('style/js/jquery.form.min.js') }}
-	{{ HTML::script('style/datatable/media/js/jquery.dataTables.js') }}
+
+	{{ HTML::style('style/datatable/media/css/jquery.dataTables.min.css') }}
+	{{ HTML::script('style/datatable/media/js/jquery.dataTables.min.js') }}
 	
 
 </head>

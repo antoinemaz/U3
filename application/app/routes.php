@@ -105,16 +105,23 @@ Route::group(array('before' => 'auth'), function(){
 	'uses' => 'CompteController@getChangerPassword'));
 
 	// SI c'est un gestionnaire
-	Route::group(array('before' => 'role'), function() {
+	Route::group(array('before' => 'gestionnaire'), function() {
 
 		// GET Page de gestion des gestionnaires
 		Route::get('compte/gestionnaires', array(
 			'as' => 'gestionnaires-get',
 			'uses' => 'CompteController@getGestionGestionnaires'));
 
+		// GET Suppression d'un gestionnaire
 	    Route::get("/compte/gestionnaire/delete/{id}", array(
 			'as' => 'deletegestionnaire',
 			'uses' => 'CompteController@deleteGestionnaire'));
+
+
+	    // GET Liste des candidatures
+	    Route::get("/gestion/listeCandidatures", array(
+			'as' => 'listeCandidatures-get',
+			'uses' => 'GestionController@getListeCandidatures'));
 
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){

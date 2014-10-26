@@ -48,9 +48,9 @@ Route::filter('auth', function()
 	}
 });
 
-Route::filter('role', function()
+Route::filter('gestionnaire', function()
 { 
-  // Si c'est un gestionnaire, il a accès à la page demandée	
+  // Si c'est un étudiant, il n'aura pas accès à la page demandée
   if ( Auth::user()->role_id == 1) {
      return Response::make('Unauthorized', 401);
    }
