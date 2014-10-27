@@ -43,10 +43,42 @@
 	  {{ Form::close() }}
 	  <div id="listPjs"></div>
 	</div>
+
+	<input id="dp1" class="datepicker" type="text">
+
+
+	<form action="{{URL::route('diplome-post')}}" method="POST" class="form-horizontal">
+
+			<table id="diplomes" class="table table-striped dataTable no-footer" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>libelle</th>
+					</tr>
+				</thead>
+
+			    <tbody>
+					<tr>
+						<td>aaa</td>
+						<td>
+							<input name="libelle1" type="text">
+						</td>
+					</tr>
+				</tbody>
+		</table>
+		{{Form::token()}}
+		<button type="submit" class="btn btn-primary">Enregistrer</button>
+
+	</form>
+
 </div>
 	  <script>
 
 	  	$(document).ready(function(){
+
+	  		$('.datepicker').datepicker({
+	  			language: 'fr'
+	  		});
 
 	  		$("#erreurPj").hide();
 	  		$("#charg").hide();
@@ -57,14 +89,21 @@
 	  			// Désactive l'action par défaut de l'évènement (du submit du form dans ce cas)
 	  			e.preventDefault();
 
+	  			// On récupère les properties pour avoir la taille max des fichiers 
+	  			<?php
+	  				$properties = parse_ini_file("properties.ini");
+	  			?>
+	  			var sizeMaxUploadFile = "<?php Print($properties['sizeMaxUploadFile']); ?>";
+
+
 	  			if(!$('#file').val()){
 	  			    $("#erreurPj").show();
-	  				$("#erreurPj").html("Choisissez une pièce jointe")
+	  				$("#erreurPj").html("Choisissez une pièce jointe ");
 
 	  			// Test sur la taille du fichier (en Mo)	
-	  			}else if( ($("#file")[0].files[0].size) /1048576 >= 10 ){
+	  			}else if( ($("#file")[0].files[0].size) /1048576 >= sizeMaxUploadFile ){
 	  				$("#erreurPj").show();
-	  				$("#erreurPj").html("Le fichier ne peut pas excéder 10 Mo.")
+	  				$("#erreurPj").html("Le fichier ne peut pas excéder "+ sizeMaxUploadFile +" Mo.")
 	  				$("#charg").hide();
 
 	  			// Test du format du fichier à tester	

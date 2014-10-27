@@ -23,6 +23,7 @@ class RedmineController extends BaseController {
 	public function getFilieres(){
 
 		$client = new RedmineClient();
-		return $client->getAnneesUniversite();
+
+		return $client->getFilieres();
 	}
 }

@@ -12,6 +12,7 @@
 					<tr>
 						<th>Nom</th>
 						<th>Prénom</th>
+						<th>Détail</th>
 					</tr>
 				</thead>
 
@@ -20,6 +21,7 @@
 					<tr>
 						<td>{{ $cand->nom }}</td>
 						<td>{{ $cand->prenom }}</td>
+						<td><a href="{{URL::route('password-oublie-get')}}">Détail</a></td>
 					</tr>
 					@endforeach
 				</tbody>

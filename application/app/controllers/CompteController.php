@@ -43,6 +43,22 @@ class CompteController extends BaseController {
 					'utilisateur_id' => $create->id,
 					'etat_id' => 1));
 
+				// Création de 6 lignes (pour formations et diplomes) : BAC, jusqu'à BAC+5
+				for ($ligne = 1; $ligne <= 6; $ligne++){
+  				  		Diplome::create(array(
+  				  		'numero' => $ligne,
+  				  		'candidature_id' => $candidature->id
+  				  	));
+				}
+
+				// Création de 6 lignes (pour stages) : jusqu'à 5 expériences
+				for ($ligne = 1; $ligne <= 5; $ligne++){
+  				  		Stage::create(array(
+  				  		'numero' => $ligne,
+  				  		'candidature_id' => $candidature->id
+  				  	));
+				}
+
 				// Envoi du mail d'activation du compte
 				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
 					function($message) use ($create){

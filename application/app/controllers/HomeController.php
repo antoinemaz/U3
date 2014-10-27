@@ -9,8 +9,10 @@ class HomeController extends BaseController {
 
 	public function upload(){
 
-		ini_set('upload_max_filesize', '100M');
-		ini_set('post_max_size', '100M');
+		$properties = parse_ini_file("properties.ini");
+	
+		ini_set('upload_max_filesize', $properties['sizeMaxUploadFile'].'M');
+		ini_set('post_max_size', $properties['sizeMaxUploadFile'].'M');
 
 		if(Request::ajax()){
 
@@ -68,6 +70,27 @@ class HomeController extends BaseController {
 
     	$fichiers = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
     	return View::make('pages.pjs')->with('pjs', $fichiers);
+    }
+
+    public function testDiplome(){
+
+    		// Candidature::where()
+
+    		lib1 = Input::get('libelle1');
+
+    		for ($ligne=1; $ligne <= 6 ; $ligne++) { 
+
+    			$user = Utilisateur::find(Auth::user()->id);
+
+    		}
+
+    		 $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
+
+    		// Enregistrement en base de données
+			// $create = Diplome::create(array(
+			// 	'libelle' => Input::get('libelle1'),
+			// 	'candidature_id' => 1 
+			//));
     }
 
 }

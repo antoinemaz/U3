@@ -25,18 +25,37 @@ class RedmineClient {
 
 		// De ce tableau de custom fields, on veut seulement récupérer la première occurence
 		// car elle concerne les filières
-		$filieres = $fields[0];
+		$fields = $fields[0];
 
 		// On retourne, sous forme d'un tableau, chaque filière
-		return $filieres['possible_values'];
+		$fields = $fields['possible_values'];
+
+		// On va construire un tableau de filière
+		$filieres = array();
+
+		foreach ($fields as $key => $value) {
+			array_push($filieres, $value['value'] );
+		}
+
+		return $filieres;
+
 	}
 
 	// Même principe que la méthode getFilieres()
 	public function getRegimeInscription(){
 		$fields = $this->getValues('custom_fields');
 		$fields = $fields['custom_fields'];
-		$filieres = $fields[17];
-		return $filieres['possible_values'];
+		$fields = $fields[17];
+		
+		$fields = $fields['possible_values'];
+
+		$regimes = array();
+
+		foreach ($fields as $key => $value) {
+			array_push($regimes, $value['value'] );
+		}
+
+		return $regimes;
 	}
 
 	// Obtention des années (L3, M1...). Attention, ce n'est pas un custom field, cela correspond à des "projects" sous Redmine

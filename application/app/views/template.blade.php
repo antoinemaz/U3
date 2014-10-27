@@ -11,6 +11,9 @@
 
 	{{ HTML::style('style/datatable/media/css/jquery.dataTables.min.css') }}
 	{{ HTML::script('style/datatable/media/js/jquery.dataTables.min.js') }}
+
+	{{ HTML::style('style/datepicker/css/datepicker.css') }}
+	{{ HTML::script('style/datepicker/js/bootstrap-datepicker.js') }}
 	
 
 </head>

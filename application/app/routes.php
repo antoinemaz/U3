@@ -145,5 +145,10 @@ Route::group(array('before' => 'auth'), function(){
 		 Route::post('/creerCandidature', array(
 		'as' => 'creationCandidature-post',
 		'uses' => 'CandidatureController@creerCandidature'));
+
+		  // POST Création de candidature
+		 Route::post('/testDiplome', array(
+		'as' => 'diplome-post',
+		'uses' => 'HomeController@testDiplome'));
 	});
 });
