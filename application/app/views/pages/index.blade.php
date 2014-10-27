@@ -46,31 +46,6 @@
 
 	<input id="dp1" class="datepicker" type="text">
 
-
-	<form action="{{URL::route('diplome-post')}}" method="POST" class="form-horizontal">
-
-			<table id="diplomes" class="table table-striped dataTable no-footer" width="100%" cellspacing="0">
-				<thead>
-					<tr>
-						<th>Nom</th>
-						<th>libelle</th>
-					</tr>
-				</thead>
-
-			    <tbody>
-					<tr>
-						<td>aaa</td>
-						<td>
-							<input name="libelle1" type="text">
-						</td>
-					</tr>
-				</tbody>
-		</table>
-		{{Form::token()}}
-		<button type="submit" class="btn btn-primary">Enregistrer</button>
-
-	</form>
-
 </div>
 	  <script>
 

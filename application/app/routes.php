@@ -133,6 +133,11 @@ Route::group(array('before' => 'auth'), function(){
 		});
 	});
 
+		 // GET Test tableau de diplome et stage
+		 Route::get('/testDiplome', array(
+		'as' => 'diplome-get',
+		'uses' => 'HomeController@getDiplome'));
+
 	// Ensemble des routes de formulaire
 	Route::group(array('before' => 'csrf'), function(){
 
@@ -146,7 +151,7 @@ Route::group(array('before' => 'auth'), function(){
 		'as' => 'creationCandidature-post',
 		'uses' => 'CandidatureController@creerCandidature'));
 
-		  // POST Création de candidature
+		  // POST Test tableau de diplome et stage
 		 Route::post('/testDiplome', array(
 		'as' => 'diplome-post',
 		'uses' => 'HomeController@testDiplome'));

@@ -4,6 +4,7 @@ class HomeController extends BaseController {
 
 	public function index()
 	{
+		// Session::put('candidature_id', $this->getCandidatureByUserLogged()->id);
 		return View::make('pages.index');
 	}
 
@@ -72,25 +73,51 @@ class HomeController extends BaseController {
     	return View::make('pages.pjs')->with('pjs', $fichiers);
     }
 
+    public function getDiplome(){
+
+    	$candidature_id = $this->getCandidatureByUserLogged()->id; 
+    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature_id)->get();
+
+    	return View::make('pages.test')->with(array(
+    		'diplomes' => $diplomes));
+    }
+
     public function testDiplome(){
 
-    		// Candidature::where()
+    	$candidature_id = $this->getCandidatureByUserLogged()->id; 
 
-    		lib1 = Input::get('libelle1');
+    		foreach (Input::get('libelle') as $key => $value) {
+    			
+    			$diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+
+    			if($diplome->count()){
+
+    				$diplome = $diplome->first();
+    				$diplome->libelle = $value;
+    				$diplome->save();
+    			}
+    		}
+
+    		return Redirect::route('diplome-get');
+
 
     		for ($ligne=1; $ligne <= 6 ; $ligne++) { 
 
-    			$user = Utilisateur::find(Auth::user()->id);
+    		
 
     		}
+    }
 
-    		 $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
+    public function getCandidatureByUserLogged(){
 
-    		// Enregistrement en base de données
-			// $create = Diplome::create(array(
-			// 	'libelle' => Input::get('libelle1'),
-			// 	'candidature_id' => 1 
-			//));
+		 // Récupération de la candidature de l'étudiant connecté 
+		 $idUser = Auth::user()->id;
+		 $candidature = Candidature::where('utilisateur_id', '=', $idUser);
+
+		 if($candidature->count()){
+			$candidature = $candidature->first(); 	
+		 }
+		 return $candidature;
     }
 
 }
