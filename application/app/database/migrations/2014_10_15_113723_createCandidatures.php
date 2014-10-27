@@ -17,27 +17,25 @@ class CreateCandidatures extends Migration {
 			$table->increments('id')->unsigned();
 
 		    $table->string('nom');
-		    $table->string('prenom');
-		    $table->string('password');
-		    $table->string('password_tmp');
-		    $table->string('code');
-		    $table->string('remember_token');
-		    $table->tinyInteger('active');
-		    $table->integer('annee_naissance');
+		    $table->string('prenom');		 
+		    $table->date('date_naissance');
 		    $table->string('regime_inscription');
 		    $table->string('sexe');
 		    $table->boolean('dossier_etrange');
 		    $table->string('nationalite');
-		    $table->string('email');
 		    $table->integer('telephone');
 		    $table->string('adresse');
 		    $table->integer('codePostal');
-		    $table->string('filliere');
+		    $table->string('Ville');
+		    $table->string('Pays');
+		    $table->string('filiere');
 		    $table->string('dernier_diplome');
-		    $table->integer('annee_dernier_diplome');
+		    $table->integer('date_dernier_diplome');
 		    $table->string('commentaire_gestionnaire');
 		    $table->string('erreur_info');
 		    $table->integer('redmine_id');
+		    //année convoitée
+		    $table->integer('project_id_redmine');
 
 		    $table->integer('etat_id')->unsigned();
 		    $table->foreign('etat_id')->references('id')->on('etats');
