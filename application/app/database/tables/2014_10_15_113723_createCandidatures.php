@@ -23,7 +23,7 @@ class CreateCandidatures extends Migration {
 		    $table->string('code');
 		    $table->string('remember_token');
 		    $table->tinyInteger('active');
-		    $table->integer('annee_naissance');
+		    $table->date('date_naissance');
 		    $table->string('regime_inscription');
 		    $table->string('sexe');
 		    $table->boolean('dossier_etrange');
