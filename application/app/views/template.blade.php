@@ -14,6 +14,8 @@
 
 	{{ HTML::style('style/datepicker/css/datepicker.css') }}
 	{{ HTML::script('style/datepicker/js/bootstrap-datepicker.js') }}
+
+	{{ HTML::script('style/js/pdfobject.js') }}
 	
 
 </head>

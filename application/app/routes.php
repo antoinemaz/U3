@@ -138,6 +138,11 @@ Route::group(array('before' => 'auth'), function(){
 		'as' => 'diplome-get',
 		'uses' => 'HomeController@getDiplome'));
 
+		 // GET téléchargement fichier PDF
+		 Route::get('/download', array(
+		 	'as' => 'download',
+		 	'uses' => 'HomeController@getDownload'));
+
 	// Ensemble des routes de formulaire
 	Route::group(array('before' => 'csrf'), function(){
 

@@ -44,16 +44,11 @@
 	  <div id="listPjs"></div>
 	</div>
 
-	<input id="dp1" class="datepicker" type="text">
 
 </div>
 	  <script>
 
 	  	$(document).ready(function(){
-
-	  		$('.datepicker').datepicker({
-	  			language: 'fr'
-	  		});
 
 	  		$("#erreurPj").hide();
 	  		$("#charg").hide();

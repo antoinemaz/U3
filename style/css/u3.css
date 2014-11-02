@@ -70,4 +70,5 @@
 
 .tableOfCandidature td, .tableOfCandidature th{
     text-align: center;
+    vertical-align: middle;
 }
