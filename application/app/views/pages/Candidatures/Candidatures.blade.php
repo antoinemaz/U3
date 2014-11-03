@@ -10,12 +10,33 @@
     <p>{{Session::get('ErreurCandidature')}}</p>
   @endif
 
-<<<<<<< HEAD
+ <!--<?php print_r($errors)?>-->
 
- <?php print_r($errors)?>
+ <?php
 
-=======
->>>>>>> f7ce38410a794d4272dfbf1f396b1cea8bae02b0
+ $idUser = Auth::user()->id;
+ $candidature = Candidature::where('utilisateur_id', '=', $idUser);
+
+ if($candidature->count()){
+        $candidature = $candidature->first(); 
+
+        if($candidature->etat_id == 2){
+
+            $etat = 'disabled';
+        
+
+        }else{
+
+            $etat = "";
+
+        }
+
+ }
+
+
+ ?>
+
+
 <div class="panel panel-default custom-panel">
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">
@@ -24,18 +45,18 @@
 
     
     <div class="form-group">
-      <label for="InputDossierE">Dossier étrangé :</label>
-      <input type="checkbox" name="InputDossierE" value="Oui"><br>
+      <label for="InputDossierE" >Dossier étrangé :</label>
+      <input type="checkbox" name="InputDossierE" value="Oui" {{$etat}}><br>
     </div>
 
     <div class="form-group">
       <label for="InputRegime">Régime d'inscription :</label>
-          {{ Form::select('InputRegime', array($tabRegimeInscription),array('class' => 'form-control', 'placeholder' => '')) }}
+          {{ Form::select('InputRegime', array($tabRegimeInscription),array('class' => 'form-control', 'placeholder' => $candidature->dossier_etrange, 'disabled' => $etat)) }}
     </div>
 
     <div class="form-group">
       <label for="InputNom">Nom :</label>
-      {{ Form::text("InputNom", Input::get("InputNom"), array('class' => 'form-control', 'placeholder' => $candidature->nom)) }}
+      {{ Form::text("InputNom", Input::get("InputNom"), array('class' => 'form-control', 'placeholder' => $candidature->nom, $etat)) }}
       @if($errors->has('InputNom'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputNom')}}</div>
       @endif
@@ -43,16 +64,29 @@
 
     <div class="form-group">
       <label for="InputPrenom">Prénom :</label>
-      {{ Form::text("InputPrenom", Input::get("InputPrenom"), array('class' => 'form-control', 'placeholder' => $candidature->prenom)) }}
+      {{ Form::text("InputPrenom", Input::get("InputPrenom"), array('class' => 'form-control', 'placeholder' => $candidature->prenom, $etat)) }}
       @if($errors->has('InputPrenom'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputPrenom')}}</div>
       @endif
     </div>
 
     <div class="form-group">
+      <label for="InputSexe">Sexe :</label>
+      <!--disabled={{$etat}} -->
+      <select name="InputSexe"  >
+        @if($candidature->sexe == 'Feminin')
+        {{print ($candidature->sexe);}}
+        <option value="Masculin">Masculin </option>
+        <option value="Feminin"  selected="selected" >Feminin </option>
+        @endif
+
+      </select>
+    </div>
+
+    <div class="form-group">
       <label for="InputDateNaissance">Date de naissance :</label>
 
-      <input id="InputDateNaissance" class="datepicker" name ="InputDateNaissance" type="text">
+      <input id="InputDateNaissance" class="datepicker" name ="InputDateNaissance" type="text" placeholder= {{$candidature->date_naissance}}>
       @if($errors->has('InputDateNaissance'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateNaissance')}}</div>
       @endif
@@ -61,26 +95,22 @@
 
     <div class="form-group">
       <label for="InputLieu">Lieu de naissance :</label>
-      {{ Form::text("InputLieu", Input::get("InputLieu"), array('class' => 'form-control', 'placeholder' => '')) }}
+      {{ Form::text("InputLieu", Input::get("InputLieu"), array('class' => 'form-control', 'placeholder' => $candidature->lieu_naissance, $etat)) }}
       @if($errors->has('InputLieu'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputLieu')}}</div>
       @endif
     </div>
 
-    <div class="form-group">
-      <label for="InputSexe">Sexe :</label>
-      {{ Form::select('InputSexe', array('masculin' => 'Masculin', 'F' => 'Féminin'),array('class' => 'form-control', 'placeholder' => $candidature->sexe)) }}
-    </div>
 
     <div class="form-group">
       <label for="InputNatio">Nationalité :</label>
-      <select name="InputNatio">
+      <select name="InputNatio" disabled={{$etat}}>
       <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
     </div>
 
     <div class="form-group">
       <label for="InputTel">Téléphone :</label>
-      {{ Form::text("InputTel", Input::get("InputTel"), array('class' => 'form-control', 'placeholder' => $candidature->telephone)) }}
+      {{ Form::text("InputTel", Input::get("InputTel"), array('class' => 'form-control', 'placeholder' => $candidature->telephone, $etat)) }}
       @if($errors->has('InputTel'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputTel')}}</div>
       @endif
@@ -88,7 +118,7 @@
 
     <div class="form-group">
       <label for="InputAdr">Adresse :</label>
-      {{ Form::text("InputAdr", Input::get("InputAdr"), array('class' => 'form-control', 'placeholder' => $candidature->adresse)) }}
+      {{ Form::text("InputAdr", Input::get("InputAdr"), array('class' => 'form-control', 'placeholder' => $candidature->adresse, $etat)) }}
       @if($errors->has('InputAdr'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputAdr')}}</div>
       @endif
@@ -96,7 +126,7 @@
 
     <div class="form-group">
       <label for="InputVille">Ville :</label>
-      {{ Form::text("InputVille", Input::get("InputVille"), array('class' => 'form-control', 'placeholder' => $candidature->Ville)) }}
+      {{ Form::text("InputVille", Input::get("InputVille"), array('class' => 'form-control', 'placeholder' => $candidature->Ville, $etat)) }}
       @if($errors->has('InputVille'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputVille')}}</div>
       @endif
@@ -104,7 +134,7 @@
 
     <div class="form-group">
       <label for="InputCP">Code postal :</label>
-      {{ Form::text("InputCP", Input::get("InputCP"), array('class' => 'form-control', 'placeholder' => $candidature->codePostal)) }}
+      {{ Form::text("InputCP", Input::get("InputCP"), array('class' => 'form-control', 'placeholder' => $candidature->codePostal, $etat)) }}
       @if($errors->has('InputCP'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputCP')}}</div>
       @endif
@@ -112,7 +142,7 @@
 
     <div class="form-group">
       <label for="InputPays">Pays :</label>
-      <select name="InputPays">
+      <select name="InputPays" disabled={{$etat}}>
       <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
     </div>
 
@@ -139,7 +169,7 @@
 
     </div>
 
-    <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Enregistrer</button>
+    <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$etat}} >Enregistrer</button>
     <button type="submit" class="btn btn-primary" name = "btnValid" value="btnValid" >Valider</button>
 
   

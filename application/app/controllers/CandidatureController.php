@@ -27,7 +27,7 @@ class CandidatureController extends BaseController {
 
         if(Input::get('btnEnreg')) {
 
-            $lacandidature = $this->candidatureDansBdd();
+            $this->candidatureDansBdd();
 
             if($candidature->save()){
 			 	return Redirect::route('creationCandidature-get')->with('message', 'Votre brouillion est enregistré');
@@ -35,11 +35,13 @@ class CandidatureController extends BaseController {
 
         } elseif(Input::get('btnValid')) {
 
-           $this-> candidatureDansBdd();
+           $lacandidature = $this-> candidatureDansBdd();
 
-   //          if($candidature->save()){
-			// 	return Redirect::route('creationCandidature-get')->with('message', 'Votre candidature est validée.');
-			// }
+           $lacandidature -> etat_id = 2;
+
+           if($lacandidature->save()){
+			 	return Redirect::route('creationCandidature-get')->with('message', 'Votre candidature est validée.');
+		   }
         }
 
 
@@ -118,6 +120,7 @@ class CandidatureController extends BaseController {
 			
 		 }
 
+		 return $candidature;
 
 	}
 
