@@ -17,11 +17,10 @@ class CreateDiplome extends Migration {
 		{
 			/*Creation d'un champs de type autoincrement et en clé primaire*/
 			$table->increments('id')->unsigned();
-			$table->string('libelle');
-		    $table->integer('annee');
+		    $table->string('annee');
 		    $table->string('etablissement');
 		    $table->string('diplome');
-		    $table->integer('moyenne_annee');
+		    $table->string('moyenne_annee');
 		    $table->string('mention');
 		    $table->string('rang');
 		    $table->integer('numero');

@@ -17,12 +17,11 @@ class CreateStage extends Migration {
 		{
 			/*Creation d'un champs de type autoincrement et en clé primaire*/
 			$table->increments('id')->unsigned();
-			$table->date('date_debut');
-			$table->date('date_fin');
+			$table->date('date_debut')->nullable();
+			$table->date('date_fin')->nullable();
 		    $table->string('nom');
 		    $table->string('adresse');
 		    $table->string('travail_effectue');
-		    $table->integer('moyenne_annee');
 		    $table->integer('numero');
 		    $table->integer('candidature_id')->unsigned();
 		    $table->foreign('candidature_id')->references('id')->on('candidatures');

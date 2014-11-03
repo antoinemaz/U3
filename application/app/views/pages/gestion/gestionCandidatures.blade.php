@@ -6,7 +6,7 @@
  		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des candidatures</div>
 		<div class="panel-body">
 			
-			<table id="candidatures" class="table table-striped" width="100%" cellspacing="0">
+			<table id="candidatures" class="table table-condensed" width="100%" cellspacing="0">
 
 				<thead>
 					<tr>
