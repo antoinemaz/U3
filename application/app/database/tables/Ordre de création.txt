@@ -1,6 +1,13 @@
-Table Etat
-Table Role
-Table Utilisateurs
-Table Candidatures
-Table Pieces
-Table diplome et table stage
+Démarche :
+
+1) Copier coller tout ce qu'il y a dans le répertoire migration dans le répertoire database
+2) Supprimer tout ce qu'il y a dans le répertoire migration
+3) Copier coller les migrations suivantes qui sont dans le répertoire table dans le répertoire migration :
+	
+	1) Table Etat + Table Role, puis php artisan migrate
+	2) Table Utilisateurs, puis php artisan migrate
+	3) Table Candidatures, puis php artisan migrate
+	4) Table Pieces + Table diplome + table stage puis php artisan migrate
+
+4) Ensuite executer la commande suivante php artisan db:seed
+

@@ -32,6 +32,37 @@
       }
     ?>
     
+    <table id="example">
+          <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Année</th>
+            <th>Etablissement</th>
+        </tr>
+      </thead>
+        <tr>
+            <td>BAC</td>
+            <td><input id="anneeTest" name="anneeTest" value="" type="text"></td>
+            <td><input id="etablissementTest" name="etablissementTest" value="" type="text"></td>
+        </tr>
+
+    </table>
+    <button id="testclic" type="submit">Submit form</button>
+
+    <script>
+        $(document).ready(function() {
+        var table = $('#example').DataTable();
+     
+        $('#testclic').click( function() {
+            var data = table.$('input, select').serialize();
+            
+            return false;
+        } );
+    } );
+    </script>
+
+
+
     <form action="{{URL::route('diplome-post')}}" method="POST" class="form-horizontal">
 
       <table id="diplomes" class="table datatable tableOfCandidature" style="margin:0 auto;">

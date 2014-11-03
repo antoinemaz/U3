@@ -98,7 +98,7 @@ class HomeController extends BaseController {
         $candidature_id = $this->getCandidatureByUserLogged();
         $pieces = DB::table('pieces')->where('candidature_id', $candidature_id->id)->get();
 
-<<<<<<< HEAD
+
     		// lib1 = Input::get('libelle1');
 
     		// for ($ligne=1; $ligne <= 6 ; $ligne++) { 
@@ -108,7 +108,7 @@ class HomeController extends BaseController {
     		// }
 
     		//  $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
-=======
+
     	return View::make('pages.test')->with(array(
     		'diplomes' => $diplomes, 'stages' => $stages, 'pieces' => $pieces));
     }
@@ -256,7 +256,6 @@ class HomeController extends BaseController {
 		 // Récupération de la candidature de l'étudiant connecté 
 		 $idUser = Auth::user()->id;
 		 $candidature = Candidature::where('utilisateur_id', '=', $idUser);
->>>>>>> f7ce38410a794d4272dfbf1f396b1cea8bae02b0
 
 		 if($candidature->count()){
 			$candidature = $candidature->first(); 	
