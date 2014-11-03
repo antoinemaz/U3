@@ -14,16 +14,18 @@ class StageController extends BaseController {
 
     public function postStage(){
 
-    	$candidature_id = $this->getCandidatureByUserLogged()->id;
+         // On clique sur le bouton suivant
+        if(Input::get('btnEnreg')) {
+
+    	   $candidature_id = $this->getCandidatureByUserLogged()->id;
 
             // Stages
-
             $validator = Validator::make(Input::get('date_debut'),
             array(
                 'date_debut' => 'date|date_format:"d/m/Y"'));
 
             if($validator->fails()){
-                return Redirect::route('diplome-get')
+                return Redirect::route('stage-get')
                         ->withErrors($validator)
                         ->withInput();
             }else{
@@ -56,7 +58,7 @@ class StageController extends BaseController {
                     }
 
                     $stage = Stage::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
+                    if($stage->count()){
                         $stage = $stage->first();
                         $stage->date_fin = $datePersiste;
                         $stage->save();
@@ -64,11 +66,11 @@ class StageController extends BaseController {
                 }
 
                 foreach (Input::get('nom') as $key => $value) {      
-                    $diplome = Stage::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->nom = $value;
-                        $diplome->save();
+                    $stage = Stage::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                    if($stage->count()){
+                        $stage = $stage->first();
+                        $stage->nom = $value;
+                        $stage->save();
                     }
                 }
 
@@ -92,7 +94,11 @@ class StageController extends BaseController {
 
             }
 
-    		return Redirect::route('stage-get');
+    		return Redirect::route('piece-get');
+
+        }else{
+            return Redirect::route('diplome-get');
+        }
     }
 
     public function getCandidatureByUserLogged(){

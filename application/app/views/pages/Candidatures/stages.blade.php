@@ -2,7 +2,13 @@
 
 @section('content')
 
-    <form action="{{URL::route('diplome-post')}}" method="POST" class="form-horizontal">
+@include('workflow')
+
+<div class="panel panel-default custom-panel">
+    <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
+    <div class="panel-body">
+
+    <form action="{{URL::route('stage-post')}}" method="POST" class="form-horizontal"  style="text-align:center;">
 
       @if($errors->has('date_debut'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('date_debut')}}</div>
@@ -72,9 +78,13 @@
     </table>
 
     {{Form::token()}}
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="submit" class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
+        <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
 
   </form>
+
+    </div>
+</div>
 
       <script>
         $(document).ready(function(){

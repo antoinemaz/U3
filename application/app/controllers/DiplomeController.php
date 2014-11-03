@@ -16,6 +16,9 @@ class DiplomeController extends BaseController {
 
     public function postDiplome(){
 
+        // On clique sur le bouton suivant
+        if(Input::get('btnEnreg')) {
+
     	$candidature_id = $this->getCandidatureByUserLogged()->id; 
 
             // Diplomes
@@ -73,7 +76,11 @@ class DiplomeController extends BaseController {
                 }
             }
 
-    		return Redirect::route('diplome-get');
+    		return Redirect::route('stage-get');
+
+        }else{
+            return Redirect::route('creationCandidature-get');
+        }
     }
 
     public function getCandidatureByUserLogged(){

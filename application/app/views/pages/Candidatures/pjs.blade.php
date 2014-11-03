@@ -14,7 +14,7 @@
 	    e.preventDefault();
 	    var pic_id = $(this).attr('id');
 
-	    $.get('/U3/upload/delete/'+pic_id, function(){
+	    $.get('/U3/candidature/upload/delete/'+pic_id, function(){
 	    	$("#listPjs").load( {{ "'".URL::route('pjs')."'" }} );
 	    	$("#charg").hide();
 	    });

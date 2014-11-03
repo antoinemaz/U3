@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder {
 		Etat::create(array('libelle' => 'Brouillon'));
 		Etat::create(array('libelle' => 'Validé'));
 		Etat::create(array('libelle' => 'Refusé'));
+		Etat::create(array('libelle' => 'A revoir'));
 
 		Utilisateur::create(array(
 			'email' => 'admin@admin.fr',

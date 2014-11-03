@@ -11,20 +11,6 @@ Route::get("/", array(
 	'as' => 'index',
 	'uses' => 'HomeController@index'));
 
-Route::get("/pjs", array('as' => 'pjs', function(){
-	if(Request::ajax()){
-			return App::make('HomeController')->showPjs(); 
-	}
-}));
-
-Route::post("/upload", array(
-	'as' => 'upload-post',
-	'uses' => 'HomeController@upload'));
-
-Route::get("/upload/delete/{id}", array(
-	'as' => 'deletepj',
-	'uses' => 'HomeController@deletePj'));
-
 Route::get("/redmine", array(
 	'as' => 'redmine',
 	'uses' => 'RedmineController@getFilieres'));
@@ -90,7 +76,7 @@ Route::group(array('before' => 'guest'), function(){
 Route::group(array('before' => 'auth'), function(){
 
 	 // GET Création d'une candidature
-	 Route::get('/creerCandidature', array(
+	 Route::get('/candidature/creerCandidature', array(
 	'as' => 'creationCandidature-get',
 	'uses' => 'CandidatureController@getCreateCandidature'));	
 
@@ -113,6 +99,28 @@ Route::group(array('before' => 'auth'), function(){
 	Route::get('/candidature/stages', array(
 	'as' => 'stage-get',
 	'uses' => 'StageController@getStage'));
+
+		// GET Pieces
+	Route::get('/candidature/pieces', array(
+	'as' => 'piece-get',
+	'uses' => 'PieceController@getPiece'));
+
+	// Get liste des pieces jointes
+	Route::get("/candidature/listePjs", array('as' => 'pjs', function(){
+		if(Request::ajax()){
+			return App::make('PieceController')->showPjs(); 
+		}
+	}));
+
+	// GET Suppression Piece jointe
+	Route::get("candidature/upload/delete/{id}", array(
+	'as' => 'deletepj',
+	'uses' => 'PieceController@deletePj'));
+
+	// GET Finalisation
+	Route::get('/candidature/finalisation', array(
+	'as' => 'finalisation-get',
+	'uses' => 'CandidatureController@getFinalisation'));
 
 	// GET Page de test
 	Route::get('/testDiplome', array(
@@ -170,5 +178,15 @@ Route::group(array('before' => 'auth'), function(){
 		 Route::post('/stage', array(
 		'as' => 'stage-post',
 		'uses' => 'StageController@postStage'));
+
+		 // POST Upload piece jointe
+		 Route::post("candidature/upload", array(
+		'as' => 'upload-post',
+		'uses' => 'PieceController@upload'));
+
+		 // POST Finalisation de la candidature
+		 Route::post("candidature/finalisation", array(
+		'as' => 'finalisation-post',
+		'uses' => 'CandidatureController@postFinalisation'));
 	});
 });

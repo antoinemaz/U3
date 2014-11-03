@@ -72,3 +72,52 @@
     text-align: center;
     vertical-align: middle;
 }
+
+.currentEtape{
+    color:#EC8003!important;
+}
+
+.crumbs { 
+    display: block;    
+    margin: 0 auto;
+    max-width: 610px; }  
+.crumbs li {  display: inline; }  
+.crumbs li.first { padding-left: 8px; }  
+.crumbs li a,  
+.crumbs li a:link,  
+.crumbs li a:visited {  
+    color: #428bca;  
+    display: block;  
+    float: left;  
+    font-size: 14px;  
+    margin-left: -13px;  
+    padding: 5px 30px 9px 26px; 
+    position: relative;  
+    text-decoration: none;  
+}  
+.crumbs li a {   
+    background-repeat: no-repeat;  
+    background-position: 100% 0;  
+    position: relative;  
+}  
+.crumbs li a:hover {  
+    color: #333;  
+    background-position: 100% -48px;  
+    cursor: pointer;  
+}  
+.crumbs li a:active {  
+    color: #333;  
+    background-position: 100% -96px;  
+}  
+.crumbs li.first a span {  
+    height: 29px;  
+    width: 3px;  
+    border-left: 1px solid #d9d9d9;  
+    position: absolute;  
+    top: 0px;  
+    left: 0px;  
+} 
+
+.noBold label{
+    font-weight: normal;
+}

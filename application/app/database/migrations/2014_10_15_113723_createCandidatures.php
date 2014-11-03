@@ -18,7 +18,7 @@ class CreateCandidatures extends Migration {
 
 		    $table->string('nom');
 		    $table->string('prenom');		 
-		    $table->date('date_naissance');
+		    $table->date('date_naissance')->nullable();
 		    $table->string('lieu_naissance');
 		    $table->string('regime_inscription');
 		    $table->string('sexe');
@@ -31,7 +31,7 @@ class CreateCandidatures extends Migration {
 		    $table->string('Pays');
 		    $table->string('filiere');
 		    $table->string('dernier_diplome');
-		    $table->integer('date_dernier_diplome');
+		    $table->date('date_dernier_diplome')->nullable();
 		    $table->string('commentaire_gestionnaire');
 		    $table->string('erreur_info');
 		    $table->integer('redmine_id');
