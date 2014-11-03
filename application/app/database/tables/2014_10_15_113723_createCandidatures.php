@@ -19,11 +19,12 @@ class CreateCandidatures extends Migration {
 		    $table->string('nom');
 		    $table->string('prenom');		 
 		    $table->date('date_naissance');
+		    $table->string('lieu_naissance');
 		    $table->string('regime_inscription');
 		    $table->string('sexe');
 		    $table->boolean('dossier_etrange');
 		    $table->string('nationalite');
-		    $table->integer('telephone');
+		    $table->string('telephone');
 		    $table->string('adresse');
 		    $table->integer('codePostal');
 		    $table->string('Ville');

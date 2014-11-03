@@ -11,15 +11,28 @@
   @endif
 
 
+ <?php print_r($errors)?>
+
 <div class="panel panel-default custom-panel">
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">
 
    <form action="{{URL::route('creationCandidature-post')}}" method="POST" class="form-horizontal inscription">
 
+    
+    <div class="form-group">
+      <label for="InputDossierE">Dossier étrangé :</label>
+      <input type="checkbox" name="InputDossierE" value="Oui"><br>
+    </div>
+
+    <div class="form-group">
+      <label for="InputRegime">Régime d'inscription :</label>
+          {{ Form::select('InputRegime', array($tabRegimeInscription),array('class' => 'form-control', 'placeholder' => '')) }}
+    </div>
+
     <div class="form-group">
       <label for="InputNom">Nom :</label>
-      {{ Form::text("InputNom", Input::get("InputNom"), array('class' => 'form-control', 'placeholder' => $candidature->nom , 'disabled')) }}
+      {{ Form::text("InputNom", Input::get("InputNom"), array('class' => 'form-control', 'placeholder' => $candidature->nom)) }}
       @if($errors->has('InputNom'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputNom')}}</div>
       @endif
@@ -34,30 +47,32 @@
     </div>
 
     <div class="form-group">
-      <label for="InputAnnee">Date de naissance :</label>
-      {{ Form::text("InputAnnee", Input::get("InputAnnee"), array('class' => 'form-control', 'placeholder' => '','data-datepicker' => 'datepicker')) }}
+      <label for="InputDateNaissance">Date de naissance :</label>
 
-      <!-- {{ Form::text('date', null, array('type' => 'text', 'class' => 'form-control datepicker','placeholder' => 'Pick the date this task should be completed', 'id' => 'calendar')) }} -->
+      <input id="InputDateNaissance" class="datepicker" name ="InputDateNaissance" type="text">
+      @if($errors->has('InputDateNaissance'))
+        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateNaissance')}}</div>
+      @endif
 
-      @if($errors->has('InputAnnee'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputAnnee')}}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="InputLieu">Lieu de naissance :</label>
+      {{ Form::text("InputLieu", Input::get("InputLieu"), array('class' => 'form-control', 'placeholder' => '')) }}
+      @if($errors->has('InputLieu'))
+        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputLieu')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputSexe">Sexe :</label>
-      {{ Form::select('InputSexe', array('masculin' => 'feminin', 'F' => 'Féminin'),array('class' => 'form-control', 'placeholder' => $candidature->sexe)) }}
-      @if($errors->has('InputSexe'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputSexe')}}</div>
-      @endif
+      {{ Form::select('InputSexe', array('masculin' => 'Masculin', 'F' => 'Féminin'),array('class' => 'form-control', 'placeholder' => $candidature->sexe)) }}
     </div>
 
     <div class="form-group">
       <label for="InputNatio">Nationalité :</label>
-      {{ Form::text("InputNatio", Input::get("InputNatio"), array('class' => 'form-control', 'placeholder' => $candidature->nationalite)) }}
-      @if($errors->has('InputNatio'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputNatio')}}</div>
-      @endif
+      <select name="InputNatio">
+      <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
     </div>
 
     <div class="form-group">
@@ -93,9 +108,14 @@
     </div>
 
     <div class="form-group">
+      <label for="InputPays">Pays :</label>
+      <select name="InputPays">
+      <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
+    </div>
+
+    <div class="form-group">
       <label for="InputFiliere">Fillière :</label>
         <div class="form-group">
-
           <!-- Dans ma liste $tabFiliere : Pour chaque filiere on l'affiche -->
           @foreach($tabFiliere as $unefiliere)
           <label for="InputFiliere">&nbsp;&nbsp;&nbsp;&nbsp;{{$unefiliere}} :</label>
@@ -106,21 +126,15 @@
     </div>
 
     <div class="form-group">
-      <label for="InputDernDip">Dernier diplôme :</label>
-      {{ Form::text("InputDernDip", Input::get("InputDernDip"), array('class' => 'form-control', 'placeholder' => $candidature->dernier_diplome)) }}
-      @if($errors->has('InputDernDip'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDernDip')}}</div>
-      @endif
-    </div>
+      <label for="InputDateDernDiplome">Date dernier diplôme :</label>
 
-    <div class="form-group">
-      <label for="InputAnneeDernDip">Année dernier diplôme :</label>
-      {{ Form::text("InputAnneeDernDip", Input::get("InputAnneeDernDip"), array('class' => 'form-control', 'placeholder' => $candidature->annee_dernier_diplome)) }}
-      @if($errors->has('InputAnneeDernDip'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputAnneeDernDip')}}</div>
-      @endif
-    </div>
+       <input id="InputDateDernDiplome" name ="InputDateDernDiplome" class="datepicker" type="text">
+       @if($errors->has('InputDateDernDiplome'))
+        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateDernDiplome')}}</div>
+       @endif
 
+
+    </div>
 
     <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Enregistrer</button>
     <button type="submit" class="btn btn-primary" name = "btnValid" value="btnValid" >Valider</button>
@@ -134,5 +148,15 @@
 </div>
 
 
+<script>
+
+  $(document).ready(function(){
+
+        $('.datepicker').datepicker({
+          language: 'fr'
+        });
+  });
+
+</script>
 
 @stop

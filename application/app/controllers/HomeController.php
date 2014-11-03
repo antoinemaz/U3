@@ -76,15 +76,15 @@ class HomeController extends BaseController {
 
     		// Candidature::where()
 
-    		lib1 = Input::get('libelle1');
+    		// lib1 = Input::get('libelle1');
 
-    		for ($ligne=1; $ligne <= 6 ; $ligne++) { 
+    		// for ($ligne=1; $ligne <= 6 ; $ligne++) { 
 
-    			$user = Utilisateur::find(Auth::user()->id);
+    		// 	$user = Utilisateur::find(Auth::user()->id);
 
-    		}
+    		// }
 
-    		 $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
+    		//  $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
 
     		// Enregistrement en base de données
 			// $create = Diplome::create(array(
