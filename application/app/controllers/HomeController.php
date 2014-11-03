@@ -91,12 +91,12 @@ class HomeController extends BaseController {
 
         // Test de diplomes et stages
     	$candidature_id = $this->getCandidatureByUserLogged()->id; 
-    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature_id)->get();
-        $stages = DB::table('stages')->where('candidature_id', $candidature_id)->get();
+    	//$diplomes = DB::table('diplomes')->where('candidature_id', $candidature_id)->get();
+        //$stages = DB::table('stages')->where('candidature_id', $candidature_id)->get();
 
         // Test de PJs
-        $candidature_id = $this->getCandidatureByUserLogged();
-        $pieces = DB::table('pieces')->where('candidature_id', $candidature_id->id)->get();
+        //$candidature_id = $this->getCandidatureByUserLogged();
+        $pieces = DB::table('pieces')->where('candidature_id', $candidature_id)->get();
 
 
     		// lib1 = Input::get('libelle1');
@@ -109,8 +109,7 @@ class HomeController extends BaseController {
 
     		//  $diplomes = DB::table('pieces')->where('candidature_id', Auth::user()->id)->get();
 
-    	return View::make('pages.test')->with(array(
-    		'diplomes' => $diplomes, 'stages' => $stages, 'pieces' => $pieces));
+    	return View::make('pages.test')->with(array('pieces' => $pieces));
     }
 
     public function testDiplome(){

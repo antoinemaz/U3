@@ -10,12 +10,6 @@
     <p>{{Session::get('ErreurCandidature')}}</p>
   @endif
 
-<<<<<<< HEAD
-
- <?php print_r($errors)?>
-
-=======
->>>>>>> f7ce38410a794d4272dfbf1f396b1cea8bae02b0
 <div class="panel panel-default custom-panel">
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">

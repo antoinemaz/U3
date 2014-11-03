@@ -104,6 +104,21 @@ Route::group(array('before' => 'auth'), function(){
 	'as' => 'changerpassword-get',
 	'uses' => 'CompteController@getChangerPassword'));
 
+	// GET Diplome
+	Route::get('/candidature/diplomes', array(
+	'as' => 'diplome-get',
+	'uses' => 'DiplomeController@getDiplome'));
+
+	// GET Stage
+	Route::get('/candidature/stages', array(
+	'as' => 'stage-get',
+	'uses' => 'StageController@getStage'));
+
+	// GET Page de test
+	Route::get('/testDiplome', array(
+	'as' => 'testDiplome-get',
+	'uses' => 'HomeController@getDiplome'));
+
 	// SI c'est un gestionnaire
 	Route::group(array('before' => 'gestionnaire'), function() {
 
@@ -133,16 +148,6 @@ Route::group(array('before' => 'auth'), function(){
 		});
 	});
 
-		 // GET Test tableau de diplome et stage
-		 Route::get('/testDiplome', array(
-		'as' => 'diplome-get',
-		'uses' => 'HomeController@getDiplome'));
-
-		 // GET téléchargement fichier PDF
-		 Route::get('/download', array(
-		 	'as' => 'download',
-		 	'uses' => 'HomeController@getDownload'));
-
 	// Ensemble des routes de formulaire
 	Route::group(array('before' => 'csrf'), function(){
 
@@ -156,9 +161,14 @@ Route::group(array('before' => 'auth'), function(){
 		'as' => 'creationCandidature-post',
 		'uses' => 'CandidatureController@creerCandidature'));
 
-		  // POST Test tableau de diplome et stage
-		 Route::post('/testDiplome', array(
+		  // POST Diplomes
+		 Route::post('/diplome', array(
 		'as' => 'diplome-post',
-		'uses' => 'HomeController@testDiplome'));
+		'uses' => 'DiplomeController@postDiplome'));
+
+		 // POST Stages
+		 Route::post('/stage', array(
+		'as' => 'stage-post',
+		'uses' => 'StageController@postStage'));
 	});
 });
