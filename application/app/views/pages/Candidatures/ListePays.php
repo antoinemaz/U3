@@ -1,4 +1,4 @@
-<option value="France" selected="selected">France </option>
+<option value="France">France </option>
 
 <option value="Afghanistan">Afghanistan </option>
 <option value="Afrique_Centrale">Afrique_Centrale </option>

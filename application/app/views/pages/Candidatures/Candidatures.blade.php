@@ -165,12 +165,33 @@
 
     <div class="form-group">
       <label for="InputRegime">Régime d'inscription :</label>
-          {{ Form::select('InputRegime', array($tabRegimeInscription),array('class' => 'form-control', 'placeholder' => '')) }}
+          <select name="InputRegime">
+            @foreach($tabRegimeInscription as $unRegime)
+
+              <?php
+                if($candidature->regime_inscription == $unRegime){
+                    ?>
+                    <option value="{{$unRegime}}" selected="selected">{{$unRegime}}</option>  
+                    <?php
+                }else{
+                    ?>
+                  <option value="{{$unRegime}}" >{{$unRegime}}</option>
+                  <?php
+                }
+              ?>
+             @endforeach
+          </select>
     </div>
 
     <div class="form-group">
       <label for="InputDossierE">Dossier étrangé :</label>
-      <input type="checkbox" name="InputDossierE" value="Oui"><br>
+      <?php
+        $checked = '';
+        if ($candidature->dossier_etrange == 1){
+          $checked = 'checked';
+        }
+      ?>
+      <input type="checkbox" name="InputDossierE" value="1" {{$checked}} ><br>
     </div>
 
     <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
