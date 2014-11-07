@@ -121,3 +121,12 @@
 .noBold label{
     font-weight: normal;
 }
+
+.travailStage{
+    height: 250px;
+    width: 280px;
+}
+
+#stages td{
+    vertical-align: middle;
+}

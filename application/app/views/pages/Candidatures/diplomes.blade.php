@@ -51,7 +51,7 @@
               <input type="text" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}"/>
+              <input type="text" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}"/>
             </td>
             <td>
               <input type="text" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}"/>
@@ -78,7 +78,10 @@
 
       $('#error').hide();
 
-      $('#form').submit(function(){
+      $('#clickDiplome').click(function(){
+
+        // variable qui servira à submit le formulaire ou pas
+        var erreur = false;
 
         $('#error').hide();
 
@@ -94,11 +97,36 @@
               if(annee != parseInt(annee)){
                   $('#error').text('Vous devez renseigner des années correctes')
                   $('#error').show();
+                  erreur = true;
                   return false;
               };
             }
           });
-        return false;
+
+           // On va tester la moyenne : il faut que ca soit un integer
+          // On parcours alors tous les champs annees
+          $('.moyenne').each(function(index) {
+
+            var moyenne = $(this).val();
+
+            // Champ vide : on laissera passé
+            if(moyenne != ''){
+              // Il faut que ça soit un integer
+              if(moyenne != parseInt(moyenne)){
+                  $('#error').text('Vous devez renseigner des moyennes correctes')
+                  $('#error').show();
+                  erreur = true;
+                  return false;
+              };
+            }
+          });
+
+          if(erreur){
+            return false;
+          }else{
+              $('#form').setAttrib('action','{{URL::route("diplome-post")}}');
+              $('#form').submit();
+          }
       });
   });
 

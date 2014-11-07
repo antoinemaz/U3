@@ -19,31 +19,20 @@ class StageController extends BaseController {
 
     	   $candidature_id = $this->getCandidatureByUserLogged()->id;
 
-            // Stages
-            $validator = Validator::make(Input::get('date_debut'),
-            array(
-                'date_debut' => 'date|date_format:"d/m/Y"'));
-
-            if($validator->fails()){
-                return Redirect::route('stage-get')
-                        ->withErrors($validator)
-                        ->withInput();
-            }else{
-
                   foreach (Input::get('date_debut') as $key => $value) {   
 
                     if($value != ''){
                         $dateDebutSplite = explode("/", $value);
-                        $datePersiste = $dateDebutSplite[2].'-'.$dateDebutSplite[1].'-'.$dateDebutSplite[0];
+                        $datePersisteDebut = $dateDebutSplite[2].'-'.$dateDebutSplite[1].'-'.$dateDebutSplite[0];
                     }else{
-                        $datePersiste = null;
+                        $datePersisteDebut = null;
                     }
 
                     $stage = Stage::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
 
                     if($stage->count()){
                         $stage = $stage->first();
-                        $stage->date_debut = $datePersiste;
+                        $stage->date_debut = $datePersisteDebut;
                         $stage->save();
                     }
                   }
@@ -52,15 +41,15 @@ class StageController extends BaseController {
                     
                     if($value != ''){
                         $dateFinSplite = explode("/", $value);
-                        $datePersiste = $dateFinSplite[2].'-'.$dateFinSplite[1].'-'.$dateFinSplite[0];
+                        $datePersisteFin = $dateFinSplite[2].'-'.$dateFinSplite[1].'-'.$dateFinSplite[0];
                     }else{
-                        $datePersiste = null;
+                        $datePersisteFin = null;
                     }
 
                     $stage = Stage::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
                     if($stage->count()){
                         $stage = $stage->first();
-                        $stage->date_fin = $datePersiste;
+                        $stage->date_fin = $datePersisteFin;
                         $stage->save();
                     }
                 }
@@ -91,8 +80,6 @@ class StageController extends BaseController {
                         $stage->save();
                     }
                 }
-
-            }
 
     		return Redirect::route('piece-get');
 

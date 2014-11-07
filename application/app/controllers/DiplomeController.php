@@ -19,24 +19,6 @@ class DiplomeController extends BaseController {
         // On clique sur le bouton suivant
         if(Input::get('btnEnreg')) {
 
-
-            foreach (Input::get('annee') as $key => $value) {
-                if($value == ""){
-
-                    return Redirect::route('diplome-get')
-                        ->with('customError', "L'année n'est pas conforme");
-                }
-            }
-
-/*$validator->getMessageBag()->add('email', 'Email wrong');*/
-
-             // Si la validation échoue, on redirige vers la même page avec les erreurs
-/*             if($validator->fails()){
-                return Redirect::route('diplome-get')
-                        ->withErrors($validator)
-                        ->withInput();
-             }else{*/
-
             	$candidature_id = $this->getCandidatureByUserLogged()->id; 
 
                 // Diplomes
@@ -95,7 +77,6 @@ class DiplomeController extends BaseController {
                 }
 
         		return Redirect::route('stage-get');
-            /*}*/
 
         }else{
             return Redirect::route('creationCandidature-get');
