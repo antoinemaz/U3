@@ -86,8 +86,7 @@
 
     <div class="form-group">
       <label for="InputNatio">Nationalité :</label>
-      <select name="InputNatio">
-      <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
+      {{ Form::select('InputNatio', $tabPays, $candidature->nationalite) }}
     </div>
 
     <div class="form-group">
@@ -124,8 +123,7 @@
 
     <div class="form-group">
       <label for="InputPays">Pays :</label>
-      <select name="InputPays">
-      <?php include 'C:\wamp\www\U3\application\app\views\pages\Candidatures\ListePays.php';?> 
+      {{ Form::select('InputPays', $tabPays,$candidature->Pays) }}
     </div>
 
     <div class="form-group">

@@ -13,11 +13,15 @@ class CandidatureController extends BaseController {
         
       	$filieresCandidature = explode("|", $candidature->filiere);
 
+      	$listePays = new ListePays();
+      	$tabPays = ListePays::getListeDesPays();
+		
 		return View::make('pages.Candidatures.Candidatures')
 		->with(array('candidature'=>$candidature, 
 			'tabFiliere' => $tabFilliere, 
 			'tabRegimeInscription' => $tabRegimeInscription,
-			'filieresCandidature' => $filieresCandidature));
+			'filieresCandidature' => $filieresCandidature,
+			'tabPays' => $tabPays));
 	}
 
 
