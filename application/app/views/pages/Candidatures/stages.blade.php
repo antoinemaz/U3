@@ -63,13 +63,13 @@
                   value="{{ $date_fin }}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:160px;" name="nom[]" value="{{ $stage->nom}}"/>
+              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="nom[]" value="{{ $stage->nom}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:160px;" name="adresse[]" value="{{ $stage->adresse}}"/>
+              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="adresse[]" value="{{ $stage->adresse}}"/>
             </td>
              <td>
-              <textarea class="form-control travailStage" name="travail_effectue[]">{{ $stage->travail_effectue}}</textarea>
+              <textarea maxlength="200" class="form-control travailStage" name="travail_effectue[]">{{ $stage->travail_effectue}}</textarea>
             </td>
           </tr>
           @endForeach

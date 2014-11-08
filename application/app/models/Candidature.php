@@ -11,5 +11,5 @@ class Candidature extends Eloquent {
 	// Liste des champs que l'utilisateur peut setter
 	#protected $fillable = array('email', 'password', 'password_tmp', 'code', 'active');
 	
-	public $timestamps = false;
+	public $timestamps = true;
 }

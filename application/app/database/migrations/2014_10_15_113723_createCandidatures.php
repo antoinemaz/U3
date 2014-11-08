@@ -26,16 +26,15 @@ class CreateCandidatures extends Migration {
 		    $table->string('nationalite');
 		    $table->string('telephone');
 		    $table->string('adresse');
-		    $table->integer('codePostal');
+		    $table->string('codePostal');
 		    $table->string('Ville');
 		    $table->string('Pays');
 		    $table->string('filiere');
-		    $table->string('dernier_diplome');
 		    $table->date('date_dernier_diplome')->nullable();
 		    $table->string('commentaire_gestionnaire');
-		    $table->string('erreur_info');
 		    $table->integer('redmine_id');
-		    //année convoitée
+		    $table->integer('annee_convoitee');
+		    $table->boolean('save');
 		    $table->integer('project_id_redmine');
 
 		    $table->integer('etat_id')->unsigned();

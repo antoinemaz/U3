@@ -8,13 +8,12 @@
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body" style="text-align: center;line-height: 26px;">
 
-      <?php
-        if ($etat == 2){
-          ?>
+      @if($candidature->save == 0)
+        Vous devez remplir toutes les informations nécéssaires afin que l'on puisse traiter votre candidature
+      @else
+        @if($candidature->etat_id == 2)
             Votre candidature a été envoyée. Un mail vous sera envoyé en cas de changement d'état de votre candidature
-          <?php
-        }else{
-          ?>
+        @else
                 Vous avez terminé de remplir votre candidature. Toutes les informations ont été enregistrées. <br/>
                 Si vous validez votre candidature, elle sera envoyée et vous ne pourrez plus la modifier. <br/>
                 <form action="{{URL::route('finalisation-post')}}" method="POST">
@@ -22,9 +21,8 @@
                    name = "btnEnreg" value="btnEnreg" >Valider la candidature</button>
                    {{Form::token()}}
                </form>
-          <?php
-        }
-      ?>
+        @endif
+      @endif
     </div>
 </div>
 @stop

@@ -18,6 +18,12 @@
 
    <form action="{{URL::route('creationCandidature-post')}}" method="POST" class="form-horizontal inscription">
 
+    @if(!empty($errors->all()))
+      <div class="alert alert-danger custom-danger" role="alert">
+        Le formulaire comporte des erreurs
+      </div>
+    @endif
+
     <?php
 
        $date_naissance = $candidature->date_naissance;
@@ -63,7 +69,7 @@
     <div class="form-group">
       <label for="InputDateNaissance">Date de naissance :</label>
 
-      <input id="InputDateNaissance" value="{{$date_naissance}}" class="datepicker" name ="InputDateNaissance" type="text">
+      {{ Form::text("InputDateNaissance", $date_naissance, array('class' => 'datepicker', 'name' => 'InputDateNaissance')) }}
       @if($errors->has('InputDateNaissance'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateNaissance')}}</div>
       @endif
@@ -86,7 +92,19 @@
 
     <div class="form-group">
       <label for="InputNatio">Nationalité :</label>
-      {{ Form::select('InputNatio', $tabPays, $candidature->nationalite) }}
+
+      <select name="InputNatio">
+            @foreach($tabPays as $pays)
+
+              <?php
+                if ($pays!=$candidature->nationalite){
+                  ?> <option value="{{$pays}}">{{$pays}}</option> <?php
+              }else{ ?>
+                <option value="{{$pays}}" selected="selected">{{$pays}}</option> <?php
+              } ?>
+              
+             @endforeach
+      </select>
     </div>
 
     <div class="form-group">
@@ -107,7 +125,7 @@
 
     <div class="form-group">
       <label for="InputVille">Ville :</label>
-      {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control', 'placeholder')) }}
+      {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control')) }}
       @if($errors->has('InputVille'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputVille')}}</div>
       @endif
@@ -123,21 +141,37 @@
 
     <div class="form-group">
       <label for="InputPays">Pays :</label>
-      {{ Form::select('InputPays', $tabPays,$candidature->Pays) }}
+            <select name="InputPays">
+            @foreach($tabPays as $pays)
+
+              <?php
+                if ($pays!=$candidature->Pays){
+                  ?> <option value="{{$pays}}">{{$pays}}</option> <?php
+              }else{ ?>
+                <option value="{{$pays}}" selected="selected">{{$pays}}</option> <?php
+              } ?>
+              
+             @endforeach
+      </select>
     </div>
 
     <div class="form-group">
       <label for="InputDateDernDiplome">Date dernier diplôme :</label>
 
-       <input value="{{$date_diplome}}" id="InputDateDernDiplome" name ="InputDateDernDiplome" class="datepicker" type="text">
+       {{ Form::text("InputDateDernDiplome", $date_diplome, array('class' => 'datepicker', 'name' => 'InputDateDernDiplome')) }}
        @if($errors->has('InputDateDernDiplome'))
         <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateDernDiplome')}}</div>
        @endif
     </div>
 
     <div class="form-group">
+      <label for="InputAnnee">Année :</label>
+        {{ Form::select('InputAnnee', $annee_convoitee, $candidature->annee_convoitee) }}
+    </div>
+
+    <div class="form-group">
       <label for="InputFiliere">Fillière :</label>
-        <div class="form-group noBold">
+        <div class="noBold">
           <!-- Dans ma liste $tabFiliere : Pour chaque filiere on l'affiche -->
           @foreach($tabFiliere as $unefiliere)
           <label for="InputFiliere">&nbsp;&nbsp;&nbsp;&nbsp;{{$unefiliere}} :</label>
@@ -156,8 +190,12 @@
               }
           ?>
 
-          {{ Form::checkbox('filiere[]' , $unefiliere, $coche)}}
+          {{ Form::checkbox('filiere[]' , $unefiliere, $coche, ['name' => 'filiere[]'])}}
           @endforeach
+
+          @if($errors->has('filiere'))
+           <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('filiere')}}</div>
+          @endif
         </div>
     </div>
 
@@ -192,7 +230,7 @@
       <input type="checkbox" name="InputDossierE" value="1" {{$checked}} ><br>
     </div>
 
-    <button type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
+    <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
 
 {{Form::token()}}
  </form>
@@ -202,6 +240,29 @@
 
 
 <script>
+
+     $(function(){
+
+      $('#error').hide();
+
+       var dateDDMMYYYRegex = '^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)dd$';
+
+        $('#clickCandidature').click(function(){
+
+          // variable qui servira à submit le formulaire ou pas
+          var erreur = false;
+
+          $('#error').hide();
+
+
+          if(erreur){
+            return false;
+          }else{
+              $('#form').setAttrib('action','{{URL::route("diplome-post")}}');
+              $('#form').submit();
+          }
+        });
+      });
 
   $(document).ready(function(){
 

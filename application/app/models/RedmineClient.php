@@ -64,8 +64,6 @@ class RedmineClient {
     	
     	// Récupération de toutes les années
     	$fields = $fields['projects'];
-	
-		$annees;
     	
     	// Construction d'un tableau avec comme clé l'id de l'année et pour valeur le libellé de l'année
     	foreach ($fields as $key => $value) {

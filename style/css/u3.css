@@ -80,7 +80,7 @@
 .crumbs { 
     display: block;    
     margin: 0 auto;
-    max-width: 610px; }  
+    max-width: 640px; }  
 .crumbs li {  display: inline; }  
 .crumbs li.first { padding-left: 8px; }  
 .crumbs li a,  

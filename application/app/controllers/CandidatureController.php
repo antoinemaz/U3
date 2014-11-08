@@ -9,8 +9,13 @@ class CandidatureController extends BaseController {
 
       	$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
       	$tabRegimeInscription = ["Formation initiale","Formation alternance","Formation permanente","Formation continue"];
-      	$tabannee_convoitee = '{"2":"Ann\u00e9e L2","3":"Ann\u00e9e L3","4":"Ann\u00e9e M1","5":"Ann\u00e9e M2","6":"Information sur le site"}'; 
         
+		$annee_convoitee[2] = ('Année L2');
+		$annee_convoitee[3] = 'Année L3';
+		$annee_convoitee[4] = 'Année M1';
+		$annee_convoitee[5] = 'Année M2';
+		$annee_convoitee[6] = 'Information sur le site';
+
       	$filieresCandidature = explode("|", $candidature->filiere);
 
       	$listePays = new ListePays();
@@ -21,7 +26,8 @@ class CandidatureController extends BaseController {
 			'tabFiliere' => $tabFilliere, 
 			'tabRegimeInscription' => $tabRegimeInscription,
 			'filieresCandidature' => $filieresCandidature,
-			'tabPays' => $tabPays));
+			'tabPays' => $tabPays,
+			'annee_convoitee' => $annee_convoitee));
 	}
 
 
@@ -63,24 +69,30 @@ class CandidatureController extends BaseController {
               }else{
                         $date_naissance = null;
                     }
-	
+
 		 	$validator = Validator::make(Input::all(),array(	
-					'InputNom' => 'required',
-					'InputPrenom' => 'required',
-					'InputDateNaissance' => 'required|min:4',
-					'InputLieu' => 'required',
+					'InputNom' => 'required|min:1|max:150',
+					'InputPrenom' => 'required|min:1|max:150',
+					'InputDateNaissance' => 'required|date_format:d/m/Y',
+					'InputLieu' => 'required|min:1|max:150',
 					'InputTel' => 'required|min:10',
-					'InputAdr' => 'required',
-					'InputVille' => 'required',
-					'InputCP' => 'required|min:5|integer',
-					'InputDateDernDiplome' => 'required|min:4'));
+					'InputAdr' => 'required|min:1|max:150',
+					'InputVille' => 'required|min:1|max:150',
+					'InputCP' => 'required|integer',
+					'InputNatio' => 'required',
+					'InputPays' => 'required',
+					'filiere' =>  'required',
+					'InputAnnee' => 'required',
+					'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
 
 
 			 // Si la validation échoue, on redirige vers la même page avec les erreurs
 			 if($validator->fails()){
+
 			 	return Redirect::route('creationCandidature-get')
 			 			->withErrors($validator)
 			 			->withInput();
+
 			 }else{
  			 		 $candidature = $this->getCandidatureByUserLogged();
 
@@ -98,12 +110,12 @@ class CandidatureController extends BaseController {
 				     $candidature -> codePostal = Input::get('InputCP');
 				     $candidature -> Pays = Input::get('InputPays');
 				     $candidature -> date_dernier_diplome = $date_diplome;
+				     $candidature -> annee_convoitee = Input::get('InputAnnee');
+				     $candidature -> save = 1;
 
 				     if($filiere != null){
 				     	 $candidature -> filiere = $Finalchaine;	
 				     }
-
-				     $candidature -> date_dernier_diplome = Input::get('InputDateDernDiplome');		
 
 		             if($candidature->save()){
 						 	return Redirect::route('diplome-get');
@@ -128,7 +140,7 @@ class CandidatureController extends BaseController {
 
 		$candidature = $this->getCandidatureByUserLogged();
 
-		return View::make('pages.Candidatures.finalisation')->with('etat', $candidature->etat_id);
+		return View::make('pages.Candidatures.finalisation')->with('candidature', $candidature);
 	}
 
 	public function postFinalisation(){

@@ -14,6 +14,16 @@ class StageController extends BaseController {
 
     public function postStage(){
 
+
+
+/*        foreach ($porcentaje as $porcentaj) {
+           $validator = Validator::make(
+                array('porcentaje' => $porcentaj),
+                array('porcentaje' => array('required','numeric','between:0,100'))
+            );*/
+// VOIR CUSTOM VALIDATOR
+
+
          // On clique sur le bouton suivant
         if(Input::get('btnEnreg')) {
 

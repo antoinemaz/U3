@@ -42,22 +42,22 @@
             </td>
             <td>
               <!-- {{ Form::text("annee[$diplome->numero]", Input::get("annee[$diplome->numero]"), array('class' => 'form-control')) }} -->
-              <input type="text" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}"/>
+              <input type="text" maxlength="4" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}"/>
             </td>
             <td>
-              <input type="text" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}"/>
+              <input type="text" maxlength="2" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}"/>
             </td>
             <td>
-              <input type="text" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}"/>
             </td>
           </tr>
           @endForeach

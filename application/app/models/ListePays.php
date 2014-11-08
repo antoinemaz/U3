@@ -73,7 +73,7 @@ public static function getListeDesPays() {
 		"Feroe",
 		"Fidji",
 		"Finlande",
-		"France",
+		"France" => "France",
 		"Gabon",
 		"Gambie",
 		"Georgie",
