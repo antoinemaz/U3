@@ -21,7 +21,7 @@
 					<tr>
 						<td>{{ $cand->nom }}</td>
 						<td>{{ $cand->prenom }}</td>
-						<td><a href="{{URL::route('password-oublie-get')}}">Détail</a></td>
+						<td><a href="{{URL::route('detailCandidature-get', $cand->id )}}">Détail</a></td>
 					</tr>
 					@endforeach
 				</tbody>

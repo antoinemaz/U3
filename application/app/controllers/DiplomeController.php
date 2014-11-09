@@ -5,7 +5,6 @@ class DiplomeController extends BaseController {
 
     public function getDiplome(){
 
-
         $candidature = $this->getCandidatureByUserLogged();
     	$candidature_id = $candidature -> id;
         $candidature_etat = $candidature -> etat_id;

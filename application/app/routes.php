@@ -149,6 +149,11 @@ Route::group(array('before' => 'auth'), function(){
 			'as' => 'listeCandidatures-get',
 			'uses' => 'GestionController@getListeCandidatures'));
 
+	    // GET Détail de candidature
+	    Route::get("/gestion/detailCandidature/{id}", array(
+			'as' => 'detailCandidature-get',
+			'uses' => 'DetailCandidatureController@getDetailCandidature'));
+
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){
 			
@@ -156,6 +161,11 @@ Route::group(array('before' => 'auth'), function(){
 			Route::post('/creerCompteGestionnaire', array(
 				'as' => 'creerCompteGestionnaire-post',
 				'uses' => 'CompteController@postCreateCompteGestionnaire'));
+
+			 // POST Détail de candidature
+		    Route::post("/gestion/detailCandidature", array(
+				'as' => 'detailCandidature-post',
+				'uses' => 'DetailCandidatureController@postDetailCandidature'));
 		});
 	});
 

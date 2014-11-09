@@ -4,9 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Laravel PHP Framework</title>
 
-	{{ HTML::style('style/css/bootstrap.css') }}
 	{{ HTML::script('style/js/jquery-1.11.1.min.js') }}
-	{{ HTML::script('style/js/jquery.form.min.js') }}
+	{{ HTML::script('style/js/bootstrap.js') }}
+
+	{{ HTML::style('style/css/bootstrap.css') }}
 
 	{{ HTML::style('style/datatable/media/css/jquery.dataTables.min.css') }}
 	{{ HTML::script('style/datatable/media/js/jquery.dataTables.min.js') }}
