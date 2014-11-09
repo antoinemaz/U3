@@ -4,12 +4,13 @@ class StageController extends BaseController {
 
     public function getStage(){
 
-        // Test de diplomes et stages
-    	$candidature_id = $this->getCandidatureByUserLogged()->id; 
+        $candidature = $this->getCandidatureByUserLogged();
+        $candidature_id = $candidature -> id;
+        $candidature_etat = $candidature -> etat_id;
 
         $stages = DB::table('stages')->where('candidature_id', $candidature_id)->get();
 
-    	return View::make('pages.Candidatures.stages')->with(array('stages' => $stages));
+    	return View::make('pages.Candidatures.stages')->with(array('stages' => $stages, 'etat' => $candidature_etat));
     }
 
     public function postStage(){
@@ -24,10 +25,18 @@ class StageController extends BaseController {
 // VOIR CUSTOM VALIDATOR
 
 
-         // On clique sur le bouton suivant
+         // On clique sur le bouton Enregistrer
         if(Input::get('btnEnreg')) {
 
-    	   $candidature_id = $this->getCandidatureByUserLogged()->id;
+            $candidature = $this->getCandidatureByUserLogged();
+
+            // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
+             if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+                 return Redirect::route('diplome-get');
+
+             }else{
+                  
+                  $candidature_id = $candidature->id;
 
                   foreach (Input::get('date_debut') as $key => $value) {   
 
@@ -91,10 +100,13 @@ class StageController extends BaseController {
                     }
                 }
 
-    		return Redirect::route('piece-get');
+                return Redirect::route('stage-get')->with('succes', 'Modifications effectuées');
+             }
 
-        }else{
+        }elseif(Input::get('btnPrecedent')){
             return Redirect::route('diplome-get');
+        }else{
+            return Redirect::route('piece-get');
         }
     }
 

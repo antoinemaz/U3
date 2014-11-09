@@ -4,46 +4,58 @@ class PieceController extends BaseController {
 
     public function getPiece(){
 
-        return View::make('pages.Candidatures.pieces');
+    	$candidature = $this->getCandidatureByUserLogged();
+
+        return View::make('pages.Candidatures.pieces')->with('etat', $candidature->etat_id);
     }
 
     // POST upload de piece jointe
 	public function upload(){
 
-		$properties = parse_ini_file("properties.ini");
-	
-		ini_set('upload_max_filesize', $properties['sizeMaxUploadFile'].'M');
-		ini_set('post_max_size', $properties['sizeMaxUploadFile'].'M');
+		$candidature = $this->getCandidatureByUserLogged();
 
-		if(Request::ajax()){
+	    // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
+        if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+            return Redirect::route('piece-get');
 
-    		$validator = Validator::make(Input::all(),
-			array('file' => 'required|max:10000|mimes:pdf'));
-	
-			// Si la validation échoue, on redirige vers la même page avec les erreurs
-			if($validator->fails()){
-				// REDIRIGER VERS PAGE CANDIDATURE AVEC MESSAGE D'ERREUR
-			}else{
-			    $file = Input::file('file');
-				$filename = $file->getClientOriginalName();
-				$path = 'uploads';
+         }else{
 
-				// code de fichier
-				$code = str_random(15);
+	         $properties = parse_ini_file("properties.ini");
+		
+			ini_set('upload_max_filesize', $properties['sizeMaxUploadFile'].'M');
+			ini_set('post_max_size', $properties['sizeMaxUploadFile'].'M');
 
-				$uid = Auth::user()->id.'-'.$code.'-'.$filename;
+			if(Request::ajax()){
 
-				$file->move($path, $uid);
-				$fileModel = new Piece;
-				$fileModel->uid = $uid;
-				$fileModel->filename = $filename;
+	    		$validator = Validator::make(Input::all(),
+				array('file' => 'required|max:10000|mimes:pdf'));
+		
+				// Si la validation échoue, on redirige vers la même page avec les erreurs
+				if($validator->fails()){
+					// REDIRIGER VERS PAGE CANDIDATURE AVEC MESSAGE D'ERREUR
+				}else{
+				    $file = Input::file('file');
+					$filename = $file->getClientOriginalName();
+					$path = 'uploads';
 
-                $candidature_id = $this->getCandidatureByUserLogged()->id; 
+					// code de fichier
+					$code = str_random(15);
 
-				$fileModel->candidature_id = $candidature_id;
-				$fileModel->save();
+					$uid = Auth::user()->id.'-'.$code.'-'.$filename;
+
+					$file->move($path, $uid);
+					$fileModel = new Piece;
+					$fileModel->uid = $uid;
+					$fileModel->filename = $filename;
+
+	                $candidature_id = $this->getCandidatureByUserLogged()->id; 
+
+					$fileModel->candidature_id = $candidature->id;
+					$fileModel->save();
+				}
 			}
-		}
+
+         }
 	}
 
     // Suppression de la pièce jointe
@@ -74,10 +86,11 @@ class PieceController extends BaseController {
     // Liste des pièces jointes
     public function showPjs(){
 
-        $candidature_id = $this->getCandidatureByUserLogged()->id;
+    	$candidature = $this->getCandidatureByUserLogged();
+        $candidature_id = $candidature->id;
 
     	$fichiers = DB::table('pieces')->where('candidature_id', $candidature_id)->get();
-    	return View::make('pages.Candidatures.pjs')->with('pjs', $fichiers);
+    	return View::make('pages.Candidatures.pjs')->with(array('pjs' => $fichiers, 'etat' => $candidature->etat_id));
     }
 
     public function getCandidatureByUserLogged(){
@@ -90,6 +103,15 @@ class PieceController extends BaseController {
 			$candidature = $candidature->first(); 	
 		 }
 		 return $candidature;
+    }
+
+    public function download(){
+
+        $file= public_path(). "/download/info.pdf";
+        $headers = array(
+              'Content-Type: application/pdf',
+            );
+        return Response::download($file, 'filename.pdf', $headers);
     }
 
 }

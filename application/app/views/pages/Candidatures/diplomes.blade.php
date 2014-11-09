@@ -8,10 +8,22 @@
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">
 
+    @if(Session::has('succes'))
+      <div id="succes" class="alert alert-success custom-alert center" role="alert">{{Session::get('succes')}}</div>
+    @endif
+
+    <div id="error" class="alert alert-danger custom-alert center" role="alert">{{Session::get('customError')}}</div>
+
     <form action="{{URL::route('diplome-post')}}" id="form" method="POST" class="form-horizontal" style="text-align:center;">
 
-        <div id="error" class="alert alert-danger custom-danger" role="alert">{{Session::get('customError')}}</div>
-      
+      <?php
+          // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
+          $readonly = '';
+          if($etat == 2 or $etat == 3 ){
+            $readonly = 'disabled';
+          }
+      ?>
+
       <table id="diplomes" class="table datatable tableOfCandidature" style="margin:0 auto;">
         <thead>
           <tr>
@@ -42,29 +54,30 @@
             </td>
             <td>
               <!-- {{ Form::text("annee[$diplome->numero]", Input::get("annee[$diplome->numero]"), array('class' => 'form-control')) }} -->
-              <input type="text" maxlength="4" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}"/>
+              <input type="text" maxlength="4" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="2" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}"/>
+              <input type="text" maxlength="2" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}"/>
+              <input type="text" maxlength="200" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}" {{$readonly}} />
             </td>
           </tr>
           @endForeach
         </tbody>
     </table>
         <button type="submit" class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
-        <button id="clickDiplome" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
+        <button id="clickDiplome" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
+        <button type="submit" class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
     {{Form::token()}}
 
   </form>
@@ -97,6 +110,7 @@
               if(annee != parseInt(annee)){
                   $('#error').text('Vous devez renseigner des années correctes')
                   $('#error').show();
+                  $('#succes').hide();
                   erreur = true;
                   return false;
               };

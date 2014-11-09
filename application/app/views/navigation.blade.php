@@ -7,7 +7,29 @@
 			<li class="{{Active::route(array('changerpassword-get'), 'active')}}"><a href="{{URL::route('changerpassword-get')}}">Changer mot de passe</a></li>
 			
 			@if(Auth::user()->role_id == 1)
-				<li class="{{Active::route(array('creationCandidature-get'), 'active')}}"><a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a></li>
+
+					@if(Route::currentRouteName() == 'creationCandidature-get')
+						<li class="active">
+							<a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a>
+						</li>
+					@elseif(Route::currentRouteName() == 'diplome-get')
+						<li class="active">
+							<a href="{{URL::route('diplome-get')}}">Créer une candidature</a>
+						</li>
+					@elseif(Route::currentRouteName() == 'stage-get')
+						<li class="active">
+							<a href="{{URL::route('stage-get')}}">Créer une candidature</a>
+						</li>
+					@elseif(Route::currentRouteName() == 'piece-get')
+						<li class="active">
+							<a href="{{URL::route('piece-get')}}">Créer une candidature</a>
+						</li>
+					@else
+						<li class="active">
+							<a href="{{URL::route('finalisation-get')}}">Créer une candidature</a>
+						</li>
+					@endIf
+				</li>
 			@else
 				<li class="{{Active::route(array('gestionnaires-get'), 'active')}}"><a href="{{URL::route('gestionnaires-get')}}">Gérer les gestionnaires</a></li>
 				<li class="{{Active::route(array('listeCandidatures-get'), 'active')}}"><a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a></li>

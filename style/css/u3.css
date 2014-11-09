@@ -34,7 +34,7 @@
     margin: 0 auto;
 }
 
-.custom-danger{
+.custom-alert{
     margin-top: 4px;
     padding: 0px;
 }
@@ -129,4 +129,8 @@
 
 #stages td{
     vertical-align: middle;
+}
+
+.center{
+    text-align: center;
 }

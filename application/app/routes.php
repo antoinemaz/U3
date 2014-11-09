@@ -117,6 +117,9 @@ Route::group(array('before' => 'auth'), function(){
 	'as' => 'deletepj',
 	'uses' => 'PieceController@deletePj'));
 
+	// Download Piece jointe
+	Route::get('/download', 'PieceController@download');
+
 	// GET Finalisation
 	Route::get('/candidature/finalisation', array(
 	'as' => 'finalisation-get',

@@ -16,13 +16,17 @@
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">
 
-   <form action="{{URL::route('creationCandidature-post')}}" method="POST" class="form-horizontal inscription">
+     @if(Session::has('succes'))
+      <div class="alert alert-success custom-alert center" role="alert">{{Session::get('succes')}}</div>
+    @endif
 
     @if(!empty($errors->all()))
-      <div class="alert alert-danger custom-danger" role="alert">
+      <div class="alert alert-danger custom-alert center" role="alert">
         Le formulaire comporte des erreurs
       </div>
     @endif
+
+   <form id="form" action="{{URL::route('creationCandidature-post')}}" method="POST" class="form-horizontal inscription">
 
     <?php
 
@@ -48,52 +52,69 @@
                  $date_diplome = $dateDiplomeSplite[2].'/'.$dateDiplomeSplite[1].'/'.$dateDiplomeSplite[0];
               }
             }
+
+            // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
+            $readonly = '';
+            if($candidature->etat_id == 2 or $candidature->etat_id == 3 ){
+              $readonly = 'disabled';
+            }
     ?>
 
     <div class="form-group">
       <label for="InputNom">Nom :</label>
-      {{ Form::text("InputNom", $candidature->nom, array('class' => 'form-control')) }}
+      {{ Form::text("InputNom", $candidature->nom, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputNom'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputNom')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputNom')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputPrenom">Prénom :</label>
-      {{ Form::text("InputPrenom", $candidature->prenom, array('class' => 'form-control')) }}
+      {{ Form::text("InputPrenom", $candidature->prenom, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputPrenom'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputPrenom')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputPrenom')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputDateNaissance">Date de naissance :</label>
 
-      {{ Form::text("InputDateNaissance", $date_naissance, array('class' => 'datepicker', 'name' => 'InputDateNaissance')) }}
+      {{ Form::text("InputDateNaissance", $date_naissance, array('class' => 'form-control datepicker', 'name' => 'InputDateNaissance', $readonly)) }}
       @if($errors->has('InputDateNaissance'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateNaissance')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputDateNaissance')}}</div>
       @endif
 
     </div>
 
     <div class="form-group">
       <label for="InputLieu">Lieu de naissance :</label>
-      {{ Form::text("InputLieu", $candidature->lieu_naissance, array('class' => 'form-control')) }}
+      {{ Form::text("InputLieu", $candidature->lieu_naissance, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputLieu'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputLieu')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputLieu')}}</div>
       @endif
     </div>
 
 
      <div class="form-group">
       <label for="InputSexe">Sexe :</label>
-      {{ Form::select('InputSexe', array('masculin' => 'Masculin', 'F' => 'Féminin'),array('class' => 'form-control', 'placeholder' => $candidature->sexe)) }}
+
+      <select name='InputSexe' class='form-control' {{$readonly}}>
+        @foreach($tabSexe as $sexe)
+             <?php
+                if ($sexe!=$candidature->sexe){
+                  ?> <option value="{{$sexe}}">{{$sexe}}</option> <?php
+              }else{ ?>
+                <option value="{{$sexe}}" selected="selected">{{$sexe}}</option> <?php
+              } ?>
+        @endForeach
+      </select>
+
     </div>
 
     <div class="form-group">
       <label for="InputNatio">Nationalité :</label>
 
-      <select name="InputNatio">
+      <select name="InputNatio" class="form-control" {{$readonly}}>
             @foreach($tabPays as $pays)
 
               <?php
@@ -109,39 +130,39 @@
 
     <div class="form-group">
       <label for="InputTel">Téléphone :</label>
-      {{ Form::text("InputTel",  $candidature->telephone, array('class' => 'form-control')) }}
+      {{ Form::text("InputTel",  $candidature->telephone, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputTel'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputTel')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputTel')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputAdr">Adresse :</label>
-      {{ Form::text("InputAdr", $candidature->adresse, array('class' => 'form-control')) }}
+      {{ Form::text("InputAdr", $candidature->adresse, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputAdr'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputAdr')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputAdr')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputVille">Ville :</label>
-      {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control')) }}
+      {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputVille'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputVille')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputVille')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputCP">Code postal :</label>
-      {{ Form::text("InputCP", $candidature->codePostal, array('class' => 'form-control')) }}
+      {{ Form::text("InputCP", $candidature->codePostal, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputCP'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputCP')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputCP')}}</div>
       @endif
     </div>
 
     <div class="form-group">
       <label for="InputPays">Pays :</label>
-            <select name="InputPays">
+            <select name="InputPays" class="form-control" {{$readonly}}>
             @foreach($tabPays as $pays)
 
               <?php
@@ -158,15 +179,15 @@
     <div class="form-group">
       <label for="InputDateDernDiplome">Date dernier diplôme :</label>
 
-       {{ Form::text("InputDateDernDiplome", $date_diplome, array('class' => 'datepicker', 'name' => 'InputDateDernDiplome')) }}
+       {{ Form::text("InputDateDernDiplome", $date_diplome, array('class' => 'form-control datepicker', 'name' => 'InputDateDernDiplome', $readonly)) }}
        @if($errors->has('InputDateDernDiplome'))
-        <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('InputDateDernDiplome')}}</div>
+        <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputDateDernDiplome')}}</div>
        @endif
     </div>
 
     <div class="form-group">
       <label for="InputAnnee">Année :</label>
-        {{ Form::select('InputAnnee', $annee_convoitee, $candidature->annee_convoitee) }}
+        {{ Form::select('InputAnnee', $annee_convoitee, $candidature->annee_convoitee, array('class' => 'form-control', $readonly)) }}
     </div>
 
     <div class="form-group">
@@ -190,18 +211,18 @@
               }
           ?>
 
-          {{ Form::checkbox('filiere[]' , $unefiliere, $coche, ['name' => 'filiere[]'])}}
+          {{ Form::checkbox('filiere[]' , $unefiliere, $coche, ['name' => 'filiere[]',$readonly])}}
           @endforeach
 
           @if($errors->has('filiere'))
-           <div class="alert alert-danger custom-danger" role="alert">{{$errors->first('filiere')}}</div>
+           <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('filiere')}}</div>
           @endif
         </div>
     </div>
 
     <div class="form-group">
       <label for="InputRegime">Régime d'inscription :</label>
-          <select name="InputRegime">
+          <select name="InputRegime" class="form-control" {{$readonly}}>
             @foreach($tabRegimeInscription as $unRegime)
 
               <?php
@@ -227,10 +248,13 @@
           $checked = 'checked';
         }
       ?>
-      <input type="checkbox" name="InputDossierE" value="1" {{$checked}} ><br>
+      <input type="checkbox" name="InputDossierE" value="1" {{$checked}} {{$readonly}} ><br>
     </div>
 
-    <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
+    <div class="center">
+          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
+         <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnSuiv" value="btnSuiv" >Suivant</button>
+    </div>
 
 {{Form::token()}}
  </form>
@@ -240,29 +264,7 @@
 
 
 <script>
-
-     $(function(){
-
-      $('#error').hide();
-
-       var dateDDMMYYYRegex = '^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)dd$';
-
-        $('#clickCandidature').click(function(){
-
-          // variable qui servira à submit le formulaire ou pas
-          var erreur = false;
-
-          $('#error').hide();
-
-
-          if(erreur){
-            return false;
-          }else{
-              $('#form').setAttrib('action','{{URL::route("diplome-post")}}');
-              $('#form').submit();
-          }
-        });
-      });
+  $( "#form" ).prop( "disabled", true );
 
   $(document).ready(function(){
 

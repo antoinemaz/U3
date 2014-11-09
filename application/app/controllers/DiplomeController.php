@@ -6,12 +6,14 @@ class DiplomeController extends BaseController {
     public function getDiplome(){
 
 
-    	$candidature_id = $this->getCandidatureByUserLogged()->id; 
+        $candidature = $this->getCandidatureByUserLogged();
+    	$candidature_id = $candidature -> id;
+        $candidature_etat = $candidature -> etat_id;
 
         // On récupère tous les diplomes liés à la candidature (6 au max)
     	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature_id)->get();
 
-    	return View::make('pages.Candidatures.diplomes')->with(array('diplomes' => $diplomes));
+    	return View::make('pages.Candidatures.diplomes')->with(array('diplomes' => $diplomes, 'etat' => $candidature_etat));
     }
 
     public function postDiplome(){
@@ -19,17 +21,25 @@ class DiplomeController extends BaseController {
         // On clique sur le bouton suivant
         if(Input::get('btnEnreg')) {
 
-            	$candidature_id = $this->getCandidatureByUserLogged()->id; 
+            $candidature = $this->getCandidatureByUserLogged();
+
+            // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
+             if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+                 return Redirect::route('diplome-get');
+
+             }else{
+                 
+                $candidature_id = $candidature->id; 
 
                 // Diplomes
-        		foreach (Input::get('annee') as $key => $value) {
-        			$diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-        			if($diplome->count()){
-        				$diplome = $diplome->first();
-        				$diplome->annee = $value;
-        				$diplome->save();
-        			}
-        		}
+                foreach (Input::get('annee') as $key => $value) {
+                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                    if($diplome->count()){
+                        $diplome = $diplome->first();
+                        $diplome->annee = $value;
+                        $diplome->save();
+                    }
+                }
 
                 foreach (Input::get('etablissement') as $key => $value) { 
                     $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
@@ -76,10 +86,13 @@ class DiplomeController extends BaseController {
                     }
                 }
 
-        		return Redirect::route('stage-get');
+                return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
+            }
 
-        }else{
+        }elseif(Input::get('btnPrecedent')){
             return Redirect::route('creationCandidature-get');
+        }else{
+            return Redirect::route('stage-get');
         }
     }
 

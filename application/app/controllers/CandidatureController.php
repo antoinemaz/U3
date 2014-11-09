@@ -21,13 +21,16 @@ class CandidatureController extends BaseController {
       	$listePays = new ListePays();
       	$tabPays = ListePays::getListeDesPays();
 		
+		$tabSexe = ["Masculin", "Féminin"];
+
 		return View::make('pages.Candidatures.Candidatures')
 		->with(array('candidature'=>$candidature, 
 			'tabFiliere' => $tabFilliere, 
 			'tabRegimeInscription' => $tabRegimeInscription,
 			'filieresCandidature' => $filieresCandidature,
 			'tabPays' => $tabPays,
-			'annee_convoitee' => $annee_convoitee));
+			'annee_convoitee' => $annee_convoitee,
+			'tabSexe' => $tabSexe));
 	}
 
 
@@ -38,102 +41,100 @@ class CandidatureController extends BaseController {
 		// On clique sur le bouton suivant
         if(Input::get('btnEnreg')) {
 
-        	//Récupération du tableau de filiere
-			$filiere = Input::get('filiere');
+			$candidature = $this->getCandidatureByUserLogged();
 
-        	if($filiere != null){
-        		
-				$chaine = '';
+			// Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
+			if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+				return Redirect::route('creationCandidature-get');
+			}else{
 
-				foreach ($filiere as $key => $value) {
-					$chaine = $chaine . $value.'|' ;
+				//Récupération du tableau de filiere
+				$filiere = Input::get('filiere');
+
+	        	if($filiere != null){
+	        		
+					$chaine = '';
+
+					foreach ($filiere as $key => $value) {
+						$chaine = $chaine . $value.'|' ;
+					}
+
+					//Suppression du dernier pipeline
+					//Renvois une chaine de ce type : (scénario tout est coché) : MIAGE|MIAGE App|ASR|Info|FC
+					$Finalchaine = rtrim($chaine, "|");
+	        	}
+
+	        	 // Traitement de la date de naissance 
+	        	 if(Input::get('InputDateNaissance') != ''){
+	                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
+	                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
+	              }else{
+	                        $date_naissance = null;
+	                    }
+
+	              // Traitement de la date du dernier diplome
+	              if(Input::get('InputDateDernDiplome') != ''){
+	                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
+	                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
+	              }else{
+	                        $date_naissance = null;
+	                    }
+
+			 	$validator = Validator::make(Input::all(),array(	
+						'InputNom' => 'required|min:1|max:150',
+						'InputPrenom' => 'required|min:1|max:150',
+						'InputDateNaissance' => 'required|date_format:d/m/Y',
+						'InputLieu' => 'required|min:1|max:150',
+						'InputTel' => 'required|min:10',
+						'InputAdr' => 'required|min:1|max:150',
+						'InputVille' => 'required|min:1|max:150',
+						'InputCP' => 'required|integer',
+						'InputNatio' => 'required',
+						'InputPays' => 'required',
+						'filiere' =>  'required',
+						'InputAnnee' => 'required',
+						'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
+
+
+				 // Si la validation échoue, on redirige vers la même page avec les erreurs
+				 if($validator->fails()){
+
+				 	return Redirect::route('creationCandidature-get')
+				 			->withErrors($validator)
+				 			->withInput();
+
+				 }else{
+						 $candidature -> nom = Input::get('InputNom');
+						 $candidature -> prenom = Input::get('InputPrenom');
+					     $candidature -> date_naissance = $date_naissance;
+					     $candidature -> lieu_naissance = Input::get('InputLieu');
+					     $candidature -> regime_inscription = Input::get('InputRegime');
+					     $candidature -> sexe = Input::get('InputSexe');
+					     $candidature -> dossier_etrange = Input::get('InputDossierE');
+					     $candidature -> nationalite = Input::get('InputNatio');
+					     $candidature -> telephone = Input::get('InputTel');
+					     $candidature -> adresse = Input::get('InputAdr');
+					     $candidature -> Ville = Input::get('InputVille');
+					     $candidature -> codePostal = Input::get('InputCP');
+					     $candidature -> Pays = Input::get('InputPays');
+					     $candidature -> date_dernier_diplome = $date_diplome;
+					     $candidature -> annee_convoitee = Input::get('InputAnnee');
+					     $candidature -> save = 1;
+
+					     if($filiere != null){
+					     	 $candidature -> filiere = $Finalchaine;	
+					     }
+
+			             if($candidature->save()){
+							 	return Redirect::route('creationCandidature-get')->with('succes', 'Modifications effectuées');
+					     }
 				}
-
-				//Suppression du dernier pipeline
-				//Renvois une chaine de ce type : (scénario tout est coché) : MIAGE|MIAGE App|ASR|Info|FC
-				$Finalchaine = rtrim($chaine, "|");
-        	}
-
-        	 // Traitement de la date de naissance 
-        	 if(Input::get('InputDateNaissance') != ''){
-                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
-                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
-              }else{
-                        $date_naissance = null;
-                    }
-
-              // Traitement de la date du dernier diplome
-              if(Input::get('InputDateDernDiplome') != ''){
-                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
-                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
-              }else{
-                        $date_naissance = null;
-                    }
-
-		 	$validator = Validator::make(Input::all(),array(	
-					'InputNom' => 'required|min:1|max:150',
-					'InputPrenom' => 'required|min:1|max:150',
-					'InputDateNaissance' => 'required|date_format:d/m/Y',
-					'InputLieu' => 'required|min:1|max:150',
-					'InputTel' => 'required|min:10',
-					'InputAdr' => 'required|min:1|max:150',
-					'InputVille' => 'required|min:1|max:150',
-					'InputCP' => 'required|integer',
-					'InputNatio' => 'required',
-					'InputPays' => 'required',
-					'filiere' =>  'required',
-					'InputAnnee' => 'required',
-					'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
-
-
-			 // Si la validation échoue, on redirige vers la même page avec les erreurs
-			 if($validator->fails()){
-
-			 	return Redirect::route('creationCandidature-get')
-			 			->withErrors($validator)
-			 			->withInput();
-
-			 }else{
- 			 		 $candidature = $this->getCandidatureByUserLogged();
-
-					 $candidature -> nom = Input::get('InputNom');
-					 $candidature -> prenom = Input::get('InputPrenom');
-				     $candidature -> date_naissance = $date_naissance;
-				     $candidature -> lieu_naissance = Input::get('InputLieu');
-				     $candidature -> regime_inscription = Input::get('InputRegime');
-				     $candidature -> sexe = Input::get('InputSexe');
-				     $candidature -> dossier_etrange = Input::get('InputDossierE');
-				     $candidature -> nationalite = Input::get('InputNatio');
-				     $candidature -> telephone = Input::get('InputTel');
-				     $candidature -> adresse = Input::get('InputAdr');
-				     $candidature -> Ville = Input::get('InputVille');
-				     $candidature -> codePostal = Input::get('InputCP');
-				     $candidature -> Pays = Input::get('InputPays');
-				     $candidature -> date_dernier_diplome = $date_diplome;
-				     $candidature -> annee_convoitee = Input::get('InputAnnee');
-				     $candidature -> save = 1;
-
-				     if($filiere != null){
-				     	 $candidature -> filiere = $Finalchaine;	
-				     }
-
-		             if($candidature->save()){
-						 	return Redirect::route('diplome-get');
-				     }
+					
 			}
 
-        } elseif(Input::get('btnValid')) {
-
-           $lacandidature = $this-> candidatureDansBdd();
-
-           $lacandidature -> etat_id = 2;
-
-           if($lacandidature->save()){
-			 	return Redirect::route('creationCandidature-get')->with('message', 'Votre candidature est validée.');
-		   }
+        }else{
+        	return Redirect::route('diplome-get');
         }
-
-
 	}
 
 	public function getFinalisation(){

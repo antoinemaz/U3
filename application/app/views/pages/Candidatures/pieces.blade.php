@@ -8,17 +8,26 @@
   <div class="panel-heading"> <span class="glyphicon glyphicon-upload"></span> Formulaire dépôt de pièces jointes</div>
   <div class="panel-body">
     {{ Form::open(array('files'=>true, 'id' => 'form', 'class'=>'form-horizontal inscription')) }}
-    <div class="form-group">
-        {{ Form::label('file','Fichier',array('id'=>'','class'=>'')) }}
-        {{ Form::file('file','',array('id'=>'file','class'=>'')) }}
-        <div class="alert alert-danger custom-danger" id="erreurPj" role="alert"></div>
-    </div>
-        <button type=button onclick="window.location='{{ route("stage-get") }}'"
-        class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
 
-        {{ Form::submit('Ajouter',array('id'=>'addFile', 'class' => 'btn btn-primary')) }} 
-        {{ Form::reset('Vider', array('class'=>'btn btn-info')) }}
-        <div style="margin-top:12px;" class="label label-info" id="charg"></div>  
+       <?php
+            // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
+            $readonly = '';
+            if($etat == 2 or $etat == 3 ){
+              $readonly = 'disabled';
+            }
+        ?>
+
+      <div class="form-group">
+          {{ Form::label('file','Fichier',array('id'=>'','class'=>'')) }}
+          <input id="file" type="file" name="file" {{$readonly}}>
+          <div class="alert alert-danger custom-alert" id="erreurPj" role="alert"></div>
+      </div>
+          <button type=button onclick="window.location='{{ route("stage-get") }}'"
+          class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent"  >Précédent</button>
+
+          {{ Form::submit('Ajouter',array('id'=>'addFile', 'class' => 'btn btn-primary', $readonly)) }} 
+          {{ Form::reset('Vider', array('class'=>'btn btn-info', $readonly)) }}
+          <div style="margin-top:12px;" class="label label-info" id="charg"></div>  
     
     {{ Form::close() }}
     <div id="listPjs"></div>

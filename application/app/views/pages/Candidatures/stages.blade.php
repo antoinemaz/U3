@@ -8,9 +8,21 @@
     <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
     <div class="panel-body">
 
+    @if(Session::has('succes'))
+      <div id="succes" class="alert alert-success custom-alert center" role="alert">{{Session::get('succes')}}</div>
+    @endif
+
+    <div id="error" class="alert alert-danger custom-alert center" role="alert"></div>
+
     <form id="form" action="{{URL::route('stage-post')}}" method="POST" class="form-horizontal"  style="text-align:center;">
 
-        <div class="alert alert-danger custom-danger" id="error" role="alert"></div>
+      <?php
+          // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
+          $readonly = '';
+          if($etat == 2 or $etat == 3 ){
+            $readonly = 'disabled';
+          }
+      ?>
 
     <table id="stages" class="table datatable tableOfCandidature" style="margin:0 auto;">
         <thead>
@@ -55,21 +67,21 @@
           <tr>
             <td>
               <input type="text"class="datepicker form-control mydate" style="width:90px;" name="date_debut[]" 
-                value="{{ $date_debut }}"/>
+                value="{{ $date_debut }}" {{$readonly}} />
                 
             </td>
             <td>
               <input type="text" class="datepicker form-control mydate" style="width:90px;" name="date_fin[]" 
-                  value="{{ $date_fin }}"/>
+                  value="{{ $date_fin }}" {{$readonly}} />
             </td>
             <td>
-              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="nom[]" value="{{ $stage->nom}}"/>
+              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="nom[]" value="{{ $stage->nom}}" {{$readonly}} />
             </td>
             <td>
-              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="adresse[]" value="{{ $stage->adresse}}"/>
+              <input maxlength="200" type="text" class="form-control" style="width:160px;" name="adresse[]" value="{{ $stage->adresse}}" {{$readonly}} />
             </td>
              <td>
-              <textarea maxlength="200" class="form-control travailStage" name="travail_effectue[]">{{ $stage->travail_effectue}}</textarea>
+              <textarea maxlength="200" class="form-control travailStage" name="travail_effectue[]" {{$readonly}} >{{ $stage->travail_effectue}}</textarea>
             </td>
           </tr>
           @endForeach
@@ -78,7 +90,8 @@
 
     {{Form::token()}}
         <button type="submit" class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
-        <button id="clickStage" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" >Suivant</button>
+        <button id="clickStage" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
+        <button type="submit" class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
 
   </form>
 
@@ -111,6 +124,7 @@
                 if(!date.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)){
                       $('#error').text('Vous devez renseigner des dates correctes')
                       $('#error').show();
+                      $('#succes').hide();
                       erreur = true;
                       return false;
                 };
