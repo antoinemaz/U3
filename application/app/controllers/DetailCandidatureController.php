@@ -47,10 +47,153 @@ class DetailCandidatureController extends BaseController {
 	}
 
 
+	// Sauvegarde des informations de la candidature
+	public function postDetailCandidature($id){
 
-	public function postDetailCandidature(){
+			// On clique sur le bouton suivant
+	        if(Input::get('btnEnreg')) {
+
+				$candidature = $this->getCandidatureById($id);
+
+				// Si l'état est brouillon ou à revoir, l'étudiant ne pourra plus modifié sa candidature
+				if($candidature->etat_id == 1 or $candidature->etat_id == 4){
+					return Redirect::route('detailCandidature-get', $candidature->id);
+				}else{
+
+					//Récupération du tableau de filiere
+					$filiere = Input::get('filiere');
+
+		        	if($filiere != null){
+		        		
+						$chaine = '';
+
+						foreach ($filiere as $key => $value) {
+							$chaine = $chaine . $value.'|' ;
+						}
+
+						//Suppression du dernier pipeline
+						//Renvois une chaine de ce type : (scénario tout est coché) : MIAGE|MIAGE App|ASR|Info|FC
+						$Finalchaine = rtrim($chaine, "|");
+		        	}
+
+		        	 // Traitement de la date de naissance 
+		        	 if(Input::get('InputDateNaissance') != ''){
+		                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
+		                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
+		              }else{
+		                        $date_naissance = null;
+		                    }
+
+		              // Traitement de la date du dernier diplome
+		              if(Input::get('InputDateDernDiplome') != ''){
+		                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
+		                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
+		              }else{
+		                        $date_naissance = null;
+		                    }
+
+				 	$validator = Validator::make(Input::all(),array(	
+							'InputNom' => 'required|min:1|max:150',
+							'InputPrenom' => 'required|min:1|max:150',
+							'InputDateNaissance' => 'required|date_format:d/m/Y',
+							'InputLieu' => 'required|min:1|max:150',
+							'InputTel' => 'required|min:10',
+							'InputAdr' => 'required|min:1|max:150',
+							'InputVille' => 'required|min:1|max:150',
+							'InputCP' => 'required|integer',
+							'InputNatio' => 'required',
+							'InputPays' => 'required',
+							'filiere' =>  'required',
+							'InputAnnee' => 'required',
+							'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
+
+
+					 // Si la validation échoue, on redirige vers la même page avec les erreurs
+					 if($validator->fails()){
+
+					 	return Redirect::route('detailCandidature-get',$candidature->id)
+					 			->withErrors($validator)
+					 			->withInput();
+
+					 }else{
+							 $candidature -> nom = Input::get('InputNom');
+							 $candidature -> prenom = Input::get('InputPrenom');
+						     $candidature -> date_naissance = $date_naissance;
+						     $candidature -> lieu_naissance = Input::get('InputLieu');
+						     $candidature -> regime_inscription = Input::get('InputRegime');
+						     $candidature -> sexe = Input::get('InputSexe');
+						     $candidature -> dossier_etrange = Input::get('InputDossierE');
+						     $candidature -> nationalite = Input::get('InputNatio');
+						     $candidature -> telephone = Input::get('InputTel');
+						     $candidature -> adresse = Input::get('InputAdr');
+						     $candidature -> Ville = Input::get('InputVille');
+						     $candidature -> codePostal = Input::get('InputCP');
+						     $candidature -> Pays = Input::get('InputPays');
+						     $candidature -> date_dernier_diplome = $date_diplome;
+						     $candidature -> annee_convoitee = Input::get('InputAnnee');
+						     $candidature -> save = 1;
+
+						     if($filiere != null){
+						     	 $candidature -> filiere = $Finalchaine;	
+						     }
+
+				             if($candidature->save()){
+								 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+						     }
+					}		
+				}
+
+	        }else{
+	        	return Redirect::route('detailCandidature-get', $id );
+	        }
+		}
+
+	// Modification de l'état de la candidature
+	public function postActionCandidature($id){
+
+		$candidature = $this->getCandidatureById($id);
+
+		// On clique sur le bouton Enregistrer
+	    if(Input::get('btnEnreg')) {
+
+	    	$candidature -> commentaire_gestionnaire = Input::get('commentGestionnaire');
+			if($candidature->save()){
+				 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+		     }
+
+	    // On clique sur le bouton A revoir
+	    }elseif(Input::get('btnArevoir')){
+
+	    // On clique sur le bouton validé
+	    }else{
+
+	    }
 
 	}
+
+	 // Suppression de la pièce jointe
+    public function deletePj($id){
+
+    	if($id != null){
+
+	    		$piece = Piece::where('id', '=', $id);
+
+	    		if($piece->count()){
+				$piece = $piece->first();
+
+				if(Auth::user()->role_id == 2){
+					File::delete('uploads/'.$piece->uid);
+					DB::table('pieces')->where('id', '=', $id)->delete();
+
+					return Redirect::route('detailCandidature-get',$piece->candidature_id)
+					->with('succes', 'Modifications effectuées');
+
+				}else{
+					App::abort(403, 'Unauthorized action.');
+				}
+    		}
+    	}
+    }
 
     public function getCandidatureById($id){
 

@@ -154,6 +154,11 @@ Route::group(array('before' => 'auth'), function(){
 			'as' => 'detailCandidature-get',
 			'uses' => 'DetailCandidatureController@getDetailCandidature'));
 
+    	// GET Suppression Piece jointe coté gestionnaire
+	 	Route::get("gestion/upload/delete/{id}", array(
+		'as' => 'deletepjgestion',
+		'uses' => 'DetailCandidatureController@deletePj'));
+
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){
 			
@@ -163,9 +168,14 @@ Route::group(array('before' => 'auth'), function(){
 				'uses' => 'CompteController@postCreateCompteGestionnaire'));
 
 			 // POST Détail de candidature
-		    Route::post("/gestion/detailCandidature", array(
+		    Route::post("/gestion/detailCandidature/{id}", array(
 				'as' => 'detailCandidature-post',
 				'uses' => 'DetailCandidatureController@postDetailCandidature'));
+
+			 // POST Actions sur la candidature
+		 	Route::post("gestion/actionCandidature/{id}", array(
+			'as' => 'actionCandidature-post',
+			'uses' => 'DetailCandidatureController@postActionCandidature'));
 		});
 	});
 
