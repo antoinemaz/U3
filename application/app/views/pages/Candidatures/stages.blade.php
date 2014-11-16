@@ -14,6 +14,12 @@
 
     <div id="error" class="alert alert-danger custom-alert center" role="alert"></div>
 
+    @if(!empty($errors->all()))
+      <div id='errorServer' class="alert alert-danger custom-alert center" role="alert">
+        {{$errors->first()}}
+      </div>
+    @endif
+
       <?php
           // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
           $readonly = '';
@@ -62,6 +68,7 @@
                       $('#error').text('Vous devez renseigner des dates correctes')
                       $('#error').show();
                       $('#succes').hide();
+                      $('#errorServer').hide();
                       erreur = true;
                       return false;
                 };

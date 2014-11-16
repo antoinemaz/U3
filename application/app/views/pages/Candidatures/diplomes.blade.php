@@ -14,6 +14,12 @@
 
     <div id="error" class="alert alert-danger custom-alert center" role="alert">{{Session::get('customError')}}</div>
 
+     @if(!empty($errors->all()))
+      <div id='errorServer' class="alert alert-danger custom-alert center" role="alert">
+        {{$errors->first()}}
+      </div>
+    @endif
+
       <?php
           // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
           $readonly = '';
@@ -58,10 +64,11 @@
             // Champ vide : on laissera passé
             if(annee != ''){
               // Il faut que ça soit un integer
-              if(annee != parseInt(annee)){
+              if(annee != parseInt(annee) || annee.toString().length != 4){
                   $('#error').text('Vous devez renseigner des années correctes')
                   $('#error').show();
                   $('#succes').hide();
+                  $('#errorServer').hide();
                   erreur = true;
                   return false;
               };
@@ -77,9 +84,11 @@
             // Champ vide : on laissera passé
             if(moyenne != ''){
               // Il faut que ça soit un integer
-              if(moyenne != parseInt(moyenne)){
-                  $('#error').text('Vous devez renseigner des moyennes correctes')
+              if(moyenne != parseInt(moyenne) || (moyenne < 0 || moyenne > 20)){
+                  $('#error').text('Vous devez renseigner des moyennes correctes (entre 0 et 20)')
                   $('#error').show();
+                  $('#succes').hide();
+                  $('#errorServer').hide();
                   erreur = true;
                   return false;
               };

@@ -27,65 +27,158 @@ class DiplomeController extends BaseController {
                  return Redirect::route('diplome-get');
 
              }else{
-                 
-                $candidature_id = $candidature->id; 
 
-                // Diplomes
-                foreach (Input::get('annee') as $key => $value) {
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->annee = $value;
-                        $diplome->save();
+                 // VALIDATOR COTE SERVEUR : cas particulier car on traite des tableaux d'input 
+
+                // ANNEE VALIDATOR
+                foreach (Input::get('annee') as $anneeInput) {
+
+                   $validator = Validator::make(
+                        array('annee' => $anneeInput),
+                        array('annee' => array('numeric', 'regex:/[0-9]{4}/'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // ETABLISSEMENT VALIDATOR
+                foreach (Input::get('etablissement') as $etablissementInput) {
+
+                   $validator = Validator::make(
+                        array('etablissement' => $etablissementInput),
+                        array('etablissement' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // DIPLOME VALIDATOR
+                foreach (Input::get('diplome') as $diplomeInput) {
+
+                   $validator = Validator::make(
+                        array('diplome' => $diplomeInput),
+                        array('diplome' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // MOYENNE VALIDATOR
+                foreach (Input::get('moyenne_annee') as $moyenneInput) {
+
+                   $validator = Validator::make(
+                        array('moyenne_annee' => $moyenneInput),
+                        array('moyenne_annee' => array('numeric', 'min:0', 'max:20'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                 // ETABLISSEMENT VALIDATOR
+                foreach (Input::get('mention') as $mentionInput) {
+
+                   $validator = Validator::make(
+                        array('mention' => $mentionInput),
+                        array('mention' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // RANG VALIDATOR
+                foreach (Input::get('rang') as $rangInput) {
+
+                   $validator = Validator::make(
+                        array('rang' => $rangInput),
+                        array('rang' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+             // FIN DU VALIDATOR COTE SERVEUR
+
+                    $candidature_id = $candidature->id; 
+
+                    // Diplomes
+                    foreach (Input::get('annee') as $key => $value) {
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->annee = $value;
+                            $diplome->save();
+                        }
                     }
-                }
 
-                foreach (Input::get('etablissement') as $key => $value) { 
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->etablissement = $value;
-                        $diplome->save();
+                    foreach (Input::get('etablissement') as $key => $value) { 
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->etablissement = $value;
+                            $diplome->save();
+                        }
                     }
-                }
 
-                 foreach (Input::get('diplome') as $key => $value) {  
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->diplome = $value;
-                        $diplome->save();
+                     foreach (Input::get('diplome') as $key => $value) {  
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->diplome = $value;
+                            $diplome->save();
+                        }
                     }
-                }
 
-                foreach (Input::get('moyenne_annee') as $key => $value) {
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->moyenne_annee = $value;
-                        $diplome->save();
+                    foreach (Input::get('moyenne_annee') as $key => $value) {
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->moyenne_annee = $value;
+                            $diplome->save();
+                        }
                     }
-                }
 
-                foreach (Input::get('mention') as $key => $value) {
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->mention = $value;
-                        $diplome->save();
+                    foreach (Input::get('mention') as $key => $value) {
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->mention = $value;
+                            $diplome->save();
+                        }
                     }
-                }
 
-                foreach (Input::get('rang') as $key => $value) {      
-                    $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
-                    if($diplome->count()){
-                        $diplome = $diplome->first();
-                        $diplome->rang = $value;
-                        $diplome->save();
-                    }
-                }
+                    foreach (Input::get('rang') as $key => $value) {      
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->rang = $value;
+                            $diplome->save();
+                        }
 
-                return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
+                    return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
+                }
             }
 
         }elseif(Input::get('btnPrecedent')){

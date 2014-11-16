@@ -27,23 +27,22 @@
                 ?></p>
             </td>
             <td>
-              <!-- {{ Form::text("annee[$diplome->numero]", Input::get("annee[$diplome->numero]"), array('class' => 'form-control')) }} -->
               <input type="text" maxlength="4" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}" {{$readonly}} />
+              <input type="text" maxlength="100" class="form-control" style="width:160px;" name="etablissement[]" value="{{ $diplome->etablissement}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}" {{$readonly}} />
+              <input type="text" maxlength="100" class="form-control" style="width:160px;" name="diplome[]" value="{{ $diplome->diplome}}" {{$readonly}} />
             </td>
             <td>
               <input type="text" maxlength="2" class="form-control moyenne" style="width:70px;" name="moyenne_annee[]" value="{{ $diplome->moyenne_annee}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}" {{$readonly}} />
+              <input type="text" maxlength="100" class="form-control" style="width:160px;" name="mention[]" value="{{ $diplome->mention}}" {{$readonly}} />
             </td>
             <td>
-              <input type="text" maxlength="200" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}" {{$readonly}} />
+              <input type="text" maxlength="100" class="form-control" style="width:70px;" name="rang[]" value="{{ $diplome->rang}}" {{$readonly}} />
             </td>
           </tr>
           @endForeach

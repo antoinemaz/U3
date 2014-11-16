@@ -15,16 +15,6 @@ class StageController extends BaseController {
 
     public function postStage(){
 
-
-
-/*        foreach ($porcentaje as $porcentaj) {
-           $validator = Validator::make(
-                array('porcentaje' => $porcentaj),
-                array('porcentaje' => array('required','numeric','between:0,100'))
-            );*/
-// VOIR CUSTOM VALIDATOR
-
-
          // On clique sur le bouton Enregistrer
         if(Input::get('btnEnreg')) {
 
@@ -32,9 +22,87 @@ class StageController extends BaseController {
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
              if($candidature->etat_id == 2 or $candidature->etat_id == 3){
-                 return Redirect::route('diplome-get');
+                 return Redirect::route('stage-get');
 
              }else{
+
+                 // VALIDATOR COTE SERVEUR : cas particulier car on traite des tableaux d'input 
+
+                // DATE DEBUT VALIDATOR
+                foreach (Input::get('date_debut') as $dateDebutInput) {
+
+                   $validator = Validator::make(
+                        array('date_debut' => $dateDebutInput),
+                        array('date_debut' => array('date_format:d/m/Y'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('stage-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // DATE FIN VALIDATOR
+                foreach (Input::get('date_fin') as $dateFinInput) {
+
+                   $validator = Validator::make(
+                        array('date_fin' => $dateFinInput),
+                        array('date_fin' => array('date_format:d/m/Y'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('stage-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // NOM ENTREPRISE VALIDATOR
+                foreach (Input::get('nom') as $nomInput) {
+
+                   $validator = Validator::make(
+                        array('nom' => $nomInput),
+                        array('nom' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('stage-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                // ADRESSE ENTREPRISE VALIDATOR
+                foreach (Input::get('adresse') as $adresseInput) {
+
+                   $validator = Validator::make(
+                        array('adresse' => $adresseInput),
+                        array('nom' => array('max:100'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('stage-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
+                 // TRAVAIL EFFECTUE VALIDATOR
+                foreach (Input::get('travail_effectue') as $taffInput) {
+
+                   $validator = Validator::make(
+                        array('travail_effectue' => $taffInput),
+                        array('travail_effectue' => array('max:400'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('stage-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+             // FIN DU VALIDATOR COTE SERVEUR
                   
                   $candidature_id = $candidature->id;
 
