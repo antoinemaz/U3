@@ -18,7 +18,7 @@
                 Si vous validez votre candidature, elle sera envoyée et vous ne pourrez plus la modifier. <br/>
                 <form action="{{URL::route('finalisation-post')}}" method="POST">
                    <button style="margin-top: 10px;" type="submit" class="btn btn-primary" 
-                   name = "btnEnreg" value="btnEnreg" >Valider la candidature</button>
+                   name = "btnEnreg" value="btnEnreg" >Envoyer la candidature</button>
                    {{Form::token()}}
                </form>
         @endif

@@ -24,9 +24,13 @@
 						<li class="active">
 							<a href="{{URL::route('piece-get')}}">Créer une candidature</a>
 						</li>
-					@else
+					@elseif(Route::currentRouteName() == 'finalisation-get')
 						<li class="active">
 							<a href="{{URL::route('finalisation-get')}}">Créer une candidature</a>
+						</li>
+					@else
+						<li>
+							<a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a>
 						</li>
 					@endIf
 				</li>
