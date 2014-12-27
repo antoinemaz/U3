@@ -65,7 +65,7 @@ class CompteController extends BaseController {
 				// Envoi du mail d'activation du compte
 				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
 					function($message) use ($create){
-					$message->to($create->email, $create->username)->subject('Ativation du compte');
+					$message->to($create->email, $create->username)->subject('Activation du compte');
 				});
 
 				// On redirige vers la page d'accueil
@@ -115,7 +115,7 @@ class CompteController extends BaseController {
 				Mail::send('emails.activerCompteGestionnaire', 
 					array('lien' => URL::route('activerCompte', $code), 'password' => $password), 
 					function($message) use ($create){
-					$message->to($create->email, $create->username)->subject('Ativation du compte gestionnaire');
+					$message->to($create->email, $create->username)->subject('Activation du compte gestionnaire');
 				});
 
 				// On redirige vers la page d'accueil

@@ -51,7 +51,7 @@ class DetailCandidatureController extends BaseController {
 	public function postDetailCandidature($id){
 
 			// On clique sur le bouton suivant
-	        if(Input::get('btnEnreg')) {
+	        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
 
 				$candidature = $this->getCandidatureById($id);
 
@@ -138,6 +138,10 @@ class DetailCandidatureController extends BaseController {
 						     }
 
 				             if($candidature->save()){
+
+				             		$stage = new StageController();
+				             		$stage->postStage($candidature->id);
+
 								 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
 						     }
 					}		

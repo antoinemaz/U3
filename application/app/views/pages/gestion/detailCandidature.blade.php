@@ -36,13 +36,13 @@
  		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des candidatures</div>
 		<div class="panel-body">
 
-			@if(Session::has('succes'))
+			@if(Session::has('succes') and empty($errors->all()))
 		      <div class="alert alert-success custom-alert center" role="alert">{{Session::get('succes')}}</div>
 		    @endif
 
 		    @if(!empty($errors->all()))
 		      <div class="alert alert-danger custom-alert center" role="alert">
-		        Le formulaire comporte des erreurs
+		        Le formulaire n'a pas pas pu être modifié
 		      </div>
 		    @endif
 			
@@ -75,7 +75,7 @@
 		 	</div>
 
 		 	<div class="center" style="margin-bottom: 15px;margin-top: 35px;">
-		          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >
+		          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnregAdmin" value="btnEnregAdmin" {{$readonly}} >
 		          	Sauvegarder les modifications
 		          </button>
 		    </div>

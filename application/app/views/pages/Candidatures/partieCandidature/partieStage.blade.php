@@ -1,3 +1,7 @@
+@if($errors->has('date_debut'))
+  <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('date_debut')}}</div>
+@endif
+
     <table id="stages" class="table datatable tableOfCandidature" style="margin:0 auto;">
         <thead>
           <tr>

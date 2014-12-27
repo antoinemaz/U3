@@ -2,6 +2,10 @@
 
 class StageController extends BaseController {
 
+    public function __construct()
+    {
+    }
+
     public function getStage(){
 
         $candidature = $this->getCandidatureByUserLogged();
@@ -13,15 +17,18 @@ class StageController extends BaseController {
     	return View::make('pages.Candidatures.stages')->with(array('stages' => $stages, 'etat' => $candidature_etat));
     }
 
-    public function postStage(){
-
+    public function postStage($idCandidature = null){
          // On clique sur le bouton Enregistrer
-        if(Input::get('btnEnreg')) {
+        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
+            if($idCandidature != null){
+                $candidature = $this->getCandidatureById($idCandidature);
+            }else{
 
-            $candidature = $this->getCandidatureByUserLogged();
+                $candidature = $this->getCandidatureByUserLogged();
+            }
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-             if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+             if(Input::get('btnEnreg') and ($candidature->etat_id == 2 or $candidature->etat_id == 3)){
                  return Redirect::route('stage-get');
 
              }else{
@@ -168,7 +175,9 @@ class StageController extends BaseController {
                     }
                 }
 
-                return Redirect::route('stage-get')->with('succes', 'Modifications effectuées');
+                if(Input::get('btnEnreg')){
+                    return Redirect::route('stage-get')->with('succes', 'Modifications effectuées');
+                }
              }
 
         }elseif(Input::get('btnPrecedent')){
@@ -190,4 +199,13 @@ class StageController extends BaseController {
 		 return $candidature;
     }
 
+    public function getCandidatureById($idCandidature){
+
+            $candidature = Candidature::where('id', '=', $idCandidature);
+
+            if($candidature->count()){
+                $candidature = $candidature->first();   
+                return $candidature;
+            }
+    }
 }
