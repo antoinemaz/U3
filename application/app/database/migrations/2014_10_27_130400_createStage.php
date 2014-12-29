@@ -21,7 +21,7 @@ class CreateStage extends Migration {
 			$table->date('date_fin')->nullable();
 		    $table->string('nom');
 		    $table->string('adresse');
-		    $table->string('travail_effectue');
+		    $table->longtext('travail_effectue');
 		    $table->integer('numero');
 		    $table->integer('candidature_id')->unsigned();
 		    $table->foreign('candidature_id')->references('id')->on('candidatures');

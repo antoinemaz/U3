@@ -3,7 +3,6 @@
 class RedmineController extends BaseController {
 
 	public function pushCandidatureToRedmine($id){
-
 		if($id != null){
 
 			// Récupération d'une candidature à partir de son id
@@ -23,7 +22,7 @@ class RedmineController extends BaseController {
 	public function getFilieres(){
 
 		$client = new RedmineClient();
+		return $client->uploadFile();
 
-		return $client->getFilieres();
 	}
 }

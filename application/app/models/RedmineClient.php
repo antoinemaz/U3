@@ -91,6 +91,28 @@ class RedmineClient {
 		return $values;
   }
 
+  public function uploadFile(){
+
+  			$contents = File::get('uploads/4-8VkzUTw6yrz2SEz-accuseReception.pdf');
+
+  			$lienRedmine = $this->lien.'uploads.xml?key='.$this->key;
+
+  				// Initialisation session CURL
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $lienRedmine);
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+			'Content-Type: application/octet-stream'
+			));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $contents);
+
+			$result = curl_exec($ch);
+
+			curl_close($ch); 
+  }
+
   public function insererCandidature($candidature)
   {
 		$lienRedmine = $this->lien.'issues.json?key='.$this->key;
@@ -98,9 +120,12 @@ class RedmineClient {
 		$user = Utilisateur::where('id', '=', $candidature->utilisateur_id);
 		
 		if($user->count()){
+
 			$user = $user->first();
 
-					// set POST params
+			// création d'un tableau de filières demandées par l'étudiant
+			$filieres = explode("|", $candidature->filiere);
+
 			$data = array();
 			// had to create the string this way to make sure it got valid json format
 			 $data['issue'] = array(
@@ -115,31 +140,32 @@ class RedmineClient {
 			'done_ratio'=> 0,
 			'is_private'=> 0,
 			'custom_fields'=> array( 
-				// A automatiser : PLUSIEURS POSSIBLE 
-				array('id'=>1, 'value'=> 'MIAGE'),
+				array('id'=>1, 'value'=> $filieres),
 				array('id'=>2, 'value'=> $candidature->prenom),
-				// IL MANQUE DATE DE NAISSANCE
-				//array('id'=>3, 'value'=> '2014-10-27'),
-				// A SUPPRIME ?
-				array('id'=>9, 'value'=> $candidature->annee_naissance),
-				array('id'=>4,'value'=> $candidature->sexe),
+				array('id'=>3, 'value'=> $candidature->date_naissance),
+				// VALEUR EN DUR CAR DOIT ETRE SUPPRIMEE : DATE DE NAISSANCE
+				array('id'=>9, 'value'=> 1991),
+				array('id'=>4,'value'=> strtolower($candidature->sexe)),
 				array('id'=>5,'value'=> $candidature->nationalite),
 				array('id'=>8, 'value'=> $candidature->dossier_etrange),
 				array('id'=>10, 'value'=> $user->email),
 				array('id'=>11, 'value'=> $candidature->telephone),
 				array('id'=>12, 'value'=> $candidature->adresse),
-				// IL MANQUE VILLE
-				//array('id'=>13, 'value'=> $candidature->ville),
+				array('id'=>13, 'value'=> $candidature->ville),
 				array('id'=>14, 'value'=> $candidature->codePostal),
-				// IL MANQUE PAYS
-				//array('id'=>15, 'value'=> $candidature->pays),
-				array('id'=>16, 'value'=> $candidature->dernier_diplome),
-				// IL MANQUE REGIME D'INSCRIPTION
-				//array('id'=>18, value'=> 'Formation initiale'),
-				array('id'=>19, 'value'=> $candidature->anee_dernier_diplome)
-				 )); 
-
-			//print_r($data);
+				array('id'=>15, 'value'=> $candidature->pays),
+				// DERNIER DIPLME A SUPPRIMER
+				/*array('id'=>16, 'value'=> $candidature->dernier_diplome),*/
+				array('id'=>18, 'value'=> $candidature->regime_inscription),
+				// DATE DERNIER DIPLOME ?
+				/*array('id'=>19, 'value'=> $candidature->date_dernier_diplome)*/
+				 ),
+				'uploads' => array(
+				array('token'=> '3.d3ce020160f542deb2bf27ee807c55ae',
+					'filename' => 'bingo',
+					'description' => 'description bingo',
+					'content_type' => 'pdf')
+				)); 
 		
 			$jsonData = json_encode($data);
 

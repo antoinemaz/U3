@@ -6,14 +6,22 @@ class CandidatureController extends BaseController {
 	{
      	$candidature = $this->getCandidatureByUserLogged();
 
-      	$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
-      	$tabRegimeInscription = ["Formation initiale","Formation alternance","Formation permanente","Formation continue"];
+     	$client = new RedmineClient();
+		$tabFilliere = $client->getFilieres();
+
+      	/*$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];*/
+
+      	$tabRegimeInscription = $client->getRegimeInscription();
+
+      /*	$tabRegimeInscription = ["Formation initiale","Formation alternance","Formation permanente","Formation continue"];*/
         
-		$annee_convoitee[2] = ('Année L2');
+        $annee_convoitee = $client->getAnneesUniversite();
+
+/*		$annee_convoitee[2] = ('Année L2');
 		$annee_convoitee[3] = 'Année L3';
 		$annee_convoitee[4] = 'Année M1';
 		$annee_convoitee[5] = 'Année M2';
-		$annee_convoitee[6] = 'Information sur le site';
+		$annee_convoitee[6] = 'Information sur le site';*/
 
       	$filieresCandidature = explode("|", $candidature->filiere);
 
@@ -69,28 +77,12 @@ class CandidatureController extends BaseController {
 					$Finalchaine = rtrim($chaine, "|");
 	        	}
 
-	        	 // Traitement de la date de naissance 
-	        	 if(Input::get('InputDateNaissance') != ''){
-	                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
-	                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
-	              }else{
-	                        $date_naissance = null;
-	                    }
-
-	              // Traitement de la date du dernier diplome
-	              if(Input::get('InputDateDernDiplome') != ''){
-	                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
-	                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
-	              }else{
-	                        $date_naissance = null;
-	                    }
-
 			 	$validator = Validator::make(Input::all(),array(	
 						'InputNom' => 'required|min:1|max:150',
 						'InputPrenom' => 'required|min:1|max:150',
 						'InputDateNaissance' => 'required|date_format:d/m/Y',
 						'InputLieu' => 'required|min:1|max:150',
-						'InputTel' => 'required|min:10',
+						'InputTel' => 'required|numeric|regex:/^[0-9]{8,20}$/',
 						'InputAdr' => 'required|min:1|max:150',
 						'InputVille' => 'required|min:1|max:150',
 						'InputCP' => 'required|integer',
@@ -100,7 +92,6 @@ class CandidatureController extends BaseController {
 						'InputAnnee' => 'required',
 						'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
 
-
 				 // Si la validation échoue, on redirige vers la même page avec les erreurs
 				 if($validator->fails()){
 
@@ -109,6 +100,22 @@ class CandidatureController extends BaseController {
 				 			->withInput();
 
 				 }else{
+					  // Traitement de la date de naissance 
+		        	 if(Input::get('InputDateNaissance') != ''){
+		                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
+		                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
+		              }else{
+		                        $date_naissance = null;
+		                    }
+
+		              // Traitement de la date du dernier diplome
+		              if(Input::get('InputDateDernDiplome') != ''){
+		                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
+		                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
+		              }else{
+		                    $date_naissance = null;
+		               }
+
 						 $candidature -> nom = Input::get('InputNom');
 						 $candidature -> prenom = Input::get('InputPrenom');
 					     $candidature -> date_naissance = $date_naissance;

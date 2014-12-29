@@ -25,6 +25,9 @@
 	<div id="main">
 
 			<div id="header" class="container-fluid">
+				{{ HTML::image('style/images/logo_univ.png', 'evry', array('class' => 'img-responsive img-header-responsive')) }}	
+				<div class="titre-responsive">
+				Portail de dépot de candidature</div>
 				{{ HTML::image('style/images/logo-evry.png', 'evry', array('class' => 'img-responsive img-header')) }}				
 			</div>
 

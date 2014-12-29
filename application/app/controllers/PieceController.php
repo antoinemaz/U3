@@ -6,7 +6,8 @@ class PieceController extends BaseController {
 
     	$candidature = $this->getCandidatureByUserLogged();
 
-        return View::make('pages.Candidatures.pieces')->with('etat', $candidature->etat_id);
+        return View::make('pages.Candidatures.pieces')->with(array('etat' => $candidature->etat_id,
+                'commentaire' => $candidature->commentaire_gestionnaire));
     }
 
     // POST upload de piece jointe

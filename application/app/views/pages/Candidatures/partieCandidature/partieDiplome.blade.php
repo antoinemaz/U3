@@ -4,7 +4,8 @@
 @if($errors->has('moyenne_annee'))
   <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('moyenne_annee')}}</div>
 @endif
-
+  
+    <div class="table-responsive">
       <table id="diplomes" class="table datatable tableOfCandidature" style="margin:0 auto;">
         <thead>
           <tr>
@@ -55,3 +56,4 @@
           @endForeach
         </tbody>
     </table>
+  </div>

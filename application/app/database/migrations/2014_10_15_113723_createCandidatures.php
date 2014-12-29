@@ -31,8 +31,7 @@ class CreateCandidatures extends Migration {
 		    $table->string('Pays');
 		    $table->string('filiere');
 		    $table->date('date_dernier_diplome')->nullable();
-		    $table->string('commentaire_gestionnaire');
-		    $table->integer('redmine_id');
+		    $table->longtext('commentaire_gestionnaire');
 		    $table->integer('annee_convoitee');
 		    $table->boolean('save');
 		    $table->integer('project_id_redmine');
