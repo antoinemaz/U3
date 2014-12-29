@@ -11,7 +11,7 @@
       @if($candidature->save == 0)
         Vous devez remplir toutes les informations nécéssaires afin que l'on puisse traiter votre candidature
       @else
-        @if($candidature->etat_id == 2)
+        @if($candidature->etat_id == Constantes::ENVOYE)
             Votre candidature a été envoyée. Un mail vous sera envoyé en cas de changement d'état de votre candidature
         @else
                 Vous avez terminé de remplir votre candidature. Toutes les informations ont été enregistrées. <br/>

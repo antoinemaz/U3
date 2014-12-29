@@ -1,7 +1,7 @@
 <?php
   // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
   $readonly = false;
-  if($etat == 2 or $etat == 3 ){
+  if($etat == Constantes::ENVOYE or $etat == Constantes::VALIDE or $etat == Constantes::REFUSE){
     $readonly = true;
   }
 ?>

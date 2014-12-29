@@ -2,28 +2,37 @@
 
 class DiplomeController extends BaseController {
 
+    public function __construct()
+    {
+    }
+
 
     public function getDiplome(){
 
         $candidature = $this->getCandidatureByUserLogged();
     	$candidature_id = $candidature -> id;
         $candidature_etat = $candidature -> etat_id;
+        $candidature_commentaire = $candidature-> commentaire_gestionnaire;
 
         // On récupère tous les diplomes liés à la candidature (6 au max)
     	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature_id)->get();
 
-    	return View::make('pages.Candidatures.diplomes')->with(array('diplomes' => $diplomes, 'etat' => $candidature_etat));
+    	return View::make('pages.Candidatures.diplomes')->with(array('diplomes' => $diplomes, 'etat' => $candidature_etat,
+            'commentaire' => $candidature_commentaire ));
     }
 
-    public function postDiplome(){
-
-        // On clique sur le bouton suivant
-        if(Input::get('btnEnreg')) {
-
-            $candidature = $this->getCandidatureByUserLogged();
+    public function postDiplome($idCandidature = null){
+         // On clique sur le bouton Enregistrer
+        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
+            if($idCandidature != null){
+                $candidature = $this->getCandidatureById($idCandidature);
+            }else{
+                $candidature = $this->getCandidatureByUserLogged();
+            }
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-             if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+             if(Input::get('btnEnreg') and ($candidature->etat_id == Constantes::ENVOYE 
+                or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE)){
                  return Redirect::route('diplome-get');
 
              }else{
@@ -177,7 +186,9 @@ class DiplomeController extends BaseController {
                             $diplome->save();
                         }
 
-                    return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
+                    if(Input::get('btnEnreg')){
+                        return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
+                     }
                 }
             }
 
@@ -198,6 +209,16 @@ class DiplomeController extends BaseController {
 			$candidature = $candidature->first(); 	
 		 }
 		 return $candidature;
+    }
+
+    public function getCandidatureById($idCandidature){
+
+            $candidature = Candidature::where('id', '=', $idCandidature);
+
+            if($candidature->count()){
+                $candidature = $candidature->first();   
+                return $candidature;
+            }
     }
 
 }

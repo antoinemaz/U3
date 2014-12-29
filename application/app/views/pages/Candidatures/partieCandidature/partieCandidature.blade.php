@@ -61,17 +61,15 @@
 
      <div class="form-group">
       <label for="InputSexe">Sexe :</label>
-
-      <select name='InputSexe' class='form-control' {{$readonly}}>
-        @foreach($tabSexe as $sexe)
-             <?php
-                if ($sexe!=$candidature->sexe){
-                  ?> <option value="{{$sexe}}">{{$sexe}}</option> <?php
-              }else{ ?>
-                <option value="{{$sexe}}" selected="selected">{{$sexe}}</option> <?php
-              } ?>
-        @endForeach
-      </select>
+       @foreach($tabSexe as $sexe)
+            <?php
+                if ($sexe != $candidature->sexe){
+                  ?>
+                    {{Form::radio('InputSexe', $sexe)}} {{$sexe}}
+                  <?php }else{
+                    ?> {{Form::radio('InputSexe', $sexe, true)}} {{$sexe}} <?php
+                  }?>
+      @endForeach
 
     </div>
 

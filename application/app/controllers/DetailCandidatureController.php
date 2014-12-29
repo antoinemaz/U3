@@ -32,6 +32,15 @@ class DetailCandidatureController extends BaseController {
     	// Récupération des informations pour le formulaire Pieces jointes (dernière partie)
     	$pieces = DB::table('pieces')->where('candidature_id', $candidature->id)->get();
 
+    	// Récupération du mail de l'utilisateur
+    	$emailUser = '';
+    	$user = DB::table('utilisateurs')->where('id', $candidature->utilisateur_id);
+    	if($user->count()){
+			$user = $user->first(); 	
+			$emailUser = $user->email;  
+		 }
+
+
 		return View::make('pages.gestion.detailCandidature')
 		->with(array('candidature'=>$candidature, 
 			'tabFiliere' => $tabFilliere, 
@@ -42,7 +51,8 @@ class DetailCandidatureController extends BaseController {
 			'tabSexe' => $tabSexe,
 			'diplomes' => $diplomes,
 			'stages' => $stages,
-			'pieces' => $pieces));
+			'pieces' => $pieces,
+			'email' => $emailUser));
 
 	}
 
@@ -50,106 +60,32 @@ class DetailCandidatureController extends BaseController {
 	// Sauvegarde des informations de la candidature
 	public function postDetailCandidature($id){
 
-			// On clique sur le bouton suivant
+			// On clique sur le bouton Enregistrer coté Admin
 	        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
 
 				$candidature = $this->getCandidatureById($id);
 
-				// Si l'état est brouillon ou à revoir, l'étudiant ne pourra plus modifié sa candidature
-				if($candidature->etat_id == 1 or $candidature->etat_id == 4){
+				// Si l'état est brouillon ou à revoir, le gestionnaire ne pourra plus modifié sa candidature
+				if($candidature->etat_id == Constantes::BROUILLON or $candidature->etat_id == Constantes::AREVOIR
+					or $candidature->etat_id == Constantes::REFUSE){
 					return Redirect::route('detailCandidature-get', $candidature->id);
 				}else{
 
-					//Récupération du tableau de filiere
-					$filiere = Input::get('filiere');
+					// On récupère le traitement du controlleur Candidature pour sauvegarder les infos de la candidature
+					$cand = new CandidatureController();
+					$cand->creerCandidature($candidature->id);
 
-		        	if($filiere != null){
-		        		
-						$chaine = '';
+					// On récupère le traitement du controlleur Stage pour sauvegarder les infos des stages
+             		$stage = new StageController();
+             		$stage->postStage($candidature->id);
 
-						foreach ($filiere as $key => $value) {
-							$chaine = $chaine . $value.'|' ;
-						}
+             		// On récupère le traitement du controlleur Diplome pour sauvegarder les infos des diplomes
+             		$diplome = new DiplomeController();
+             		$diplome->postDiplome($candidature->id);
 
-						//Suppression du dernier pipeline
-						//Renvois une chaine de ce type : (scénario tout est coché) : MIAGE|MIAGE App|ASR|Info|FC
-						$Finalchaine = rtrim($chaine, "|");
-		        	}
-
-		        	 // Traitement de la date de naissance 
-		        	 if(Input::get('InputDateNaissance') != ''){
-		                    $dateNaissanceSplite = explode("/", Input::get('InputDateNaissance'));
-		                    $date_naissance = $dateNaissanceSplite[2].'-'.$dateNaissanceSplite[1].'-'.$dateNaissanceSplite[0];
-		              }else{
-		                        $date_naissance = null;
-		                    }
-
-		              // Traitement de la date du dernier diplome
-		              if(Input::get('InputDateDernDiplome') != ''){
-		                    $dateDiplomeSplite = explode("/", Input::get('InputDateDernDiplome'));
-		                    $date_diplome = $dateDiplomeSplite[2].'-'.$dateDiplomeSplite[1].'-'.$dateDiplomeSplite[0];
-		              }else{
-		                        $date_naissance = null;
-		                    }
-
-				 	$validator = Validator::make(Input::all(),array(	
-							'InputNom' => 'required|min:1|max:150',
-							'InputPrenom' => 'required|min:1|max:150',
-							'InputDateNaissance' => 'required|date_format:d/m/Y',
-							'InputLieu' => 'required|min:1|max:150',
-							'InputTel' => 'required|min:10',
-							'InputAdr' => 'required|min:1|max:150',
-							'InputVille' => 'required|min:1|max:150',
-							'InputCP' => 'required|integer',
-							'InputNatio' => 'required',
-							'InputPays' => 'required',
-							'filiere' =>  'required',
-							'InputAnnee' => 'required',
-							'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
-
-
-					 // Si la validation échoue, on redirige vers la même page avec les erreurs
-					 if($validator->fails()){
-
-					 	return Redirect::route('detailCandidature-get',$candidature->id)
-					 			->withErrors($validator)
-					 			->withInput();
-
-					 }else{
-							 $candidature -> nom = Input::get('InputNom');
-							 $candidature -> prenom = Input::get('InputPrenom');
-						     $candidature -> date_naissance = $date_naissance;
-						     $candidature -> lieu_naissance = Input::get('InputLieu');
-						     $candidature -> regime_inscription = Input::get('InputRegime');
-						     $candidature -> sexe = Input::get('InputSexe');
-						     $candidature -> dossier_etrange = Input::get('InputDossierE');
-						     $candidature -> nationalite = Input::get('InputNatio');
-						     $candidature -> telephone = Input::get('InputTel');
-						     $candidature -> adresse = Input::get('InputAdr');
-						     $candidature -> Ville = Input::get('InputVille');
-						     $candidature -> codePostal = Input::get('InputCP');
-						     $candidature -> Pays = Input::get('InputPays');
-						     $candidature -> date_dernier_diplome = $date_diplome;
-						     $candidature -> annee_convoitee = Input::get('InputAnnee');
-						     $candidature -> save = 1;
-
-						     if($filiere != null){
-						     	 $candidature -> filiere = $Finalchaine;	
-						     }
-
-				             if($candidature->save()){
-
-				             		$stage = new StageController();
-				             		$stage->postStage($candidature->id);
-
-								 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
-						     }
-					}		
-				}
-
-	        }else{
-	        	return Redirect::route('detailCandidature-get', $id );
-	        }
+				 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+				}		
+			}
 		}
 
 	// Modification de l'état de la candidature
@@ -157,20 +93,28 @@ class DetailCandidatureController extends BaseController {
 
 		$candidature = $this->getCandidatureById($id);
 
-		// On clique sur le bouton Enregistrer
-	    if(Input::get('btnEnreg')) {
+		// Dans tous les cas, on modifie le commentaire du gestionnaire
+		$candidature->commentaire_gestionnaire = Input::get('commentGestionnaire');
 
-	    	$candidature -> commentaire_gestionnaire = Input::get('commentGestionnaire');
-			if($candidature->save()){
-				 	return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
-		     }
+		// On clique sur le bouton Valider
+	    if(Input::get('btnValide')) {
+
+	    //TODO : GO REDMINE !
 
 	    // On clique sur le bouton A revoir
 	    }elseif(Input::get('btnArevoir')){
 
-	    // On clique sur le bouton validé
-	    }else{
+	    	$candidature->etat_id = Constantes::AREVOIR;
+	    	if($candidature->save()){
+	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+	    	}
 
+	    // On clique sur le bouton Refuser
+	    }else{
+	    	$candidature->etat_id = Constantes::REFUSE;
+	    	if($candidature->save()){
+	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+	    	}
 	    }
 
 	}

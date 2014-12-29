@@ -14,9 +14,10 @@ class DatabaseSeeder extends Seeder {
 		Role::create(array('libelle' => 'Gestionnaire'));
 
 		Etat::create(array('libelle' => 'Brouillon'));
-		Etat::create(array('libelle' => 'Validé'));
-		Etat::create(array('libelle' => 'Refusé'));
+		Etat::create(array('libelle' => 'Envoyée'));
+		Etat::create(array('libelle' => 'Validée'));
 		Etat::create(array('libelle' => 'A revoir'));
+		Etat::create(array('libelle' => 'Refusée'));
 
 		Utilisateur::create(array(
 			'email' => 'admin@admin.fr',

@@ -44,7 +44,7 @@
 }
 
 .custom-panel{
-    margin: 40px auto;
+    margin: 20px auto;
     max-width: 900px;
 }
 
@@ -178,4 +178,28 @@
 
 .deleteLink:hover{
     text-decoration: none;
+}
+
+.panelEtat{
+    margin: 28px auto 0;
+    text-align: center;
+}
+
+.linkDisabled{
+   pointer-events: none;
+   cursor: default;
+   color:#9E9E9E!important;
+}
+
+.commentaireGestionnaire{
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.commentaireGestionnaire .panel-body{
+    white-space: pre-line;
+}
+
+.adminForm .panelEtat{
+    margin-top:0px;
 }

@@ -11,10 +11,12 @@ class StageController extends BaseController {
         $candidature = $this->getCandidatureByUserLogged();
         $candidature_id = $candidature -> id;
         $candidature_etat = $candidature -> etat_id;
+        $candidature_commentaire = $candidature-> commentaire_gestionnaire;
 
         $stages = DB::table('stages')->where('candidature_id', $candidature_id)->get();
 
-    	return View::make('pages.Candidatures.stages')->with(array('stages' => $stages, 'etat' => $candidature_etat));
+    	return View::make('pages.Candidatures.stages')->with(array('stages' => $stages, 'etat' => $candidature_etat,
+            'commentaire' => $candidature_commentaire ));
     }
 
     public function postStage($idCandidature = null){
@@ -28,7 +30,8 @@ class StageController extends BaseController {
             }
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-             if(Input::get('btnEnreg') and ($candidature->etat_id == 2 or $candidature->etat_id == 3)){
+             if(Input::get('btnEnreg') and ($candidature->etat_id == Constantes::ENVOYE 
+                or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE)){
                  return Redirect::route('stage-get');
 
              }else{

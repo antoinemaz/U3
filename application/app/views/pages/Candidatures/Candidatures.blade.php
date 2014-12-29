@@ -29,7 +29,8 @@
     <?php
         // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
         $readonly = '';
-        if($candidature->etat_id == 2 or $candidature->etat_id == 3 ){
+        if($candidature->etat_id == Constantes::ENVOYE 
+                or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE){
           $readonly = 'disabled';
         }
     ?>

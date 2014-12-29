@@ -15,7 +15,8 @@ class PieceController extends BaseController {
 		$candidature = $this->getCandidatureByUserLogged();
 
 	    // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-        if($candidature->etat_id == 2 or $candidature->etat_id == 3){
+        if($candidature->etat_id == Constantes::ENVOYE 
+                or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE){
             return Redirect::route('piece-get');
 
          }else{

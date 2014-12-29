@@ -35,7 +35,7 @@ class CompteController extends BaseController {
 				'password' => Hash::make($password),
 				'code' => $code,
 				'active' => 0,
-				'role_id' => 1));
+				'role_id' => Constantes::ETUDIANT));
 
 			if($create){
 
@@ -44,7 +44,7 @@ class CompteController extends BaseController {
 					'Pays' => 'France',
 					'nationalite' => 'France',
 					'save' => 0,
-					'etat_id' => 1));
+					'etat_id' => Constantes::BROUILLON));
 
 				// Création de 6 lignes (pour formations et diplomes) : BAC, jusqu'à BAC+5
 				for ($ligne = 1; $ligne <= 6; $ligne++){

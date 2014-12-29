@@ -1,3 +1,10 @@
+@if($errors->has('annee'))
+  <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('annee')}}</div>
+@endif
+@if($errors->has('moyenne_annee'))
+  <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('moyenne_annee')}}</div>
+@endif
+
       <table id="diplomes" class="table datatable tableOfCandidature" style="margin:0 auto;">
         <thead>
           <tr>

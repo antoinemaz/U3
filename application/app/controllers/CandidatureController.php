@@ -4,7 +4,6 @@ class CandidatureController extends BaseController {
 
 	public function getCreateCandidature()
 	{
-
      	$candidature = $this->getCandidatureByUserLogged();
 
       	$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
@@ -30,23 +29,29 @@ class CandidatureController extends BaseController {
 			'filieresCandidature' => $filieresCandidature,
 			'tabPays' => $tabPays,
 			'annee_convoitee' => $annee_convoitee,
-			'tabSexe' => $tabSexe));
+			'tabSexe' => $tabSexe,
+			'etat' => $candidature->etat_id,
+			'commentaire' => $candidature->commentaire_gestionnaire));
 	}
 
 
 
-	public function creerCandidature()
+	public function creerCandidature($idCandidature = null)
 	{
+         // On clique sur le bouton Enregistrer
+        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
+            if($idCandidature != null){
+                $candidature = $this->getCandidatureById($idCandidature);
+            }else{
+                $candidature = $this->getCandidatureByUserLogged();
+            }
 
-		// On clique sur le bouton suivant
-        if(Input::get('btnEnreg')) {
+            // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
+             if(Input::get('btnEnreg') and ($candidature->etat_id == Constantes::ENVOYE 
+                or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE)){
+                 return Redirect::route('creationCandidature-get');
 
-			$candidature = $this->getCandidatureByUserLogged();
-
-			// Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-			if($candidature->etat_id == 2 or $candidature->etat_id == 3){
-				return Redirect::route('creationCandidature-get');
-			}else{
+             }else{
 
 				//Récupération du tableau de filiere
 				$filiere = Input::get('filiere');
@@ -126,7 +131,9 @@ class CandidatureController extends BaseController {
 					     }
 
 			             if($candidature->save()){
+			             	if(Input::get('btnEnreg')){
 							 	return Redirect::route('creationCandidature-get')->with('succes', 'Modifications effectuées');
+					     	}
 					     }
 				}
 					
@@ -141,27 +148,50 @@ class CandidatureController extends BaseController {
 
 		$candidature = $this->getCandidatureByUserLogged();
 
-		return View::make('pages.Candidatures.finalisation')->with('candidature', $candidature);
+		 // Si on est a brouillon ou a revoir, on affiche la page de finalisation de la candidature		
+         if($candidature->etat_id != Constantes::BROUILLON and $candidature->etat_id != Constantes::AREVOIR){
+         	 return Redirect::route('creationCandidature-get');
+         }else{
+         	return View::make('pages.Candidatures.finalisation')->with(array('candidature' => $candidature,
+				'etat' => $candidature->etat_id,'commentaire' => $candidature->commentaire_gestionnaire));
+         }
+
 	}
 
 	public function postFinalisation(){
 		$candidature = $this->getCandidatureByUserLogged();
-		$candidature -> etat_id = 2;
-        if($candidature->save()){
-		 	return Redirect::route('finalisation-get');
-    	}
+
+		// Si on est a brouillon ou a revoir, on permet la finalisation de la candidature	
+		if($candidature->etat_id == Constantes::BROUILLON and $candidature->etat_id == Constantes::AREVOIR){
+         	 return Redirect::route('creationCandidature-get');
+         }else{
+	        $candidature -> etat_id = Constantes::ENVOYE;
+	        if($candidature->save()){
+			 	return Redirect::route('finalisation-get');
+	    	}
+         }
 	}
 
     public function getCandidatureByUserLogged(){
 
-	 // Récupération de la candidature de l'étudiant connecté 
-	 $idUser = Auth::user()->id;
-	 $candidature = Candidature::where('utilisateur_id', '=', $idUser);
+		 // Récupération de la candidature de l'étudiant connecté 
+		 $idUser = Auth::user()->id;
+		 $candidature = Candidature::where('utilisateur_id', '=', $idUser);
 
-	 if($candidature->count()){
-		$candidature = $candidature->first(); 	
-	 }
-	 return $candidature;
-}
+		 if($candidature->count()){
+			$candidature = $candidature->first(); 	
+		 }
+		 return $candidature;
+	}
+
+    public function getCandidatureById($idCandidature){
+
+            $candidature = Candidature::where('id', '=', $idCandidature);
+
+            if($candidature->count()){
+                $candidature = $candidature->first();   
+                return $candidature;
+            }
+    }
 
 }
