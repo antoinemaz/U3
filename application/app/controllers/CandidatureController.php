@@ -28,7 +28,7 @@ class CandidatureController extends BaseController {
       	$listePays = new ListePays();
       	$tabPays = ListePays::getListeDesPays();
 		
-		$tabSexe = ["Masculin", "Féminin"];
+		$tabSexe = ["masculin", "féminin"];
 
 		return View::make('pages.Candidatures.Candidatures')
 		->with(array('candidature'=>$candidature, 

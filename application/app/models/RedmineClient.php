@@ -1,5 +1,7 @@
 <?php
 
+header('Content-type: text/plain; charset=utf-8');
+
 class RedmineClient {
 
 	 var $lien;
@@ -91,13 +93,18 @@ class RedmineClient {
 		return $values;
   }
 
-  public function uploadFile(){
+  public function uploadFile($pjs){
 
-  			$contents = File::get('uploads/4-8VkzUTw6yrz2SEz-accuseReception.pdf');
+  		// Initiation du tableau de PJs qui sera envoyé à Redmine via le web service
+		$lesPieces = array();
 
-  			$lienRedmine = $this->lien.'uploads.xml?key='.$this->key;
+		$lienRedmine = $this->lien.'uploads.json?key='.$this->key;
 
-  				// Initialisation session CURL
+		foreach ($pjs as $key => $value) {
+		 	// Obtention du fichier parcouru
+			$contents = File::get('uploads/'.$value->uid);
+
+			// Initialisation session CURL
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $lienRedmine);
 			curl_setopt($ch, CURLOPT_POST, true);
@@ -110,7 +117,81 @@ class RedmineClient {
 
 			$result = curl_exec($ch);
 
-			curl_close($ch); 
+			// on y extrait le tokne du fichier
+			$resultToken = json_decode($result, true);
+			$resultToken = $resultToken['upload'];
+			$resultToken = $resultToken['token'];
+
+			array_push($lesPieces, 
+				array('token'=> $resultToken, 
+					'filename' => $value->filename,
+					'description' => $value->filename, 
+					'content_type' => $this->get_file_extension($value->filename)
+					) 
+			);
+			/*'description' => 'description bingo',*/
+		}
+
+		curl_close($ch); 
+
+		return $lesPieces;
+  }
+
+  // Obtention de l'extension d'un nom d'un fichier
+  function get_file_extension($file_name) {
+	return substr(strrchr($file_name,'.'),1);
+  }
+
+  function getDiplomesFormates($diplomes){
+
+  	$chaineDiplomes = '';
+
+  	foreach ($diplomes as $key => $value) {
+
+  		$chaineDiplomes = $chaineDiplomes . ' BAC +'. ($value->numero-1) .')';
+		$chaineDiplomes = $chaineDiplomes . ' Année : '. ($value->annee).' / ';
+		$chaineDiplomes = $chaineDiplomes . ' Etablissement : '. ($value->etablissement).' / ';
+		$chaineDiplomes = $chaineDiplomes . ' Moyenne année : '. ($value->moyenne_annee).' / ';
+		$chaineDiplomes = $chaineDiplomes . ' Mention : '. ($value->mention).' / ';
+		$chaineDiplomes = $chaineDiplomes . ' Rang : '. ($value->rang). "\r\n \r\n";
+  	}
+  	return $chaineDiplomes;
+  }
+
+    function getStagesFormates($stages){
+
+  	$chaineStages = '';
+
+
+
+  	foreach ($stages as $key => $value) {
+
+  		$chaineStages = $chaineStages . $value->numero .')';
+		$chaineStages = $chaineStages . ' Date de début : '. ($this->getDateFormate($value->date_debut)) .' / ';
+		$chaineStages = $chaineStages . ' Date de fin : '. ($this->getDateFormate($value->date_fin)) .' / ';
+		$chaineStages = $chaineStages . ' Nom : '. ($value->nom).' / ';
+		$chaineStages = $chaineStages . ' Adresse : '. ($value->adresse).' / ';
+		$chaineStages = $chaineStages . ' Travail effectué : '. ($value->travail_effectue). "\r\n \r\n";
+  	}
+  	return $chaineStages;
+  }
+
+  public function getDateFormate($date){
+
+  		if($date != null){
+  		 $dateAformater = explode("-", $date);
+
+  		 $annee = $dateAformater[0];
+  		 $mois =  $dateAformater[1];
+  		 $jour = $dateAformater[2];
+
+         $newDate =  $jour . '/' . $mois  . '/' . $annee ;
+
+         return $newDate;
+  		}else{
+  			return null;
+  		}
+
   }
 
   public function insererCandidature($candidature)
@@ -125,6 +206,19 @@ class RedmineClient {
 
 			// création d'un tableau de filières demandées par l'étudiant
 			$filieres = explode("|", $candidature->filiere);
+
+			// gestion ds pièces jointes
+			$listeNomsPieces = DB::table('pieces')->where('candidature_id', $candidature->id)->get();
+			// upload des pjs et obtention du tableau a passé a l'issue
+			//$listOfPjs = $this->uploadFile($listeNomsPieces);
+
+			// obtention des diplomes formatés et à envoyer:
+			$diplomesEnBase = DB::table('diplomes')->where('candidature_id', $candidature->id)->get();
+			$listOfDiplomes = $this->getDiplomesFormates($diplomesEnBase);
+
+			// obtention des stages formatés et à envoyer:
+			$stagesEnBase = DB::table('stages')->where('candidature_id', $candidature->id)->get();
+			$listOfStages = $this->getStagesFormates($stagesEnBase);
 
 			$data = array();
 			// had to create the string this way to make sure it got valid json format
@@ -145,7 +239,7 @@ class RedmineClient {
 				array('id'=>3, 'value'=> $candidature->date_naissance),
 				// VALEUR EN DUR CAR DOIT ETRE SUPPRIMEE : DATE DE NAISSANCE
 				array('id'=>9, 'value'=> 1991),
-				array('id'=>4,'value'=> strtolower($candidature->sexe)),
+				array('id'=>4,'value'=> $candidature->sexe),
 				array('id'=>5,'value'=> $candidature->nationalite),
 				array('id'=>8, 'value'=> $candidature->dossier_etrange),
 				array('id'=>10, 'value'=> $user->email),
@@ -159,13 +253,10 @@ class RedmineClient {
 				array('id'=>18, 'value'=> $candidature->regime_inscription),
 				// DATE DERNIER DIPLOME ?
 				/*array('id'=>19, 'value'=> $candidature->date_dernier_diplome)*/
-				 ),
-				'uploads' => array(
-				array('token'=> '3.d3ce020160f542deb2bf27ee807c55ae',
-					'filename' => 'bingo',
-					'description' => 'description bingo',
-					'content_type' => 'pdf')
-				)); 
+				array('id'=>20, 'value'=> $listOfDiplomes),
+				array('id'=>21, 'value'=> $listOfStages)
+				 ));
+				//'uploads' => $listOfPjs);
 		
 			$jsonData = json_encode($data);
 

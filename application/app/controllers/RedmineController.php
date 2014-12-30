@@ -21,8 +21,10 @@ class RedmineController extends BaseController {
 	// Obtention des filières en utilisant les Web service de Redmine
 	public function getFilieres(){
 
+		$diplomesEnBase = DB::table('stages')->where('candidature_id', 4)->get();
+
 		$client = new RedmineClient();
-		return $client->uploadFile();
+		return $client->getStagesFormates($diplomesEnBase);
 
 	}
 }
