@@ -117,7 +117,7 @@ class RedmineClient {
 
 			$result = curl_exec($ch);
 
-			// on y extrait le tokne du fichier
+			// on y extrait le token id du fichier
 			$resultToken = json_decode($result, true);
 			$resultToken = $resultToken['upload'];
 			$resultToken = $resultToken['token'];
@@ -129,7 +129,6 @@ class RedmineClient {
 					'content_type' => $this->get_file_extension($value->filename)
 					) 
 			);
-			/*'description' => 'description bingo',*/
 		}
 
 		curl_close($ch); 
@@ -142,6 +141,7 @@ class RedmineClient {
 	return substr(strrchr($file_name,'.'),1);
   }
 
+  // Formatage des diplomes à envoyer sous forme de texte à Redmine
   function getDiplomesFormates($diplomes){
 
   	$chaineDiplomes = '';
@@ -158,11 +158,10 @@ class RedmineClient {
   	return $chaineDiplomes;
   }
 
+  	// Formatage des stages à envoyer sous forme de texte à Redmine
     function getStagesFormates($stages){
 
   	$chaineStages = '';
-
-
 
   	foreach ($stages as $key => $value) {
 
@@ -176,6 +175,7 @@ class RedmineClient {
   	return $chaineStages;
   }
 
+  // Formatage de la date en FR
   public function getDateFormate($date){
 
   		if($date != null){
@@ -194,6 +194,7 @@ class RedmineClient {
 
   }
 
+  // Insertion de la candidature dans Redmine
   public function insererCandidature($candidature)
   {
 		$lienRedmine = $this->lien.'issues.json?key='.$this->key;
@@ -210,7 +211,7 @@ class RedmineClient {
 			// gestion ds pièces jointes
 			$listeNomsPieces = DB::table('pieces')->where('candidature_id', $candidature->id)->get();
 			// upload des pjs et obtention du tableau a passé a l'issue
-			//$listOfPjs = $this->uploadFile($listeNomsPieces);
+			$listOfPjs = $this->uploadFile($listeNomsPieces);
 
 			// obtention des diplomes formatés et à envoyer:
 			$diplomesEnBase = DB::table('diplomes')->where('candidature_id', $candidature->id)->get();
@@ -255,8 +256,8 @@ class RedmineClient {
 				/*array('id'=>19, 'value'=> $candidature->date_dernier_diplome)*/
 				array('id'=>20, 'value'=> $listOfDiplomes),
 				array('id'=>21, 'value'=> $listOfStages)
-				 ));
-				//'uploads' => $listOfPjs);
+				 ),
+				'uploads' => $listOfPjs);
 		
 			$jsonData = json_encode($data);
 

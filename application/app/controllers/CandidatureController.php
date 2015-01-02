@@ -90,6 +90,7 @@ class CandidatureController extends BaseController {
 						'InputPays' => 'required',
 						'filiere' =>  'required',
 						'InputAnnee' => 'required',
+						'InputSexe' => 'required',
 						'InputDateDernDiplome' => 'required|date_format:d/m/Y'));
 
 				 // Si la validation échoue, on redirige vers la même page avec les erreurs
@@ -116,22 +117,22 @@ class CandidatureController extends BaseController {
 		                    $date_naissance = null;
 		               }
 
-						 $candidature -> nom = Input::get('InputNom');
-						 $candidature -> prenom = Input::get('InputPrenom');
-					     $candidature -> date_naissance = $date_naissance;
-					     $candidature -> lieu_naissance = Input::get('InputLieu');
-					     $candidature -> regime_inscription = Input::get('InputRegime');
-					     $candidature -> sexe = Input::get('InputSexe');
-					     $candidature -> dossier_etrange = Input::get('InputDossierE');
-					     $candidature -> nationalite = Input::get('InputNatio');
-					     $candidature -> telephone = Input::get('InputTel');
-					     $candidature -> adresse = Input::get('InputAdr');
-					     $candidature -> Ville = Input::get('InputVille');
-					     $candidature -> codePostal = Input::get('InputCP');
-					     $candidature -> Pays = Input::get('InputPays');
-					     $candidature -> date_dernier_diplome = $date_diplome;
-					     $candidature -> annee_convoitee = Input::get('InputAnnee');
-					     $candidature -> save = 1;
+					 $candidature -> nom = Input::get('InputNom');
+					 $candidature -> prenom = Input::get('InputPrenom');
+				     $candidature -> date_naissance = $date_naissance;
+				     $candidature -> lieu_naissance = Input::get('InputLieu');
+				     $candidature -> regime_inscription = Input::get('InputRegime');
+				     $candidature -> sexe = Input::get('InputSexe');
+				     $candidature -> dossier_etrange = Input::get('InputDossierE');
+				     $candidature -> nationalite = Input::get('InputNatio');
+				     $candidature -> telephone = Input::get('InputTel');
+				     $candidature -> adresse = Input::get('InputAdr');
+				     $candidature -> Ville = Input::get('InputVille');
+				     $candidature -> codePostal = Input::get('InputCP');
+				     $candidature -> Pays = Input::get('InputPays');
+				     $candidature -> date_dernier_diplome = $date_diplome;
+				     $candidature -> annee_convoitee = Input::get('InputAnnee');
+				     $candidature -> save = 1;
 
 					     if($filiere != null){
 					     	 $candidature -> filiere = $Finalchaine;	

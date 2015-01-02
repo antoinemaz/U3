@@ -53,26 +53,33 @@
 		        	or $candidature->etat_id == Constantes::REFUSE){
 		          $readonly = 'disabled';
 		        }
+
+		        $hidden = '';
+		        if($candidature->etat_id == Constantes::VALIDE){
+		        	$hidden='style="display:none;"';
+		        }
 		    ?>
 
 		 <form action="{{URL::route('detailCandidature-post', $candidature->id)}}" method="POST" class="form-horizontal inscription adminForm" style="max-width: none;">
 
 		 	<div class="panelEtat">
 
-				@if($candidature->etat_id == 1)
+				@if($candidature->etat_id == Constantes::BROUILLON)
 					<div class="alert alert-info" role="alert">
 						Etat de la candidature : <strong>Brouillon</strong>
 					</div>
-				@elseif($candidature->etat_id == 2)
+				@elseif($candidature->etat_id == Constantes::ENVOYE)
 					<div class="alert alert-info" role="alert">
 						Etat de la candidature : <strong>Envoyée</strong>
 					</div>
 					
-				@elseif($candidature->etat_id == 3)
+				@elseif($candidature->etat_id == Constantes::VALIDE)
 					<div class="alert alert-success" role="alert">
-						Etat de la candidature : <strong>Envoyée</strong>
+						Etat de la candidature : <strong>Validée</strong>
+						<br/>
+						Toutes les données ont été envoyées dans Redmine
 					</div>
-				@elseif($candidature->etat_id == 4)
+				@elseif($candidature->etat_id == Constantes::AREVOIR)
 					<div class="alert alert-warning" role="alert">
 						Etat de la candidature : <strong>A revoir</strong>
 					</div>
@@ -92,73 +99,73 @@
 		 		@include('pages.Candidatures.partieCandidature.partieCandidature')
 		 	</div>
 
-		 	<span class="label label-primary custom-label" style="margin-top: 30px;">Diplomes</span>
+		 	<div {{$hidden}}>
+			 	<span class="label label-primary custom-label" style="margin-top: 30px;">Diplomes</span>
 
+			 	<div>
+			 		@include('pages.Candidatures.partieCandidature.partieDiplome')
+			 	</div>
 
-		 	<!-- hidden-sm hidden-xs : TROUVER UNE SOLUTION -->
-		 	<div>
-		 		@include('pages.Candidatures.partieCandidature.partieDiplome')
-		 	</div>
+			 	<span class="label label-primary custom-label" style="margin-top: 30px;">Stages</span>
+			 	<div>
+			 		@include('pages.Candidatures.partieCandidature.partieStage')
+			 	</div>
 
-		 	<span class="label label-primary custom-label" style="margin-top: 30px;">Stages</span>
-		 	<div>
-		 		@include('pages.Candidatures.partieCandidature.partieStage')
-		 	</div>
+			 	<div class="center" style="margin-bottom: 15px;margin-top: 35px;">
+			          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnregAdmin" value="btnEnregAdmin" {{$readonly}} >
+			          	Sauvegarder les modifications
+			          </button>
+			    </div>
 
-		 	<div class="center" style="margin-bottom: 15px;margin-top: 35px;">
-		          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnregAdmin" value="btnEnregAdmin" {{$readonly}} >
-		          	Sauvegarder les modifications
-		          </button>
-		    </div>
+			 	<span class="label label-primary custom-label" style="margin-top: 30px;">Pièces jointes</span>
+			 	<div>
+				 	<?php
+		    		  for ($i=1; $i <= $count ; $i++) { 
+		      		   ?>
+		      		   	<span class="label label-default label-pj">{{$pieces[$i-1]->filename}}</span>
 
-		 	<span class="label label-primary custom-label" style="margin-top: 30px;">Pièces jointes</span>
-		 	<div>
-			 	<?php
-	    		  for ($i=1; $i <= $count ; $i++) { 
-	      		   ?>
-	      		   	<span class="label label-default label-pj">{{$pieces[$i-1]->filename}}</span>
-
-	      		   		<a href="{{URL::route('deletepjgestion', $pieces[$i-1]->id)}}" class="deleteLink">
-	      				   	<span class="glyphicon glyphicon-remove"></span> Supprimer
-	      		   		</a>
-	        		
-	        		  <div style="height: 400px;" id="pdf{{$i}}"></div>
-	     		   <?php
-	   			   }
-	 			 ?>
-		 	</div>
-		 	{{Form::token()}}
-		 </form>
-
-		 	<div class="navbar-fixed-bottom comment">
-
-		 	<form action="{{URL::route('actionCandidature-post', $candidature->id)}}" method="POST" >
-			 	<table style="margin:0 auto;">
-			 		<tr>
-			 			<td>
-					 		<div class="center">
-								<u>Partie réservée au gestionnaire</u>
-								<textarea style="resize:none;" maxlength="200" class="form-control travailStage" name="commentGestionnaire" >{{ $candidature->commentaire_gestionnaire}}</textarea>
-							</div>
-			 			</td>
-			 			<td>
-			 				<div class="center" style="margin-left: 15px;">Actions possibles : </div>
-			 				<div class="center" style="margin-left: 15px;">
-		        				 <button type="submit" class="btn btn-success" 
-		        				 name = "btnValide" value="btnArevoir" >Valider</button>
-		         		  	     <button type="submit" class="btn btn-warning" 
-		         		  	     name = "btnArevoir" value="btnValide" >A revoir</button>
-		         		  	     <button type="submit" class="btn btn-danger" 
-		         		  	     name = "btnRefuse" value="btnEnreg" >Refuser</button>
-	 					   </div>
-			 			</td>
-			 		</tr>
-			 	</table>
+		      		   		<a href="{{URL::route('deletepjgestion', $pieces[$i-1]->id)}}" class="deleteLink">
+		      				   	<span class="glyphicon glyphicon-remove"></span> Supprimer
+		      		   		</a>
+		        		
+		        		  <div style="height: 400px;" id="pdf{{$i}}"></div>
+		     		   <?php
+		   			   }
+		 			 ?>
+			 	</div>
 			 	{{Form::token()}}
 			 </form>
 
-			</div>
-  		</div>
-	</div>	
-  	 <div style="height: 40px;"></div>
+			 	<div class="navbar-fixed-bottom comment">
+
+			 	<form action="{{URL::route('actionCandidature-post', $candidature->id)}}" method="POST" >
+				 	<table style="margin:0 auto;">
+				 		<tr>
+				 			<td>
+						 		<div class="center">
+									<u>Partie réservée au gestionnaire</u>
+									<textarea style="resize:none;" maxlength="200" class="form-control travailStage" name="commentGestionnaire" >{{ $candidature->commentaire_gestionnaire}}</textarea>
+								</div>
+				 			</td>
+				 			<td>
+				 				<div class="center" style="margin-left: 15px;">Actions possibles : </div>
+				 				<div class="center" style="margin-left: 15px;">
+			        				 <button type="submit" class="btn btn-success" 
+			        				 name = "btnValide" value="btnArevoir" >Valider</button>
+			         		  	     <button type="submit" class="btn btn-warning" 
+			         		  	     name = "btnArevoir" value="btnValide" >A revoir</button>
+			         		  	     <button type="submit" class="btn btn-danger" 
+			         		  	     name = "btnRefuse" value="btnEnreg" >Refuser</button>
+		 					   </div>
+				 			</td>
+				 		</tr>
+				 	</table>
+				 	{{Form::token()}}
+				 </form>
+
+				</div>
+	  		</div>
+		</div>	
+	  	 <div style="height: 40px;"></div>
+  	</div>
 @stop

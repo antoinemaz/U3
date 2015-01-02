@@ -40,7 +40,7 @@
       @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputDateNaissance">Date de naissance :</label>
 
       {{ Form::text("InputDateNaissance", $date_naissance, array('class' => 'form-control datepicker', 'name' => 'InputDateNaissance', $readonly)) }}
@@ -50,7 +50,7 @@
 
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputLieu">Lieu de naissance :</label>
       {{ Form::text("InputLieu", $candidature->lieu_naissance, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputLieu'))
@@ -59,21 +59,22 @@
     </div>
 
 
-     <div class="form-group">
+     <div class="form-group" {{$hidden}}>
       <label for="InputSexe">Sexe :</label>
+
        @foreach($tabSexe as $sexe)
             <?php
-                if ($sexe != $candidature->sexe){
+                if ($candidature->sexe != null && $sexe != $candidature->sexe){
                   ?>
-                    {{Form::radio('InputSexe', $sexe)}} {{$sexe}}
+                    <input type="radio" name="InputSexe" value={{$sexe}} {{$readonly}}>{{$sexe}}</input> 
                   <?php }else{
-                    ?> {{Form::radio('InputSexe', $sexe, true)}} {{$sexe}} <?php
+                    ?> <input type="radio" name="InputSexe" value={{$sexe}} {{$readonly}} checked="checked">{{$sexe}}</input> <?php
                   }?>
       @endForeach
 
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputNatio">Nationalité :</label>
 
       <select name="InputNatio" class="form-control" {{$readonly}}>
@@ -90,7 +91,7 @@
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputTel">Téléphone :</label>
       {{ Form::text("InputTel",  $candidature->telephone, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputTel'))
@@ -98,7 +99,7 @@
       @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputAdr">Adresse :</label>
       {{ Form::text("InputAdr", $candidature->adresse, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputAdr'))
@@ -106,7 +107,7 @@
       @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputVille">Ville :</label>
       {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputVille'))
@@ -114,7 +115,7 @@
       @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputCP">Code postal :</label>
       {{ Form::text("InputCP", $candidature->codePostal, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputCP'))
@@ -122,7 +123,7 @@
       @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputPays">Pays :</label>
             <select name="InputPays" class="form-control" {{$readonly}}>
             @foreach($tabPays as $pays)
@@ -138,7 +139,7 @@
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputDateDernDiplome">Date dernier diplôme :</label>
 
        {{ Form::text("InputDateDernDiplome", $date_diplome, array('class' => 'form-control datepicker', 'name' => 'InputDateDernDiplome', $readonly)) }}
@@ -202,7 +203,7 @@
           </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" {{$hidden}}>
       <label for="InputDossierE">Dossier étrangé :</label>
       <?php
         $checked = '';

@@ -10,27 +10,27 @@
 
 					@if(Route::currentRouteName() == 'creationCandidature-get')
 						<li class="active">
-							<a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('creationCandidature-get')}}">Dépôt de la candidature</a>
 						</li>
 					@elseif(Route::currentRouteName() == 'diplome-get')
 						<li class="active">
-							<a href="{{URL::route('diplome-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('diplome-get')}}">Dépôt de la candidature</a>
 						</li>
 					@elseif(Route::currentRouteName() == 'stage-get')
 						<li class="active">
-							<a href="{{URL::route('stage-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('stage-get')}}">Dépôt de la candidature</a>
 						</li>
 					@elseif(Route::currentRouteName() == 'piece-get')
 						<li class="active">
-							<a href="{{URL::route('piece-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('piece-get')}}">Dépôt de la candidature</a>
 						</li>
 					@elseif(Route::currentRouteName() == 'finalisation-get')
 						<li class="active">
-							<a href="{{URL::route('finalisation-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('finalisation-get')}}">Dépôt de la candidature</a>
 						</li>
 					@else
 						<li>
-							<a href="{{URL::route('creationCandidature-get')}}">Créer une candidature</a>
+							<a href="{{URL::route('creationCandidature-get')}}">Dépôt de la candidature</a>
 						</li>
 					@endIf
 				</li>

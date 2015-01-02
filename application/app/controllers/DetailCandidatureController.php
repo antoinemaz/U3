@@ -7,21 +7,28 @@ class DetailCandidatureController extends BaseController {
 		$candidature = $this->getCandidatureById($id);
 
 		// Récupération des informations pour le formulaire Candidature (premiere partie)
-		$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
-      	$tabRegimeInscription = ["Formation initiale","Formation alternance","Formation permanente","Formation continue"];
+		$client = new RedmineClient();
+		$tabFilliere = $client->getFilieres();
+
+		// $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
+
+		$tabRegimeInscription = $client->getRegimeInscription();
+      	//$tabRegimeInscription = ["Formation initiale","Formation alternance","Formation permanente","Formation continue"];
         
-		$annee_convoitee[2] = ('Année L2');
+        $annee_convoitee = $client->getAnneesUniversite();
+
+/*		$annee_convoitee[2] = ('Année L2');
 		$annee_convoitee[3] = 'Année L3';
 		$annee_convoitee[4] = 'Année M1';
 		$annee_convoitee[5] = 'Année M2';
-		$annee_convoitee[6] = 'Information sur le site';
+		$annee_convoitee[6] = 'Information sur le site';*/
 
       	$filieresCandidature = explode("|", $candidature->filiere);
 
       	$listePays = new ListePays();
       	$tabPays = ListePays::getListeDesPays();
 		
-		$tabSexe = ["Masculin", "Féminin"];
+		$tabSexe = ["masculin", "féminin"];
 
 		// Récupération des informations pour le formulaire Diplome (deuxième partie)
     	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->get();
@@ -99,7 +106,49 @@ class DetailCandidatureController extends BaseController {
 		// On clique sur le bouton Valider
 	    if(Input::get('btnValide')) {
 
-	    //TODO : GO REDMINE !
+	    // Appel de la méthode qui envoie le tout dans Redmine :
+	    $client = new RedmineClient();	
+    	$client->insererCandidature($candidature);
+
+    	// Changement de l'état de la candidature
+    	$candidature->etat_id = Constantes::VALIDE;
+
+    	// Suppression de tous les diplomes en base
+    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->delete();
+
+    	// Suppression de tous les stages en base
+    	$stages = DB::table('stages')->where('candidature_id', $candidature->id)->delete();
+
+    	// Suppression de toutes les pièces jointes sur le file system
+		$piecesCandidature =DB::table('pieces')->where('candidature_id', '=', $candidature->id)->get();
+
+		foreach ($piecesCandidature as $key => $value) {
+			
+			if($value->uid != null){
+				// Suppression du fichier dans le file system
+				File::delete('uploads/'.$value->uid);		
+				// Puis en base 
+				DB::table('pieces')->where('id', '=', $value->id)->delete();		
+			}
+		}
+
+		// Suppression de certaines valeurs parmis les informations élémentaires de la candidature
+	     $candidature -> date_naissance = null;
+	     $candidature -> lieu_naissance = null;
+	     $candidature -> sexe = null;
+	     $candidature -> dossier_etrange = null;
+	     $candidature -> nationalite = null;
+	     $candidature -> telephone = null;
+	     $candidature -> adresse = null;
+	     $candidature -> Ville = null;
+	     $candidature -> codePostal = null;
+	     $candidature -> Pays = null;
+	     $candidature -> date_dernier_diplome = null;
+	     $candidature -> commentaire_gestionnaire = null;
+
+	     if($candidature->save()){
+	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+	    	}
 
 	    // On clique sur le bouton A revoir
 	    }elseif(Input::get('btnArevoir')){

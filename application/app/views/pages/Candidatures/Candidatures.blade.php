@@ -33,6 +33,11 @@
                 or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE){
           $readonly = 'disabled';
         }
+
+        $hidden = '';
+        if($candidature->etat_id == Constantes::VALIDE){
+          $hidden='style="display:none;"';
+        }
     ?>
 
    <form id="form" action="{{URL::route('creationCandidature-post')}}" method="POST" class="form-horizontal inscription">
@@ -41,7 +46,7 @@
     @include('pages.Candidatures.partieCandidature.partieCandidature')
 
 
-    <div class="center">
+    <div class="center" {{$hidden}}>
           <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
          <button id="clickCandidature" type="submit" class="btn btn-primary" name = "btnSuiv" value="btnSuiv" >Suivant</button>
     </div>

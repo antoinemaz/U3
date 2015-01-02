@@ -7,7 +7,7 @@
 <div class="panel panel-default custom-panel">
   <div class="panel-heading"> <span class="glyphicon glyphicon-upload"></span> Formulaire dépôt de pièces jointes</div>
   <div class="panel-body">
-    {{ Form::open(array('files'=>true, 'id' => 'form', 'class'=>'form-horizontal inscription')) }}
+    {{ Form::open(array('files'=>true, 'id' => 'form', 'class'=>'form-horizontal inscription center', 'style' => 'max-width:none;')) }}
 
        <?php
             // Récupération de l'état de la candidature, si elle est envoyé, le formulaire ne sera plus éditable
@@ -19,14 +19,17 @@
 
       <div class="form-group">
           {{ Form::label('file','Fichier',array('id'=>'','class'=>'')) }}
-          <input id="file" type="file" name="file" {{$readonly}}>
-          <div class="alert alert-danger custom-alert" id="erreurPj" role="alert"></div>
+          <input style="display:inline-block;" id="file" type="file" name="file" {{$readonly}}>
+          <div style="max-width: none;" class="alert alert-danger custom-alert" id="erreurPj" role="alert"></div>
       </div>
           <button type=button onclick="window.location='{{ route("stage-get") }}'"
           class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent"  >Précédent</button>
 
           {{ Form::submit('Ajouter',array('id'=>'addFile', 'class' => 'btn btn-primary', $readonly)) }} 
           {{ Form::reset('Vider', array('class'=>'btn btn-info', $readonly)) }}
+
+          <button type=button onclick="window.location='{{ route("finalisation-get") }}'" 
+          class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
           <div style="margin-top:12px;" class="label label-info" id="charg"></div>  
     
     {{ Form::close() }}

@@ -107,7 +107,9 @@ class CompteController extends BaseController {
 				'password' => Hash::make($password),
 				'code' => $code,
 				'active' => 0,
-				'role_id' => 2));
+				'role_id' => Constantes::ETUDIANT,
+				'sexe' => 'masculin',
+				'pays' => 'France'));
 
 			if($create){
 
