@@ -1,13 +1,16 @@
 Démarche :
 
-1) Copier coller tout ce qu'il y a dans le répertoire migration dans le répertoire database
+Prérequis : supprimer votre base Laravel et recréer en une vierge qui porte le nom suivant : laravel
+
+1) Copier coller tout ce qu'il y a dans le répertoire migration dans le répertoire database (PAS TOUCHE AU .gitkeep !)
 2) Supprimer tout ce qu'il y a dans le répertoire migration
 3) Copier coller les migrations suivantes qui sont dans le répertoire table dans le répertoire migration :
 	
-	1) Table Etat + Table Role, puis php artisan migrate
+	1) Table Etat + Table Role + Table Configuration, puis php artisan migrate (commandes a executer dans wamp/www/U3/application)
 	2) Table Utilisateurs, puis php artisan migrate
 	3) Table Candidatures, puis php artisan migrate
 	4) Table Pieces + Table diplome + table stage puis php artisan migrate
 
 4) Ensuite executer la commande suivante php artisan db:seed
 
+5) vider le répertoire "migrations" et copier coller tout ce qu'il y a dans le répertoire "tables" dans le répertoire "migrations". 

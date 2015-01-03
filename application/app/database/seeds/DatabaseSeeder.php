@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder {
 
 		Role::create(array('libelle' => 'Etudiant'));
 		Role::create(array('libelle' => 'Gestionnaire'));
+		Role::create(array('libelle' => 'Administrateur'));
 
 		Etat::create(array('libelle' => 'Brouillon'));
 		Etat::create(array('libelle' => 'Envoyée'));
@@ -23,6 +24,11 @@ class DatabaseSeeder extends Seeder {
 			'email' => 'admin@admin.fr',
 			'password' => Hash::make('aaaaaa'),
 			'active' => 1,
-			'role_id' => 2));
+			'role_id' => 3));
+	
+		Configuration::create(array(
+			'libelle' => 'sendMailsToGestionnaires',
+			'active' => true
+			));
 	}
 }

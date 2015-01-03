@@ -144,7 +144,7 @@
 				 			<td>
 						 		<div class="center">
 									<u>Partie réservée au gestionnaire</u>
-									<textarea style="resize:none;" maxlength="200" class="form-control travailStage" name="commentGestionnaire" >{{ $candidature->commentaire_gestionnaire}}</textarea>
+									<textarea placeholder="Ce texte sera visible à l'étudiant que si vous changez l'état à A revoir" style="resize:none;" maxlength="200" class="form-control travailStage" name="commentGestionnaire" >{{ $candidature->commentaire_gestionnaire}}</textarea>
 								</div>
 				 			</td>
 				 			<td>

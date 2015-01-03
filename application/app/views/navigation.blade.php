@@ -6,7 +6,7 @@
 			<li class="{{Active::route(array('deconnexion-get'), 'active')}}"><a href="{{URL::route('deconnexion-get')}}">Se déconnecter</a></li>
 			<li class="{{Active::route(array('changerpassword-get'), 'active')}}"><a href="{{URL::route('changerpassword-get')}}">Changer mot de passe</a></li>
 			
-			@if(Auth::user()->role_id == 1)
+			@if(Auth::user()->role_id == Constantes::ETUDIANT)
 
 					@if(Route::currentRouteName() == 'creationCandidature-get')
 						<li class="active">
@@ -35,8 +35,16 @@
 					@endIf
 				</li>
 			@else
-				<li class="{{Active::route(array('gestionnaires-get'), 'active')}}"><a href="{{URL::route('gestionnaires-get')}}">Gérer les gestionnaires</a></li>
-				<li class="{{Active::route(array('listeCandidatures-get'), 'active')}}"><a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a></li>
+				@if(Route::currentRouteName() == 'detailCandidature-get' or Route::currentRouteName() == 'listeCandidatures-get')
+					<li class="active">
+						<a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a>
+					</li>
+				@else
+					<li>
+						<a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a>
+					</li>
+				@endif
+				<li class="{{Active::route(array('configuration-get'), 'active')}}"><a href="{{URL::route('configuration-get')}}">Configuration</a></li>
 			@endif
 
 		@else

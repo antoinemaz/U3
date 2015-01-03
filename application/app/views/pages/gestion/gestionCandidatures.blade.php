@@ -12,6 +12,7 @@
 					<tr>
 						<th>Nom</th>
 						<th>Prénom</th>
+						<th>Etat</th>
 						<th>Détail</th>
 					</tr>
 				</thead>
@@ -21,6 +22,18 @@
 					<tr>
 						<td>{{ $cand->nom }}</td>
 						<td>{{ $cand->prenom }}</td>
+
+						@if($cand->etat_id == Constantes::ENVOYE)
+							<td class="alert-info">Envoyée</td>
+						@elseif($cand->etat_id == Constantes::VALIDE)
+							<td class="alert-success">Validée</td>
+						@elseif($cand->etat_id == Constantes::AREVOIR)
+							<td class="alert-warning">A revoir</td>
+						@else
+							<td class="alert-danger">Refusée</td>
+						@endIf
+
+						</td>
 						<td><a href="{{URL::route('detailCandidature-get', $cand->id )}}">Détail</a></td>
 					</tr>
 					@endforeach

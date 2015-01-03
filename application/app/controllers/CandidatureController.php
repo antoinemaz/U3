@@ -175,6 +175,13 @@ class CandidatureController extends BaseController {
          }else{
 	        $candidature -> etat_id = Constantes::ENVOYE;
 	        if($candidature->save()){
+
+	        	// Envoi d'un mail selon la valeur dans configs
+	        	$config = new ConfigurationController();
+	        	if ($config->getSendMailsGestionnairesValue() == 1){
+	        		// TODO : SEND MAIL AUX GESTIONNAIRES
+	        	}	
+
 			 	return Redirect::route('finalisation-get');
 	    	}
          }

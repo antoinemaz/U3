@@ -12,5 +12,8 @@ class Constantes {
 	// LISTE DES ROLES
 	const ETUDIANT = 1;
 	const GESTIONNAIRE = 2;
+	const ADMINISTRATEUR = 3;
 
+	// CONFIGURATION
+	const SENDMAILSGESTIONNAIRES = 'sendMailsToGestionnaires';
 }

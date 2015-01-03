@@ -43,6 +43,7 @@ class CompteController extends BaseController {
 					'utilisateur_id' => $create->id,
 					'Pays' => 'France',
 					'nationalite' => 'France',
+					'sexe' => 'masculin',
 					'save' => 0,
 					'etat_id' => Constantes::BROUILLON));
 
@@ -63,83 +64,13 @@ class CompteController extends BaseController {
 				}
 
 				// Envoi du mail d'activation du compte
-				Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
-					function($message) use ($create){
-					$message->to($create->email, $create->username)->subject('Activation du compte');
-				});
+				$mailService = new MailService();
+				$mailService->sendMailActivationCompte($create, $code);
 
 				// On redirige vers la page d'accueil
 				return Redirect::route('index')
 						->with('global', 'Compte créé');
 			}
-		}
-	}
-
-		// Vue de création d'un compte 
-	public function getGestionGestionnaires()
-	{
-		$gestionnaires = DB::table('utilisateurs')->where('role_id', 2)->get();
-
-		return View::make('pages.compte.gestionnaires')->with('gestionnaires', $gestionnaires);
-	}
-
-	public function postCreateCompteGestionnaire()
-	{
-		$validator = Validator::make(Input::all(),
-			array('email' => 'required|max:50|email|unique:utilisateurs'));
-	
-		// Si la validation échoue, on redirige vers la même page avec les erreurs
-		if($validator->fails()){
-			return Redirect::route('gestionnaires-get')
-					->withErrors($validator)
-					->withInput();
-		}else{
-			// on set les valeurs des inputs dans des variables
-			$email = Input::get('email');
-			$password = str_random(10);
-
-			// code d'activation
-			$code = str_random(60);
-
-			// Enregistrement en base de données
-			$create = Utilisateur::create(array(
-				'email' => $email,
-				'password' => Hash::make($password),
-				'code' => $code,
-				'active' => 0,
-				'role_id' => Constantes::ETUDIANT,
-				'sexe' => 'masculin',
-				'pays' => 'France'));
-
-			if($create){
-
-				// Envoi du mail d'activation du compte
-				Mail::send('emails.activerCompteGestionnaire', 
-					array('lien' => URL::route('activerCompte', $code), 'password' => $password), 
-					function($message) use ($create){
-					$message->to($create->email, $create->username)->subject('Activation du compte gestionnaire');
-				});
-
-				// On redirige vers la page d'accueil
-				return Redirect::route('gestionnaires-get')
-						->with('global', 'Compte créé');
-			}
-		}
-	}
-
-	public function deleteGestionnaire($id){
-
-		$gestionnaire = Utilisateur::where('role_id', '=', 2)->where('id', '=', $id);
-		
-		if($gestionnaire->count()){
-			$gestionnaire = $gestionnaire->first();
-			$gestionnaire->delete();
-
-			return Redirect::route('gestionnaires-get');
-
-		}else{
-			//return App::abort(404);
-			return Redirect::route('gestionnaires-get');
 		}
 	}
 
@@ -288,14 +219,11 @@ class CompteController extends BaseController {
 					if($Utilisateur->save()){
 						
 					// Envoi du mail avec le nouveau mot de passe
-					Mail::send('emails.passwordOublie', array('lien' => URL::route('reinitialisationPassword', $code), 
-						'password' => $password), 
-						function($message) use ($Utilisateur){
-						$message->to($Utilisateur->email, $Utilisateur->email)->subject('Réinitialisation du mode de passe');
-						});
+					$mailService = new MailService();
+					$mailService->sendMailPasswordOublie($Utilisateur, $code, $password);
 					
-						return Redirect::route('index')
-						->with('password_reinit', 'Un nouveau mot de passe a été envoyé par mail');
+					return Redirect::route('index')
+					->with('password_reinit', 'Un nouveau mot de passe a été envoyé par mail');
 					}
 
 				}

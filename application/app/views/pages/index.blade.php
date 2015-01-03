@@ -3,7 +3,6 @@
 @section('content')
 
 <div class="panel panel-default custom-panel center">
-	
 	@if(Session::has('compte-impossible-active'))
 		<p>{{Session::get('compte-impossible-active')}}</p>
 	@endif

@@ -47,7 +47,6 @@ class DetailCandidatureController extends BaseController {
 			$emailUser = $user->email;  
 		 }
 
-
 		return View::make('pages.gestion.detailCandidature')
 		->with(array('candidature'=>$candidature, 
 			'tabFiliere' => $tabFilliere, 
@@ -60,9 +59,7 @@ class DetailCandidatureController extends BaseController {
 			'stages' => $stages,
 			'pieces' => $pieces,
 			'email' => $emailUser));
-
 	}
-
 
 	// Sauvegarde des informations de la candidature
 	public function postDetailCandidature($id){
@@ -103,58 +100,74 @@ class DetailCandidatureController extends BaseController {
 		// Dans tous les cas, on modifie le commentaire du gestionnaire
 		$candidature->commentaire_gestionnaire = Input::get('commentGestionnaire');
 
+		// On va récupérer le mail de l'utilisateur de la candidature pour l'envoi du mail
+		$mailUser = '';
+		$user = Utilisateur::where('id', '=', $candidature->utilisateur_id);
+		if($user->count()){
+			$user = $user->first(); 	
+			$mailUser = $user->email;
+		 }
+
 		// On clique sur le bouton Valider
 	    if(Input::get('btnValide')) {
 
-	    // Appel de la méthode qui envoie le tout dans Redmine :
-	    $client = new RedmineClient();	
-    	$client->insererCandidature($candidature);
+		    // Appel de la méthode qui envoie le tout dans Redmine :
+		    $client = new RedmineClient();	
+	    	$client->insererCandidature($candidature);
 
-    	// Changement de l'état de la candidature
-    	$candidature->etat_id = Constantes::VALIDE;
+	    	// Changement de l'état de la candidature
+	    	$candidature->etat_id = Constantes::VALIDE;
 
-    	// Suppression de tous les diplomes en base
-    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->delete();
+	    	// Suppression de tous les diplomes en base
+	    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->delete();
 
-    	// Suppression de tous les stages en base
-    	$stages = DB::table('stages')->where('candidature_id', $candidature->id)->delete();
+	    	// Suppression de tous les stages en base
+	    	$stages = DB::table('stages')->where('candidature_id', $candidature->id)->delete();
 
-    	// Suppression de toutes les pièces jointes sur le file system
-		$piecesCandidature =DB::table('pieces')->where('candidature_id', '=', $candidature->id)->get();
+	    	// Suppression de toutes les pièces jointes sur le file system
+			$piecesCandidature =DB::table('pieces')->where('candidature_id', '=', $candidature->id)->get();
 
-		foreach ($piecesCandidature as $key => $value) {
-			
-			if($value->uid != null){
-				// Suppression du fichier dans le file system
-				File::delete('uploads/'.$value->uid);		
-				// Puis en base 
-				DB::table('pieces')->where('id', '=', $value->id)->delete();		
+			foreach ($piecesCandidature as $key => $value) {
+				
+				if($value->uid != null){
+					// Suppression du fichier dans le file system
+					File::delete('uploads/'.$value->uid);		
+					// Puis en base 
+					DB::table('pieces')->where('id', '=', $value->id)->delete();		
+				}
 			}
-		}
 
-		// Suppression de certaines valeurs parmis les informations élémentaires de la candidature
-	     $candidature -> date_naissance = null;
-	     $candidature -> lieu_naissance = null;
-	     $candidature -> sexe = null;
-	     $candidature -> dossier_etrange = null;
-	     $candidature -> nationalite = null;
-	     $candidature -> telephone = null;
-	     $candidature -> adresse = null;
-	     $candidature -> Ville = null;
-	     $candidature -> codePostal = null;
-	     $candidature -> Pays = null;
-	     $candidature -> date_dernier_diplome = null;
-	     $candidature -> commentaire_gestionnaire = null;
+			// Suppression de certaines valeurs parmis les informations élémentaires de la candidature
+		     $candidature -> date_naissance = null;
+		     $candidature -> lieu_naissance = null;
+		     $candidature -> sexe = null;
+		     $candidature -> dossier_etrange = null;
+		     $candidature -> nationalite = null;
+		     $candidature -> telephone = null;
+		     $candidature -> adresse = null;
+		     $candidature -> Ville = null;
+		     $candidature -> codePostal = null;
+		     $candidature -> Pays = null;
+		     $candidature -> date_dernier_diplome = null;
+		     $candidature -> commentaire_gestionnaire = null;
 
-	     if($candidature->save()){
-	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
-	    	}
+		     if($candidature->save()){
+		     		// Envoi d'un mail pour avertir de la validation de la candidature à l'étudiant
+		     		$mailService = new MailService();
+		     		$mailService->sendMailCandidatureValidee($mailUser, $candidature);
+
+		    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
+		    	}
 
 	    // On clique sur le bouton A revoir
 	    }elseif(Input::get('btnArevoir')){
 
 	    	$candidature->etat_id = Constantes::AREVOIR;
 	    	if($candidature->save()){
+    			// Envoi d'un mail pour avertir que la candidature est à revoir
+	     		$mailService = new MailService();
+	     		$mailService->sendMailCandidatureArevoir($mailUser, $candidature);
+
 	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
 	    	}
 
@@ -162,6 +175,10 @@ class DetailCandidatureController extends BaseController {
 	    }else{
 	    	$candidature->etat_id = Constantes::REFUSE;
 	    	if($candidature->save()){
+	    		// Envoi d'un mail pour avertir que la candidature est à refusée
+	     		$mailService = new MailService();
+	     		$mailService->sendMailCandidatureRefusee($mailUser, $candidature);
+
 	    		return Redirect::route('detailCandidature-get',$candidature->id)->with('succes', 'Modifications effectuées');
 	    	}
 	    }

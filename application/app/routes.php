@@ -133,17 +133,6 @@ Route::group(array('before' => 'auth'), function(){
 	// SI c'est un gestionnaire
 	Route::group(array('before' => 'gestionnaire'), function() {
 
-		// GET Page de gestion des gestionnaires
-		Route::get('compte/gestionnaires', array(
-			'as' => 'gestionnaires-get',
-			'uses' => 'CompteController@getGestionGestionnaires'));
-
-		// GET Suppression d'un gestionnaire
-	    Route::get("/compte/gestionnaire/delete/{id}", array(
-			'as' => 'deletegestionnaire',
-			'uses' => 'CompteController@deleteGestionnaire'));
-
-
 	    // GET Liste des candidatures
 	    Route::get("/gestion/listeCandidatures", array(
 			'as' => 'listeCandidatures-get',
@@ -159,13 +148,13 @@ Route::group(array('before' => 'auth'), function(){
 		'as' => 'deletepjgestion',
 		'uses' => 'DetailCandidatureController@deletePj'));
 
+		// GET Liste des configurations
+	    Route::get("/gestion/configuration", array(
+			'as' => 'configuration-get',
+			'uses' => 'ConfigurationController@getConfiguration'));
+
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){
-			
-			// POST Création de compte gestionnaire
-			Route::post('/creerCompteGestionnaire', array(
-				'as' => 'creerCompteGestionnaire-post',
-				'uses' => 'CompteController@postCreateCompteGestionnaire'));
 
 			 // POST Détail de candidature
 		    Route::post("/gestion/detailCandidature/{id}", array(
@@ -212,4 +201,24 @@ Route::group(array('before' => 'auth'), function(){
 		'as' => 'finalisation-post',
 		'uses' => 'CandidatureController@postFinalisation'));
 	});
+
+	// SI c'est un administrateur
+	Route::group(array('before' => 'administrateur'), function() {
+
+	    // POST Configuration
+		 Route::post("/gestion/configuration", array(
+		'as' => 'configuration-post',
+		'uses' => 'ConfigurationController@postConfiguration'));
+	});
+
+		// GET Suppression d'un gestionnaire
+	    Route::get("/compte/gestionnaire/delete/{id}", array(
+			'as' => 'deletegestionnaire',
+			'uses' => 'ConfigurationController@deleteGestionnaire'));
+
+		// POST Création de compte gestionnaire
+		Route::post('/creerCompteGestionnaire', array(
+		'as' => 'creerCompteGestionnaire-post',
+		'uses' => 'ConfigurationController@postCreateCompteGestionnaire'));
+
 });

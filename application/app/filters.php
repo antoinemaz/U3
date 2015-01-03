@@ -51,7 +51,15 @@ Route::filter('auth', function()
 Route::filter('gestionnaire', function()
 { 
   // Si c'est un étudiant, il n'aura pas accès à la page demandée
-  if ( Auth::user()->role_id == 1) {
+  if ( Auth::user()->role_id == Constantes::ETUDIANT) {
+     return Response::make('Unauthorized', 401);
+   }
+}); 
+
+Route::filter('administrateur', function()
+{ 
+  // Si c'est un étudiant, il n'aura pas accès à la page demandée
+  if ( Auth::user()->role_id == Constantes::ETUDIANT or Auth::user()->role_id == Constantes::GESTIONNAIRE) {
      return Response::make('Unauthorized', 401);
    }
 }); 

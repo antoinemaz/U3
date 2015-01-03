@@ -16,15 +16,15 @@
 	/*color: #00609f;
       background-image: linear-gradient(to right, white, white 12%, #00609f); 
       */
-    font-weight: bold;
-    text-align: center;
-    margin: 20px;
-    /*background-color: #428bca; */
-    color:00609f;
-    height: 110px;
-}
+      font-weight: bold;
+      text-align: center;
+      margin: 20px;
+      /*background-color: #428bca; */
+      color:00609f;
+      height: 110px;
+  }
 
-.form-control{
+  .form-control{
     border: 1px solid #bcbcbc;
 }
 
@@ -103,109 +103,109 @@
     display: block;    
     margin: 0 auto;
     max-width: 640px; }  
-.crumbs li {  display: inline; }  
-.crumbs li.first { padding-left: 8px; }  
-.crumbs li a,  
-.crumbs li a:link,  
-.crumbs li a:visited {  
-    color: #428bca;  
-    display: block;  
-    float: left;  
-    font-size: 14px;  
-    margin-left: -13px;  
-    padding: 5px 30px 9px 26px; 
-    position: relative;  
-    text-decoration: none;  
-}  
-.crumbs li a {   
-    background-repeat: no-repeat;  
-    background-position: 100% 0;  
-    position: relative;  
-}  
-.crumbs li a:hover {  
-    color: #333;  
-    background-position: 100% -48px;  
-    cursor: pointer;  
-}  
-.crumbs li a:active {  
-    color: #333;  
-    background-position: 100% -96px;  
-}  
-.crumbs li.first a span {  
-    height: 29px;  
-    width: 3px;  
-    border-left: 1px solid #d9d9d9;  
-    position: absolute;  
-    top: 0px;  
-    left: 0px;  
-} 
+    .crumbs li {  display: inline; }  
+    .crumbs li.first { padding-left: 8px; }  
+    .crumbs li a,  
+    .crumbs li a:link,  
+    .crumbs li a:visited {  
+        color: #428bca;  
+        display: block;  
+        float: left;  
+        font-size: 14px;  
+        margin-left: -13px;  
+        padding: 5px 30px 9px 26px; 
+        position: relative;  
+        text-decoration: none;  
+    }  
+    .crumbs li a {   
+        background-repeat: no-repeat;  
+        background-position: 100% 0;  
+        position: relative;  
+    }  
+    .crumbs li a:hover {  
+        color: #333;  
+        background-position: 100% -48px;  
+        cursor: pointer;  
+    }  
+    .crumbs li a:active {  
+        color: #333;  
+        background-position: 100% -96px;  
+    }  
+    .crumbs li.first a span {  
+        height: 29px;  
+        width: 3px;  
+        border-left: 1px solid #d9d9d9;  
+        position: absolute;  
+        top: 0px;  
+        left: 0px;  
+    } 
 
-.noBold label{
-    font-weight: normal;
-}
+    .noBold label{
+        font-weight: normal;
+    }
 
-.travailStage{
-    height: 250px;
-    width: 280px;
-}
+    .travailStage{
+        height: 250px;
+        width: 280px;
+    }
 
-#stages td{
-    vertical-align: middle;
-}
+    #stages td{
+        vertical-align: middle;
+    }
 
-.center{
-    text-align: center;
-}
+    .center{
+        text-align: center;
+    }
 
-.comment{
-    background-color: #f5f5f5;
-    border: 1px solid #b4b5b5;
-    height: 110px;
-}
+    .comment{
+        background-color: #f5f5f5;
+        border: 1px solid #b4b5b5;
+        height: 110px;
+    }
 
-.comment textarea{
-    height: 80px;
-    margin: 0 auto;
-    width: 450px;
-}
+    .comment textarea{
+        height: 80px;
+        margin: 0 auto;
+        width: 450px;
+    }
 
-.custom-label{
-    display: block;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
+    .custom-label{
+        display: block;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
 
-.label-pj{
-    display: block;
-    font-size: 13px;
-    margin-bottom: 10px;
-    max-width: 160px;
-    padding: 4px;
-    margin-top: 20px;
-}
+    .label-pj{
+        display: block;
+        font-size: 13px;
+        margin-bottom: 10px;
+        max-width: 160px;
+        padding: 4px;
+        margin-top: 20px;
+    }
 
-.deleteLink{
-    display: block;
-    margin-bottom: 10px;
-    margin-left: 13px;
-}
+    .deleteLink{
+        display: block;
+        margin-bottom: 10px;
+        margin-left: 13px;
+    }
 
-.deleteLink:hover{
-    text-decoration: none;
-}
+    .deleteLink:hover{
+        text-decoration: none;
+    }
 
-.panelEtat{
-    margin: 28px auto 0;
-    text-align: center;
-}
+    .panelEtat{
+        margin: 28px auto 0;
+        text-align: center;
+    }
 
-.linkDisabled{
-   pointer-events: none;
-   cursor: default;
-   color:#9E9E9E!important;
-}
+    .linkDisabled{
+       pointer-events: none;
+       cursor: default;
+       color:#9E9E9E!important;
+   }
 
-.commentaireGestionnaire{
+   .commentaireGestionnaire{
     margin: 0 auto;
     max-width: 400px;
 }
@@ -220,7 +220,7 @@
 
 @media screen and (max-width: 1120px)
 {
-    #diplomes td input{
+    #diplomes td input, #stages td input{
         max-width: 100px!important;
     }
 
@@ -231,11 +231,11 @@
 
 @media screen and (max-width: 980px)
 {
-    #diplomes td {
+    #diplomes td, #stages td {
         padding: 0px;
     }
 
-     #diplomes td input{
+    #diplomes td input, #stages td input{
         margin: 0 auto;
     }
 
@@ -264,9 +264,21 @@
     }
 }
 
+@media screen and (max-width: 870px)
+{
+    #stages td .travailStage{
+        max-width: 200px!important;
+    }
+}
+
+
 @media screen and (max-width: 500px)
 {
     #header{
         margin-bottom: 85px;
     }
+}
+
+#candidatures th, #candidatures td{
+    text-align: center;
 }
