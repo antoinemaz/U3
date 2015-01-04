@@ -128,10 +128,9 @@ class RedmineClient {
 					'description' => $value->filename, 
 					'content_type' => $this->get_file_extension($value->filename)
 					) 
-			);
+				);
+			curl_close($ch); 
 		}
-
-		curl_close($ch); 
 
 		return $lesPieces;
   }

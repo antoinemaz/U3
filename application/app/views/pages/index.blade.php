@@ -4,25 +4,37 @@
 
 <div class="panel panel-default custom-panel center">
 	@if(Session::has('compte-impossible-active'))
-		<p>{{Session::get('compte-impossible-active')}}</p>
+		<div class="alert alert-danger custom-alert center" role="alert">
+			{{Session::get('compte-impossible-active')}}
+		</div>
 	@endif
 	@if(Session::has('compte-active'))
-		<p>{{Session::get('compte-active')}}</p>
+		<div class="alert alert-success custom-alert center" role="alert">
+			{{Session::get('compte-active')}}
+		</div>
 	@endif
 	@if(Session::has('password_changed'))
-		<p>{{Session::get('password_changed')}}</p>
+		<div class="alert alert-success custom-alert center" role="alert">
+			{{Session::get('password_changed')}}
+		</div>
 	@endif
 	@if(Session::has('password_reinit'))
-		<p>{{Session::get('password_reinit')}}</p>
+		<div class="alert alert-success custom-alert center" role="alert">
+			{{Session::get('password_reinit')}}
+		</div>
 	@endif
 	@if(Session::has('validation_password_oublie'))
-	<p>{{Session::get('validation_password_oublie')}}</p>
-		@endif
+		<div class="alert alert-success custom-alert center" role="alert">
+			{{Session::get('validation_password_oublie')}}
+		</div>
+	@endif
 	@if(Session::has('error_forget_password_init'))
-		<p>{{Session::get('error_forget_password_init')}}</p>
+		<div class="alert alert-danger custom-alert center" role="alert">
+			{{Session::get('error_forget_password_init')}}
+		</div>
 	@endif
 	@if(Auth::check())
-		<p>Salut {{Auth::user()->email}} </p>
+		<p>Bonjour, vous êtes connecté avec l'adresse mail suivante : {{Auth::user()->email}} </p>
 	@else
 		<p> Vous n'êtes pas connecté</p>
 	@endif

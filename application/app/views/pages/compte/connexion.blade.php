@@ -2,16 +2,19 @@
 
 @section('content')
 
-
 	<div class="panel panel-default custom-panel">
- 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de connexion</div>
+ 		<div class="panel-heading"> <span class="glyphicon glyphicon-log-in"></span> Connexion au portail</div>
 		<div class="panel-body">
 
 		@if(Session::has('connexion-probleme'))
-		<p>{{Session::get('connexion-probleme')}}</p>
+			<div class="alert alert-danger custom-alert center" role="alert">
+				{{Session::get('connexion-probleme')}}
+			</div>	
 		@endif
 		@if(Session::has('connexion-mauvais'))
-		<p>{{Session::get('connexion-mauvais')}}</p>
+			<div class="alert alert-danger custom-alert center" role="alert">
+				{{Session::get('connexion-mauvais')}}
+			</div>	
 		@endif
 
 		<form action="{{URL::route('connexion-post')}}" method="POST" class="form-horizontal inscription">

@@ -17,12 +17,33 @@
                 Vous avez terminé de remplir votre candidature. Toutes les informations ont été enregistrées. <br/>
                 Si vous validez votre candidature, elle sera envoyée et vous ne pourrez plus la modifier. <br/>
                 <form action="{{URL::route('finalisation-post')}}" method="POST">
-                   <button style="margin-top: 10px;" type="submit" class="btn btn-primary" 
-                   name = "btnEnreg" value="btnEnreg" >Envoyer la candidature</button>
-                   {{Form::token()}}
-               </form>
+                 {{Form::token()}}
+
+                 <button style="margin-top: 10px;" type="button" class="btn btn-primary" 
+                 data-toggle="modal" data-target=".confirmerEnvoi" >Envoyer la candidature</button>
+
+                 <!-- Fenetre modale qui s'ouvre pour confirmer l'envoi de la candidature  -->
+                 <div class="modal fade confirmerEnvoi" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-sm" style="margin-top: 270px;">
+                    <div class="modal-content" style="padding: 10px;">
+                      Etes-vous sûr ?
+                      <button  type="submit" class="btn btn-primary" 
+                      name = "btnEnreg" value="btnEnreg" >Oui</button>
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+                    </div>
+                  </div>
+                </div>
+
+              </form>
         @endif
       @endif
     </div>
 </div>
+
+<script>
+
+
+
+</script>
+
 @stop

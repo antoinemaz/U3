@@ -1,5 +1,6 @@
 <?php
 
+// CLASSE DE TEST D'APPEL AU WEB SERVICE
 class RedmineController extends BaseController {
 
 	public function pushCandidatureToRedmine($id){

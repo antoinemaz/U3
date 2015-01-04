@@ -33,7 +33,7 @@
     </script>
 
 	<div class="panel panel-default custom-panel">
- 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des candidatures</div>
+ 		<div class="panel-heading"> <span class="glyphicon glyphicon-zoom-in"></span> Détail d'une candidature</div>
 		<div class="panel-body">
 
 			@if(Session::has('succes') and empty($errors->all()))
@@ -59,6 +59,8 @@
 		        	$hidden='style="display:none;"';
 		        }
 		    ?>
+
+		    		 	<a href="{{URL::route('listeCandidatures-get')}}"> << Retour à la liste des candidatures</a>
 
 		 <form action="{{URL::route('detailCandidature-post', $candidature->id)}}" method="POST" class="form-horizontal inscription adminForm" style="max-width: none;">
 
@@ -136,7 +138,7 @@
 			 	{{Form::token()}}
 			 </form>
 
-			 	<div class="navbar-fixed-bottom comment">
+			 	<div class="navbar-fixed-bottom comment" style=" transform: none;z-index: auto;">
 
 			 	<form action="{{URL::route('actionCandidature-post', $candidature->id)}}" method="POST" >
 				 	<table style="margin:0 auto;">
@@ -150,13 +152,56 @@
 				 			<td>
 				 				<div class="center" style="margin-left: 15px;">Actions possibles : </div>
 				 				<div class="center" style="margin-left: 15px;">
-			        				 <button type="submit" class="btn btn-success" 
-			        				 name = "btnValide" value="btnArevoir" >Valider</button>
-			         		  	     <button type="submit" class="btn btn-warning" 
-			         		  	     name = "btnArevoir" value="btnValide" >A revoir</button>
-			         		  	     <button type="submit" class="btn btn-danger" 
-			         		  	     name = "btnRefuse" value="btnEnreg" >Refuser</button>
-		 					   </div>
+
+				 					<!-- Bouton valider -->
+				 					<button type="button" class="btn btn-success" data-toggle="modal"  
+				 					data-target=".confirmerValider">Valider</button>
+
+				 					<!-- Fenetre modale qui s'ouvre pour confirmer le changement à l'état valider  -->
+				 					<div class="modal fade confirmerValider" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+				 						<div class="modal-dialog modal-sm"  style="margin-top: 270px;" >
+				 							<div class="modal-content" style="padding: 10px;">
+				 								Etes-vous sûr ?
+				 								<button type="submit" class="btn btn-success" 
+				 								name = "btnValide" value = "btnValide">Oui</button>
+				 								<button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+				 							</div>
+				 						</div>
+				 					</div>
+
+				 					<!-- Bouton à revoir -->
+				 					<button type="button" class="btn btn-warning" data-toggle="modal"  
+									data-target=".confirmerArevoir">A revoir</button>
+
+				 					<!-- Fenetre modale qui s'ouvre pour confirmer le changement à l'état A revoir  -->
+				 					<div class="modal fade confirmerArevoir" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+				 						<div class="modal-dialog modal-sm"  style="margin-top: 270px;" >
+				 							<div class="modal-content" style="padding: 10px;">
+				 								Etes-vous sûr ?
+				 								<button type="submit" class="btn btn-warning" 
+				 								name = "btnArevoir" value="btnArevoir" >Oui</button>
+				 								<button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+				 							</div>
+				 						</div>
+				 					</div>
+
+				 					<!-- Bouton refuser -->
+				 					<button type="button" class="btn btn-danger" data-toggle="modal"  
+				 					data-target=".confirmerRefuser">Refuser</button>
+
+				 					<!-- Fenetre modale qui s'ouvre pour confirmer le changement à l'état refuser  -->
+				 					<div class="modal fade confirmerRefuser" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+				 						<div class="modal-dialog modal-sm"  style="margin-top: 270px;" >
+				 							<div class="modal-content" style="padding: 10px;">
+				 								Etes-vous sûr ?
+				 								<button type="submit" class="btn btn-danger" 
+				 								name = "btnRefuse" value="btnRefuse" >Oui</button>
+				 								<button type="button" class="btn btn-default" data-dismiss="modal">Non</button>
+				 							</div>
+				 						</div>
+				 					</div>
+
+				 				</div>
 				 			</td>
 				 		</tr>
 				 	</table>

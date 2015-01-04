@@ -20,7 +20,7 @@
 
 @if(Auth::user()->role_id == Constantes::ADMINISTRATEUR)
 	<div class="panel panel-default custom-panel">
-		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span>Configuration</div>
+		<div class="panel-heading"> <span class="glyphicon glyphicon-wrench"></span> Configuration</div>
 		<div class="panel-body">
 
 			<form id="form" action="{{URL::route('configuration-post')}}" method="POST" class="form-horizontaln center">
@@ -42,7 +42,7 @@
 	</div>	
 
 	<div class="panel panel-default custom-panel">
-		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span>Gestion des comptes Gestionnaires/Administrateurs</div>
+		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des comptes Gestionnaires/Administrateurs</div>
 		<div class="panel-body">
 			<form action="{{URL::route('creerCompteGestionnaire-post')}}" method="POST" class="form-horizontal inscription">	
 				<div class="form-group">
@@ -101,7 +101,7 @@
 @endIf
 
 <div class="panel panel-default custom-panel">
-	<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span>Filtre des candidatures</div>
+	<div class="panel-heading"> <span class="glyphicon glyphicon-filter"></span> Filtre des candidatures</div>
 	<div class="panel-body">
 		TODO !
 	</div>

@@ -223,7 +223,7 @@ class CompteController extends BaseController {
 					$mailService->sendMailPasswordOublie($Utilisateur, $code, $password);
 					
 					return Redirect::route('index')
-					->with('password_reinit', 'Un nouveau mot de passe a été envoyé par mail');
+					->with('password_reinit', 'Un nouveau mot de passe vous a été envoyé par mail');
 					}
 
 				}

@@ -4,7 +4,7 @@
 
 
 	<div class="panel panel-default custom-panel">
- 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de connexion</div>
+ 		<div class="panel-heading"> <span class="glyphicon glyphicon-edit"></span> Changer le mot de passe</div>
 		<div class="panel-body">
 
 		@if(Session::has('error_change_password'))

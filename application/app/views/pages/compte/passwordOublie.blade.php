@@ -3,11 +3,13 @@
 @section('content')
 
 	@if(Session::has('erreur_passord_oublie'))
-	<p>{{Session::get('erreur_passord_oublie')}}</p>
+		<div class="alert alert-danger custom-alert center" role="alert">
+			{{Session::get('erreur_passord_oublie')}}
+		</div>
 	@endif
 
 	<div class="panel panel-default custom-panel">
- 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de connexion</div>
+ 		<div class="panel-heading"> <span class="glyphicon glyphicon-wrench"></span> Mot de passe oublié</div>
 		<div class="panel-body">
 
 		@if(Session::has('error_change_password'))
@@ -27,7 +29,7 @@
 		</div>
 
 
-		<button type="submit" class="btn btn-primary">Changer</button>
+		<button type="submit" class="btn btn-primary">Envoyer</button>
 		{{Form::token()}}
 	</form>	
   		</div>

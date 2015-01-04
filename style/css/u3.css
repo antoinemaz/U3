@@ -24,6 +24,19 @@
       height: 110px;
   }
 
+a{
+    color: #00387f;
+}
+
+a:hover{
+    color: #EE7F02;
+}
+
+.active a{
+    color: #00387f!important;
+    font-weight: bold;
+}
+
   .form-control{
     border: 1px solid #bcbcbc;
 }

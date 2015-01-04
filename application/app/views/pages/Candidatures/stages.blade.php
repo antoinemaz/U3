@@ -87,7 +87,10 @@
 
     $(document).ready(function(){
 
-      $('.datepicker').datepicker({
+      $('.datepickerDeb').datepicker({
+        language: 'fr'
+      });
+      $('.datepickerFin').datepicker({
         language: 'fr'
       });
     });

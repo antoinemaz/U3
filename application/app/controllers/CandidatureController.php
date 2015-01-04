@@ -178,7 +178,7 @@ class CandidatureController extends BaseController {
 
 	        	// Envoi d'un mail selon la valeur dans configs
 	        	$config = new ConfigurationController();
-	        	if ($config->getSendMailsGestionnairesValue() == 1){
+	        	if ($config->getSendMailsGestionnairesValue()->active == 1){
 	        		// TODO : SEND MAIL AUX GESTIONNAIRES
 	        	}	
 
