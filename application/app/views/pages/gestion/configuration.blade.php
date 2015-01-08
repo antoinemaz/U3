@@ -44,6 +44,7 @@
 	<div class="panel panel-default custom-panel">
 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des comptes Gestionnaires/Administrateurs</div>
 		<div class="panel-body">
+
 			<form action="{{URL::route('creerCompteGestionnaire-post')}}" method="POST" class="form-horizontal inscription">	
 				<div class="form-group">
 					<label for="email">Email :</label>
@@ -100,10 +101,72 @@
 	</div>
 @endIf
 
+
 <div class="panel panel-default custom-panel">
 	<div class="panel-heading"> <span class="glyphicon glyphicon-filter"></span> Filtre des candidatures</div>
 	<div class="panel-body">
-		TODO !
+		
+
+		<form action="{{URL::route('ajouterCoupleAnneeFiliere-post')}}" method="POST" class="form-horizontal inscription">	
+				
+				<div class="form-group">
+					<label for="annee">Année :</label>
+					<select name="annee" class="form-control">
+						@foreach($tabRoles as $unRole) 
+						<option value="{{$unRole->id}}" >{{$unRole->libelle}}</option>
+					}
+					@endforeach
+				    </select>
+				</div>
+
+				<div class="form-group">
+					<label for="filliere">Fillières :</label>
+					<select name="filliere" class="form-control">
+						@foreach($tabRoles as $unRole) 
+						<option value="{{$unRole->id}}" >{{$unRole->libelle}}</option>
+					}
+					@endforeach
+				    </select>
+			    </div>
+
+			<button type="submit" class="btn btn-primary">Ajouter</button>
+			{{Form::token()}}
+		</form>	
+
+
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Email</th>
+					<th>Rôle</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+
+			@foreach ($gestionnairesAndAdmins as $gestionnaire)
+			<tr>
+				<td>{{ $gestionnaire->email }}</td>
+				<td>
+					@if($gestionnaire->role_id == Constantes::GESTIONNAIRE)
+						Gestionnaire
+					@else
+						Administrateur
+					@endIf
+				</td>
+				<td>
+					@if($gestionnaire->id != 1)
+						<a class="cn" id="{{$gestionnaire->id}}" class="file" 
+							href="{{URL::route('deletegestionnaire',array('id' => $gestionnaire->id))}}">Supprimer</a>
+					@endIf
+				</td>
+			</tr>
+			@endforeach	
+		</table>
+
+
+
+
 	</div>
 </div>
 
