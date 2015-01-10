@@ -55,12 +55,12 @@
 		        }
 
 		        $hidden = '';
-		        if($candidature->etat_id == Constantes::VALIDE){
+		        if($candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE){
 		        	$hidden='style="display:none;"';
 		        }
 		    ?>
 
-		    		 	<a href="{{URL::route('listeCandidatures-get')}}"> << Retour à la liste des candidatures</a>
+		  <a href="{{URL::route('listeCandidatures-get')}}"> << Retour à la liste des candidatures</a>
 
 		 <form action="{{URL::route('detailCandidature-post', $candidature->id)}}" method="POST" class="form-horizontal inscription adminForm" style="max-width: none;">
 
@@ -94,10 +94,6 @@
 
 			<span class="label label-primary custom-label">Informations élémentaires</span>
 		 	<div style="max-width:300px;margin: 0 auto;">
-		 		<div class="form-group" style="margin-bottom: 4px;">
-		 			<label for="InputNom">Email :</label>
-		 			{{$email}}
-		 		</div>
 		 		@include('pages.Candidatures.partieCandidature.partieCandidature')
 		 	</div>
 

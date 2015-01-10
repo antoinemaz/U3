@@ -13,7 +13,7 @@ class ConfigurationController extends BaseController {
       $tabRoles = DB::table('roles')->whereNotIn('id', array(Constantes::ETUDIANT))->get();
 
       // Récupération de la valeur de la config sendMailsToGestionnaires
-      $active = $this->getSendMailsGestionnairesValue()->active;
+      $active = $this->getValueOfConfiguration()->active;
 
       return View::make('pages.gestion.configuration')
       ->with(array('sendMailsGestionnaires' => $active, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
@@ -22,7 +22,7 @@ class ConfigurationController extends BaseController {
 
     public function postConfiguration(){
 
-      $value = $this->getSendMailsGestionnairesValue();
+      $value = $this->getValueOfConfiguration();
       $value->active = Input::get('sendMailsGestionnaires');
 
       if($value->save()){
@@ -30,13 +30,13 @@ class ConfigurationController extends BaseController {
       }
     }
 
-    public function getSendMailsGestionnairesValue(){
-      // On va récupérer la valeur du champs sendMailsToGestionnaires en base
-      $sendMailsGestionnaires = Configuration::where('libelle', '=', Constantes::SENDMAILSGESTIONNAIRES);
+    public function getValueOfConfiguration(){
+      // On va récupérer la seule occurence dans la table configuration qui contient toutes les propriétés
+      $properties = Configuration::where('id', '=', 1);
 
-      if($sendMailsGestionnaires->count()){ 
-       $sendMailsGestionnaires = $sendMailsGestionnaires->first(); 
-       return $sendMailsGestionnaires;
+      if($properties->count()){ 
+       $properties = $properties->first(); 
+       return $properties;
      }
      return null;
    }

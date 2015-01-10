@@ -7,7 +7,7 @@
 
 </style>
 
-	@if($etat == Constantes::VALIDE)
+	@if($etat == Constantes::VALIDE or $etat == Constantes::REFUSE)
 		<div id="breadcrumb" style="display:none;">  
 	@else
 		<div id="breadcrumb" style="margin-top: 28px;">  

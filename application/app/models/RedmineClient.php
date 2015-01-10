@@ -237,8 +237,6 @@ class RedmineClient {
 				array('id'=>1, 'value'=> $filieres),
 				array('id'=>2, 'value'=> $candidature->prenom),
 				array('id'=>3, 'value'=> $candidature->date_naissance),
-				// VALEUR EN DUR CAR DOIT ETRE SUPPRIMEE : DATE DE NAISSANCE
-				array('id'=>9, 'value'=> 1991),
 				array('id'=>4,'value'=> $candidature->sexe),
 				array('id'=>5,'value'=> $candidature->nationalite),
 				array('id'=>8, 'value'=> $candidature->dossier_etrange),
@@ -248,13 +246,10 @@ class RedmineClient {
 				array('id'=>13, 'value'=> $candidature->ville),
 				array('id'=>14, 'value'=> $candidature->codePostal),
 				array('id'=>15, 'value'=> $candidature->pays),
-				// DERNIER DIPLME A SUPPRIMER
-				/*array('id'=>16, 'value'=> $candidature->dernier_diplome),*/
 				array('id'=>18, 'value'=> $candidature->regime_inscription),
-				// DATE DERNIER DIPLOME ?
-				/*array('id'=>19, 'value'=> $candidature->date_dernier_diplome)*/
 				array('id'=>20, 'value'=> $listOfDiplomes),
-				array('id'=>21, 'value'=> $listOfStages)
+				array('id'=>21, 'value'=> $listOfStages),
+				array('id'=>22, 'value'=> $candidature->date_dernier_diplome)
 				 ),
 				'uploads' => $listOfPjs);
 		

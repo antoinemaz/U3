@@ -1,7 +1,8 @@
     <?php
-
        $date_naissance = $candidature->date_naissance;
        $date_diplome = $candidature->date_dernier_diplome;
+       $date_creation = $candidature->created_at;
+       $date_modif = $candidature->updated_at;
 
         if($date_naissance != null){
               
@@ -22,8 +23,39 @@
                  $date_diplome = $dateDiplomeSplite[2].'/'.$dateDiplomeSplite[1].'/'.$dateDiplomeSplite[0];
               }
             }
-    ?>
 
+          if($date_creation != null){
+
+              if($date_creation == '00/00/0000'){
+                $date_creation = null;
+              }else{
+               $date_creationSplite = explode("-", $date_creation);
+               $date_creation = substr($date_creationSplite[2], 0,2) .'/'.$date_creationSplite[1].'/'.$date_creationSplite[0] . ' à' . substr($date_creationSplite[2], 2);
+             }
+           }
+
+           if($date_modif != null){
+
+            if($date_modif == '00/00/0000'){
+              $date_modif = null;
+            }else{
+             $date_modifSplite = explode("-", $date_modif);
+             $date_modif = substr($date_modifSplite[2], 0,2).'/'.$date_modifSplite[1].'/'.$date_modifSplite[0] . ' à' . substr($date_modifSplite[2], 2);
+           }
+         }
+    ?>
+    <div class="form-group" style="margin-bottom: 4px;">
+      <label>Email :</label>
+      {{$email}}
+    </div>
+    <div class="form-group" style="margin-bottom: 4px;">
+      <label>Date de création :</label>
+      {{$date_creation}}
+    </div>
+    <div class="form-group" style="margin-bottom: 10px;">
+      <label>Date de modification :</label>
+      {{$date_modif}}
+    </div>
     <div class="form-group">
       <label for="InputNom">Nom :</label>
       {{ Form::text("InputNom", $candidature->nom, array('class' => 'form-control', $readonly)) }}

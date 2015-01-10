@@ -30,6 +30,14 @@ class CandidatureController extends BaseController {
 		
 		$tabSexe = ["masculin", "féminin"];
 
+		// Récupération du mail de l'utilisateur
+		$emailUser = '';
+		$user = DB::table('utilisateurs')->where('id', $candidature->utilisateur_id);
+		if($user->count()){
+			$user = $user->first(); 	
+			$emailUser = $user->email;  
+		}
+
 		return View::make('pages.Candidatures.Candidatures')
 		->with(array('candidature'=>$candidature, 
 			'tabFiliere' => $tabFilliere, 
@@ -39,7 +47,8 @@ class CandidatureController extends BaseController {
 			'annee_convoitee' => $annee_convoitee,
 			'tabSexe' => $tabSexe,
 			'etat' => $candidature->etat_id,
-			'commentaire' => $candidature->commentaire_gestionnaire));
+			'commentaire' => $candidature->commentaire_gestionnaire,
+			'email' => $emailUser));
 	}
 
 
@@ -178,7 +187,7 @@ class CandidatureController extends BaseController {
 
 	        	// Envoi d'un mail selon la valeur dans configs
 	        	$config = new ConfigurationController();
-	        	if ($config->getSendMailsGestionnairesValue()->active == 1){
+	        	if ($config->getValueOfConfiguration()->active == 1){
 	        		// TODO : SEND MAIL AUX GESTIONNAIRES
 	        	}	
 

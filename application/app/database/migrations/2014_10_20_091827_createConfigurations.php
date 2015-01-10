@@ -12,12 +12,12 @@ class CreateConfigurations extends Migration {
 			$table->increments('id')->unsigned();
 			$table->string('libelle');
 			$table->boolean('active');
-
+			$table->date('date_debut_periode')->nullable();
+			$table->date('date_fin_periode')->nullable();
 		});
 	}
 	
-	public function down()
-	{
+	public function down(){
 		Schema::drop('configurations');
 	}
 }

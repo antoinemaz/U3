@@ -10,69 +10,82 @@ class CompteController extends BaseController {
 
 	public function postCreateCompte()
 	{
-		$validator = Validator::make(Input::all(),
-			array(
-				'email' => 'required|max:50|email|unique:utilisateurs',
-				'password' => 'required|min:6',
-				'password_again' => 'required|same:password'));
-	
-		// Si la validation échoue, on redirige vers la même page avec les erreurs
-		if($validator->fails()){
-			return Redirect::route('creerCompte-get')
-					->withErrors($validator)
-					->withInput();
-		}else{
-			// on set les valeurs des inputs dans des variables
-			$email = Input::get('email');
-			$password = Input::get('password');
+	    // Obtention des configurations 
+    	$config = new ConfigurationController();
+    	$config = $config->getValueOfConfiguration();
+    	
+    	// On va tester si la date du jour est compris dans la période d'inscription
+    	$now = date("Y-m-d");
+    	if($now >= $config->date_debut_periode && $now <= $config->date_fin_periode ){
 
-			// code d'activation
-			$code = str_random(60);
+    		$validator = Validator::make(Input::all(),
+    			array(
+    				'email' => 'required|max:50|email|unique:utilisateurs',
+    				'password' => 'required|min:6',
+    				'password_again' => 'required|same:password'));
 
-			// Enregistrement en base de données
-			$create = Utilisateur::create(array(
-				'email' => $email,
-				'password' => Hash::make($password),
-				'code' => $code,
-				'active' => 0,
-				'role_id' => Constantes::ETUDIANT));
+			// Si la validation échoue, on redirige vers la même page avec les erreurs
+    		if($validator->fails()){
+    			return Redirect::route('creerCompte-get')
+    			->withErrors($validator)
+    			->withInput();
+    		}else{
+				// on set les valeurs des inputs dans des variables
+    			$email = Input::get('email');
+    			$password = Input::get('password');
 
-			if($create){
+				// code d'activation
+    			$code = str_random(60);
 
-				$candidature = Candidature::create(array(
-					'utilisateur_id' => $create->id,
-					'Pays' => 'France',
-					'nationalite' => 'France',
-					'sexe' => 'masculin',
-					'save' => 0,
-					'etat_id' => Constantes::BROUILLON));
+				// Enregistrement en base de données
+    			$create = Utilisateur::create(array(
+    				'email' => $email,
+    				'password' => Hash::make($password),
+    				'code' => $code,
+    				'active' => 0,
+    				'role_id' => Constantes::ETUDIANT));
 
-				// Création de 6 lignes (pour formations et diplomes) : BAC, jusqu'à BAC+5
-				for ($ligne = 1; $ligne <= 6; $ligne++){
-  				  		Diplome::create(array(
-  				  		'numero' => $ligne,
-  				  		'candidature_id' => $candidature->id
-  				  	));
-				}
+    			if($create){
 
-				// Création de 6 lignes (pour stages) : jusqu'à 5 expériences
-				for ($ligne = 1; $ligne <= 5; $ligne++){
-  				  		Stage::create(array(
-  				  		'numero' => $ligne,
-  				  		'candidature_id' => $candidature->id
-  				  	));
-				}
+    				$candidature = Candidature::create(array(
+    					'utilisateur_id' => $create->id,
+    					'Pays' => 'France',
+    					'nationalite' => 'France',
+    					'sexe' => 'masculin',
+    					'save' => 0,
+    					'etat_id' => Constantes::BROUILLON));
 
-				// Envoi du mail d'activation du compte
-				$mailService = new MailService();
-				$mailService->sendMailActivationCompte($create, $code);
+					// Création de 6 lignes (pour formations et diplomes) : BAC, jusqu'à BAC+5
+    				for ($ligne = 1; $ligne <= 6; $ligne++){
+    					Diplome::create(array(
+    						'numero' => $ligne,
+    						'candidature_id' => $candidature->id
+    						));
+    				}
 
-				// On redirige vers la page d'accueil
-				return Redirect::route('index')
-						->with('global', 'Compte créé');
-			}
-		}
-	}
+					// Création de 6 lignes (pour stages) : jusqu'à 5 expériences
+    				for ($ligne = 1; $ligne <= 5; $ligne++){
+    					Stage::create(array(
+    						'numero' => $ligne,
+    						'candidature_id' => $candidature->id
+    						));
+    				}
+
+					// Envoi du mail d'activation du compte
+    				$mailService = new MailService();
+    				$mailService->sendMailActivationCompte($create, $code);
+
+					// On redirige vers la page d'accueil
+    				return Redirect::route('index')
+    				->with('global', 'Compte créé');
+    			}
+    		}
+
+    	}else{
+    			// On est pas dans la période
+    			return Redirect::route('creerCompte-get')->with('erreur-periode', 'Les inscriptions sont closes');
+    		}
+    }
 
 	// Page d'activation du compte
 	public function getActivationCompte($code){

@@ -7,6 +7,12 @@
  		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de création de compte</div>
 		<div class="panel-body">
 
+		@if(Session::has('erreur-periode'))
+			<div class="alert alert-danger custom-alert center" role="alert">
+				{{Session::get('erreur-periode')}}
+			</div>	
+		@endif
+
 		<form action="{{URL::route('creerCompte-post')}}" method="POST" class="form-horizontal inscription">
 			
 			<div class="form-group">

@@ -118,38 +118,8 @@ class DetailCandidatureController extends BaseController {
 	    	// Changement de l'état de la candidature
 	    	$candidature->etat_id = Constantes::VALIDE;
 
-	    	// Suppression de tous les diplomes en base
-	    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->delete();
-
-	    	// Suppression de tous les stages en base
-	    	$stages = DB::table('stages')->where('candidature_id', $candidature->id)->delete();
-
-	    	// Suppression de toutes les pièces jointes sur le file system
-			$piecesCandidature =DB::table('pieces')->where('candidature_id', '=', $candidature->id)->get();
-
-			foreach ($piecesCandidature as $key => $value) {
-				
-				if($value->uid != null){
-					// Suppression du fichier dans le file system
-					File::delete('uploads/'.$value->uid);		
-					// Puis en base 
-					DB::table('pieces')->where('id', '=', $value->id)->delete();		
-				}
-			}
-
-			// Suppression de certaines valeurs parmis les informations élémentaires de la candidature
-		     $candidature -> date_naissance = null;
-		     $candidature -> lieu_naissance = null;
-		     $candidature -> sexe = null;
-		     $candidature -> dossier_etrange = null;
-		     $candidature -> nationalite = null;
-		     $candidature -> telephone = null;
-		     $candidature -> adresse = null;
-		     $candidature -> Ville = null;
-		     $candidature -> codePostal = null;
-		     $candidature -> Pays = null;
-		     $candidature -> date_dernier_diplome = null;
-		     $candidature -> commentaire_gestionnaire = null;
+	    	// Suppression de certaines données de la candidature dans notre base
+	    	$candidature = $this->supprimerDonneesCandidature($candidature);
 
 		     if($candidature->save()){
 		     		// Envoi d'un mail pour avertir de la validation de la candidature à l'étudiant
@@ -174,6 +144,10 @@ class DetailCandidatureController extends BaseController {
 	    // On clique sur le bouton Refuser
 	    }else{
 	    	$candidature->etat_id = Constantes::REFUSE;
+
+	    	// Suppression de certaines données de la candidature dans notre base
+	    	$candidature = $this->supprimerDonneesCandidature($candidature);
+
 	    	if($candidature->save()){
 	    		// Envoi d'un mail pour avertir que la candidature est à refusée
 	     		$mailService = new MailService();
@@ -183,6 +157,43 @@ class DetailCandidatureController extends BaseController {
 	    	}
 	    }
 
+	}
+
+	public function supprimerDonneesCandidature($candidature){
+    	// Suppression de tous les diplomes en base
+    	$diplomes = DB::table('diplomes')->where('candidature_id', $candidature->id)->delete();
+
+    	// Suppression de tous les stages en base
+    	$stages = DB::table('stages')->where('candidature_id', $candidature->id)->delete();
+
+    	// Suppression de toutes les pièces jointes sur le file system
+		$piecesCandidature =DB::table('pieces')->where('candidature_id', '=', $candidature->id)->get();
+
+		foreach ($piecesCandidature as $key => $value) {
+			
+			if($value->uid != null){
+				// Suppression du fichier dans le file system
+				File::delete('uploads/'.$value->uid);		
+				// Puis en base 
+				DB::table('pieces')->where('id', '=', $value->id)->delete();		
+			}
+		}
+
+		// Suppression de certaines valeurs parmis les informations élémentaires de la candidature
+	     $candidature -> date_naissance = null;
+	     $candidature -> lieu_naissance = null;
+	     $candidature -> sexe = null;
+	     $candidature -> dossier_etrange = null;
+	     $candidature -> nationalite = null;
+	     $candidature -> telephone = null;
+	     $candidature -> adresse = null;
+	     $candidature -> Ville = null;
+	     $candidature -> codePostal = null;
+	     $candidature -> Pays = null;
+	     $candidature -> date_dernier_diplome = null;
+	     $candidature -> commentaire_gestionnaire = null;
+
+	     return $candidature;
 	}
 
 	 // Suppression de la pièce jointe

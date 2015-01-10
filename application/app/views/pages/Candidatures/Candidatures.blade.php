@@ -35,7 +35,7 @@
         }
 
         $hidden = '';
-        if($candidature->etat_id == Constantes::VALIDE){
+        if($candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE){
           $hidden='style="display:none;"';
         }
     ?>
