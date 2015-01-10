@@ -153,6 +153,11 @@ Route::group(array('before' => 'auth'), function(){
 			'as' => 'configuration-get',
 			'uses' => 'ConfigurationController@getConfiguration'));
 
+	    	    // GET Suppression d'un couple
+	    Route::get("/gestion/coupleAnneeFilliere/delete/{id}", array(
+			'as' => 'deleteCouple',
+			'uses' => 'ConfigurationController@deleteCouple'));
+
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){
 
@@ -220,5 +225,10 @@ Route::group(array('before' => 'auth'), function(){
 		Route::post('/creerCompteGestionnaire', array(
 		'as' => 'creerCompteGestionnaire-post',
 		'uses' => 'ConfigurationController@postCreateCompteGestionnaire'));
+
+		// POST Ajout de couple Annee/Filliere au Gestionnaire courant
+		Route::post('/ajouterCoupleAnneeFiliere', array(
+		'as' => 'ajouterCoupleAnneeFiliere-post',
+		'uses' => 'ConfigurationController@postAddCoupleAnneeFilliere'));
 
 });

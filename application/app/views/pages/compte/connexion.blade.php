@@ -36,7 +36,7 @@
 		</div>
 
 		<div class="form-group">
-			{{Form::checkbox('remember', 'value')}};
+			{{Form::checkbox('remember', 'value')}}
 			<label for="remember">Se souvenir de moi</label>
 		</div>
 

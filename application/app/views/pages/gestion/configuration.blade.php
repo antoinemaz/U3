@@ -8,6 +8,12 @@
   </div>
 @endif
 
+@if(Session::has('CoupleAnneeFilliere-add'))
+	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
+@endif
+@if(Session::has('CoupleAnneeFilliere-supprime'))
+	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-supprime')}}</div>
+@endif
 @if(Session::has('gestionnaire-cree'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('gestionnaire-cree')}}</div>
 @endif
@@ -44,6 +50,7 @@
 	<div class="panel panel-default custom-panel">
 		<div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Gestion des comptes Gestionnaires/Administrateurs</div>
 		<div class="panel-body">
+
 			<form action="{{URL::route('creerCompteGestionnaire-post')}}" method="POST" class="form-horizontal inscription">	
 				<div class="form-group">
 					<label for="email">Email :</label>
@@ -88,7 +95,7 @@
 				</td>
 				<td>
 					@if($gestionnaire->id != 1)
-						<a class="cn" id="{{$gestionnaire->id}}" class="file" 
+						<a  id="{{$gestionnaire->id}}" 
 							href="{{URL::route('deletegestionnaire',array('id' => $gestionnaire->id))}}">Supprimer</a>
 					@endIf
 				</td>
@@ -100,10 +107,60 @@
 	</div>
 @endIf
 
+
 <div class="panel panel-default custom-panel">
 	<div class="panel-heading"> <span class="glyphicon glyphicon-filter"></span> Filtre des candidatures</div>
 	<div class="panel-body">
-		TODO !
+		
+
+		<form action="{{URL::route('ajouterCoupleAnneeFiliere-post')}}" method="POST" class="form-horizontal inscription">	
+				
+				<div class="form-group">
+      			<label for="annee">Année :</label>
+        		{{ Form::select('annee', $annee_convoitee,null, array('class' => 'form-control')) }}
+    			</div>
+
+				<div class="form-group">
+					<label for="filliere">Fillière :</label>
+					<select name="filliere" class="form-control">
+						@foreach($tabFiliere as $uneFilliere) 
+						<option>{{$uneFilliere}}</option>
+					}
+					@endforeach
+				    </select>
+			    </div>
+
+			<button type="submit" class="btn btn-primary">Ajouter</button>
+			{{Form::token()}}
+		</form>	
+
+
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Année</th>
+					<th>Fillière</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+
+			@foreach ($coupleAnneeFilliere as $couple)
+			<tr>
+				<td>{{ $annee_convoitee[$couple->annees_resp] }}</td>
+				<td>{{ $couple-> filieres_resp }}
+				</td>
+				<td>
+						<a id="{{$couple->id}}"
+							href="{{URL::route('deleteCouple',array('id' => $couple->id))}}">Supprimer</a>
+				</td>
+			</tr>
+			@endforeach	
+		</table>
+
+
+
+
 	</div>
 </div>
 

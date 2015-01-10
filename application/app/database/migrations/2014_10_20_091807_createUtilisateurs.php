@@ -18,8 +18,6 @@ class CreateUtilisateurs extends Migration {
 			$table->string('email');
 			$table->integer('role_id')->unsigned();
 			$table->foreign('role_id')->references('id')->on('roles');
-			$table->string('filieres_resp');
-			$table->string('annees_resp');
 			/* created at et updated at sont créé à l'aide de timestamp() */
 			$table->timestamps();
 		});

@@ -15,10 +15,24 @@ class ConfigurationController extends BaseController {
       // Récupération de la valeur de la config sendMailsToGestionnaires
       $active = $this->getValueOfConfiguration()->active;
 
+      //Tableau temporaire à remplacer par ce que l'on réupère dans redmine
+      $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
+
+      $annee_convoitee[2] = ('Année L2');
+      $annee_convoitee[3] = 'Année L3';
+      $annee_convoitee[4] = 'Année M1';
+      $annee_convoitee[5] = 'Année M2';
+      $annee_convoitee[6] = 'Information sur le site';
+
+      //Récupération dans la table associative des couples Année/Fillière du user courant
+       $coupleAnneeFilliere= DB::table('correspondances')
+      ->where('iduser', Auth::user()->id)->get();
+
       return View::make('pages.gestion.configuration')
       ->with(array('sendMailsGestionnaires' => $active, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
-        'tabRoles' => $tabRoles));
+        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'coupleAnneeFilliere' => $coupleAnneeFilliere, 'annee_convoitee' => $annee_convoitee));
     }
+
 
     public function postConfiguration(){
 
@@ -92,6 +106,39 @@ class ConfigurationController extends BaseController {
     }
   }
 
+
+
+    public function postAddCoupleAnneeFilliere()
+   {
+
+      $annee = Input::get('annee');
+      $filliere = Input::get('filliere');
+
+      $idUser = Auth::user()->id;
+
+      //Insert Bdd
+      $create = Correspondance::create(array(
+        'iduser' => $idUser,
+        'filieres_resp' =>  $filliere,
+        'annees_resp' => $annee,
+        ));
+
+      if($create){
+
+        //Redirection page configuration
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-add', 'Couple Année/Filliere ajouté !');
+      }else{
+
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-add', 'Une erreur s est produite lors de l ajout du couple !');
+
+      }
+    }
+
+
+
+
   public function deleteGestionnaire($id){
 
           // Le premier utilisateur administrateur est impossible à supprimer
@@ -113,5 +160,26 @@ class ConfigurationController extends BaseController {
       }
     }
   }
+
+
+public function deleteCouple($id){
+
+      $couple = Correspondance::where('id', '=', $id);
+
+      if($couple->count()){
+        $couple = $couple->first();
+
+        $couple->delete();
+
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-supprime', 'Le couple a été supprimé');
+
+      }else{
+        return Redirect::route('configuration-get');
+      }
+    
+  }
+
+
 
 }
