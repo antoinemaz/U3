@@ -15,10 +15,19 @@ class ConfigurationController extends BaseController {
       // Récupération de la valeur de la config sendMailsToGestionnaires
       $active = $this->getSendMailsGestionnairesValue()->active;
 
+      //Tableau temporaire à remplacer par ce que l'on réupère dans redmine
+      $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
+      $tabAnnee = ["L2","L3","M1","M2"];
+
+      //Récupération dans la table associative des couples Année/Fillière du user courant
+       $coupleAnneeFilliere= DB::table('correspondances')
+      ->where('iduser', Auth::user()->id)->get();
+
       return View::make('pages.gestion.configuration')
       ->with(array('sendMailsGestionnaires' => $active, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
-        'tabRoles' => $tabRoles));
+        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'tabAnnee' => $tabAnnee, 'coupleAnneeFilliere' => $coupleAnneeFilliere));
     }
+
 
     public function postConfiguration(){
 
@@ -91,6 +100,39 @@ class ConfigurationController extends BaseController {
       }
     }
   }
+
+
+
+    public function postAddCoupleAnneeFilliere()
+   {
+
+      $annee = Input::get('annee');
+      $filliere = Input::get('filliere');
+
+      $idUser = Auth::user()->id;
+
+      //Insert Bdd
+      $create = Correspondance::create(array(
+        'iduser' => $idUser,
+        'filieres_resp' =>  $filliere,
+        'annees_resp' => $annee,
+        ));
+
+      if($create){
+
+        //Redirection page configuration
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-add', 'Couple Année/Filliere ajouté !');
+      }else{
+
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-add', 'Une erreur s est produite lors de l ajout du couple !');
+
+      }
+    }
+
+
+
 
   public function deleteGestionnaire($id){
 

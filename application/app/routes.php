@@ -224,6 +224,6 @@ Route::group(array('before' => 'auth'), function(){
 		// POST Ajout de couple Annee/Filliere au Gestionnaire courant
 		Route::post('/ajouterCoupleAnneeFiliere', array(
 		'as' => 'ajouterCoupleAnneeFiliere-post',
-		'uses' => 'ConfigurationController@postCreateCompteGestionnaire'));
+		'uses' => 'ConfigurationController@postAddCoupleAnneeFilliere'));
 
 });

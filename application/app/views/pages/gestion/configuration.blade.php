@@ -8,6 +8,9 @@
   </div>
 @endif
 
+@if(Session::has('CoupleAnneeFilliere-add'))
+	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
+@endif
 @if(Session::has('gestionnaire-cree'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('gestionnaire-cree')}}</div>
 @endif
@@ -112,8 +115,8 @@
 				<div class="form-group">
 					<label for="annee">Année :</label>
 					<select name="annee" class="form-control">
-						@foreach($tabRoles as $unRole) 
-						<option value="{{$unRole->id}}" >{{$unRole->libelle}}</option>
+						@foreach($tabAnnee as $uneAnnee)
+						<option>{{$uneAnnee}}</option>
 					}
 					@endforeach
 				    </select>
@@ -122,8 +125,8 @@
 				<div class="form-group">
 					<label for="filliere">Fillières :</label>
 					<select name="filliere" class="form-control">
-						@foreach($tabRoles as $unRole) 
-						<option value="{{$unRole->id}}" >{{$unRole->libelle}}</option>
+						@foreach($tabFiliere as $uneFilliere) 
+						<option>{{$uneFilliere}}</option>
 					}
 					@endforeach
 				    </select>
@@ -138,27 +141,20 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Email</th>
-					<th>Rôle</th>
+					<th>Année</th>
+					<th>Fillière</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 
-			@foreach ($gestionnairesAndAdmins as $gestionnaire)
+			@foreach ($coupleAnneeFilliere as $couple)
 			<tr>
-				<td>{{ $gestionnaire->email }}</td>
-				<td>
-					@if($gestionnaire->role_id == Constantes::GESTIONNAIRE)
-						Gestionnaire
-					@else
-						Administrateur
-					@endIf
+				<td>{{ $couple-> annees_resp }}</td>
+				<td>{{ $couple-> filieres_resp }}
 				</td>
 				<td>
-					@if($gestionnaire->id != 1)
 						<a class="cn" id="{{$gestionnaire->id}}" class="file" 
 							href="{{URL::route('deletegestionnaire',array('id' => $gestionnaire->id))}}">Supprimer</a>
-					@endIf
 				</td>
 			</tr>
 			@endforeach	
