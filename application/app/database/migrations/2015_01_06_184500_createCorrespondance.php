@@ -10,8 +10,8 @@ class CreateCorrespondance extends Migration {
 			/*Creation d'un champs de type autoincrement et en clé primaire*/
 			$table->increments('id')->unsigned();
 			$table->string('iduser');
-			$table->string('filieres_resp');
-			$table->string('annees_resp');
+			$table->string('filiere_resp');
+			$table->integer('annee_resp');
 			$table->foreign('iduser')->references('id')->on('utilisateurs');
 			/* created at et updated at sont créé à l'aide de timestamp() */
 			$table->timestamps();

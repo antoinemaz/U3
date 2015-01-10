@@ -11,6 +11,9 @@
 @if(Session::has('CoupleAnneeFilliere-add'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
 @endif
+@if(Session::has('CoupleAnneeFilliere-supprime'))
+	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-supprime')}}</div>
+@endif
 @if(Session::has('gestionnaire-cree'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('gestionnaire-cree')}}</div>
 @endif
@@ -92,7 +95,7 @@
 				</td>
 				<td>
 					@if($gestionnaire->id != 1)
-						<a class="cn" id="{{$gestionnaire->id}}" class="file" 
+						<a  id="{{$gestionnaire->id}}" 
 							href="{{URL::route('deletegestionnaire',array('id' => $gestionnaire->id))}}">Supprimer</a>
 					@endIf
 				</td>
@@ -113,17 +116,12 @@
 		<form action="{{URL::route('ajouterCoupleAnneeFiliere-post')}}" method="POST" class="form-horizontal inscription">	
 				
 				<div class="form-group">
-					<label for="annee">Année :</label>
-					<select name="annee" class="form-control">
-						@foreach($tabAnnee as $uneAnnee)
-						<option>{{$uneAnnee}}</option>
-					}
-					@endforeach
-				    </select>
-				</div>
+      			<label for="annee">Année :</label>
+        		{{ Form::select('annee', $annee_convoitee,null, array('class' => 'form-control')) }}
+    			</div>
 
 				<div class="form-group">
-					<label for="filliere">Fillières :</label>
+					<label for="filliere">Fillière :</label>
 					<select name="filliere" class="form-control">
 						@foreach($tabFiliere as $uneFilliere) 
 						<option>{{$uneFilliere}}</option>
@@ -149,12 +147,12 @@
 
 			@foreach ($coupleAnneeFilliere as $couple)
 			<tr>
-				<td>{{ $couple-> annees_resp }}</td>
+				<td>{{ $annee_convoitee[$couple->annees_resp] }}</td>
 				<td>{{ $couple-> filieres_resp }}
 				</td>
 				<td>
-						<a class="cn" id="{{$gestionnaire->id}}" class="file" 
-							href="{{URL::route('deletegestionnaire',array('id' => $gestionnaire->id))}}">Supprimer</a>
+						<a id="{{$couple->id}}"
+							href="{{URL::route('deleteCouple',array('id' => $couple->id))}}">Supprimer</a>
 				</td>
 			</tr>
 			@endforeach	

@@ -153,6 +153,11 @@ Route::group(array('before' => 'auth'), function(){
 			'as' => 'configuration-get',
 			'uses' => 'ConfigurationController@getConfiguration'));
 
+	    	    // GET Suppression d'un couple
+	    Route::get("/gestion/coupleAnneeFilliere/delete/{id}", array(
+			'as' => 'deleteCouple',
+			'uses' => 'ConfigurationController@deleteCouple'));
+
 		// Ensemble des routes de formulaire gestionnaire
 		Route::group(array('before' => 'csrf'), function(){
 

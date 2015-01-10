@@ -17,7 +17,12 @@ class ConfigurationController extends BaseController {
 
       //Tableau temporaire à remplacer par ce que l'on réupère dans redmine
       $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
-      $tabAnnee = ["L2","L3","M1","M2"];
+
+      $annee_convoitee[2] = ('Année L2');
+      $annee_convoitee[3] = 'Année L3';
+      $annee_convoitee[4] = 'Année M1';
+      $annee_convoitee[5] = 'Année M2';
+      $annee_convoitee[6] = 'Information sur le site';
 
       //Récupération dans la table associative des couples Année/Fillière du user courant
        $coupleAnneeFilliere= DB::table('correspondances')
@@ -25,7 +30,7 @@ class ConfigurationController extends BaseController {
 
       return View::make('pages.gestion.configuration')
       ->with(array('sendMailsGestionnaires' => $active, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
-        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'tabAnnee' => $tabAnnee, 'coupleAnneeFilliere' => $coupleAnneeFilliere));
+        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'coupleAnneeFilliere' => $coupleAnneeFilliere, 'annee_convoitee' => $annee_convoitee));
     }
 
 
@@ -155,5 +160,26 @@ class ConfigurationController extends BaseController {
       }
     }
   }
+
+
+public function deleteCouple($id){
+
+      $couple = Correspondance::where('id', '=', $id);
+
+      if($couple->count()){
+        $couple = $couple->first();
+
+        $couple->delete();
+
+        return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-supprime', 'Le couple a été supprimé');
+
+      }else{
+        return Redirect::route('configuration-get');
+      }
+    
+  }
+
+
 
 }
