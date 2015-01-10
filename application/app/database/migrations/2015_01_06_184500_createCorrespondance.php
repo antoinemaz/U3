@@ -12,8 +12,8 @@ class CreateCorrespondance extends Migration {
 			$table->string('iduser');
 			$table->string('filiere_resp');
 			$table->integer('annee_resp');
-			$table->foreign('iduser')->references('id')->on('utilisateurs');
-			/* created at et updated at sont créé à l'aide de timestamp() */
+			$table->integer('utilisateur_id')->unsigned();
+			$table->foreign('utilisateur_id')->references('id')->on('utilisateurs');
 			$table->timestamps();
 		});
 	}

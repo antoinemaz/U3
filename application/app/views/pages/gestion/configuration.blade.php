@@ -29,18 +29,68 @@
 		<div class="panel-heading"> <span class="glyphicon glyphicon-wrench"></span> Configuration</div>
 		<div class="panel-body">
 
-			<form id="form" action="{{URL::route('configuration-post')}}" method="POST" class="form-horizontaln center">
+		   <?php
 
-				<div class="form-group">
-					<label for="InputSexe">Envoi automatique de mails aux gestionnaires :</label>
+              $date_debut_periode = null;
+              $date_fin_periode = null;
 
-					<input type="radio" name="sendMailsGestionnaires" value="1" <?php if($sendMailsGestionnaires == 1){ echo "checked='checked'";} ?> >Oui</input> 
-					<input type="radio" name="sendMailsGestionnaires" value="0" <?php if($sendMailsGestionnaires == 0){ echo "checked='checked'";} ?> >Non</input>
-				</div>
+              if($properties->date_debut_periode != null){
+                
+                if($date_debut_periode == '00/00/0000'){
+                  $date_debut_periode = null;
+                }else{
+                   $dateDebutSplite = explode("-", $properties->date_debut_periode);
+                   $date_debut_periode = $dateDebutSplite[2].'/'.$dateDebutSplite[1].'/'.$dateDebutSplite[0];
+                }
+              }
 
-				<div class="center">
-					<button id="clickConfig" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg">Enregistrer</button>
-				</div>
+              if($properties->date_fin_periode != null){
+
+                if($date_fin_periode == '00/00/0000'){
+                    $date_fin_periode = null;
+                }else{
+                    $dateFinSplite = explode("-", $properties->date_fin_periode);
+                    $date_fin_periode = $dateFinSplite[2].'/'.$dateFinSplite[1].'/'.$dateFinSplite[0];
+                }
+              }
+            ?>
+
+
+            <form id="form" action="{{URL::route('configuration-post')}}" method="POST" class="form-horizontaln center">
+
+            	<div class="form-group">
+            		<label>Envoi automatique de mails aux gestionnaires :</label>
+
+            		<input type="radio" name="sendMailsGestionnaires" value="1" <?php if($properties->active == 1){ echo "checked='checked'";} ?> >Oui</input> 
+            		<input type="radio" name="sendMailsGestionnaires" value="0" <?php if($properties->active == 0){ echo "checked='checked'";} ?> >Non</input>
+            	</div>
+
+            	<div class="panel panel-default" style="margin: 0 auto 15px;max-width: 500px;">
+            		<div class="panel-heading"><strong style="color:black;">Période d'inscription</strong></div>
+            		<div class="panel-body">
+            			<div class="form-inline">
+            				<div class="form-group">
+            					<label for="date_deb">Date de début</label>
+            					<input type="text" class="datepickerDeb form-control mydate" style="width:100px;" name="date_deb" 
+            					value="{{ $date_fin_periode }}" />
+            					@if($errors->has('date_deb'))
+            						<div class="alert alert-danger custom-alert" role="alert">{{$errors->first('date_deb')}}</div>
+            					@endif
+
+            					<label for="date_fin">Date de fin</label>
+            					<input type="text" class="datepickerFin form-control mydate" style="width:100px;" name="date_fin" 
+            					value="{{ $date_fin_periode }}" />
+            					@if($errors->has('date_fin'))
+            						<div class="alert alert-danger custom-alert" role="alert">{{$errors->first('date_fin')}}</div>
+            					@endif
+            				</div>
+            			</div>
+            		</div>
+            	</div>
+
+            	<div class="center">
+            		<button id="clickConfig" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg">Enregistrer</button>
+            	</div>
 
 				{{Form::token()}}
 			</form>
@@ -110,8 +160,7 @@
 
 <div class="panel panel-default custom-panel">
 	<div class="panel-heading"> <span class="glyphicon glyphicon-filter"></span> Filtre des candidatures</div>
-	<div class="panel-body">
-		
+	<div class="panel-body">	
 
 		<form action="{{URL::route('ajouterCoupleAnneeFiliere-post')}}" method="POST" class="form-horizontal inscription">	
 				
@@ -134,8 +183,6 @@
 			{{Form::token()}}
 		</form>	
 
-
-
 		<table class="table">
 			<thead>
 				<tr>
@@ -147,8 +194,8 @@
 
 			@foreach ($coupleAnneeFilliere as $couple)
 			<tr>
-				<td>{{ $annee_convoitee[$couple->annees_resp] }}</td>
-				<td>{{ $couple-> filieres_resp }}
+				<td>{{ $annee_convoitee[$couple->annee_resp] }}</td>
+				<td>{{ $couple-> filiere_resp }}
 				</td>
 				<td>
 						<a id="{{$couple->id}}"
@@ -158,10 +205,19 @@
 			@endforeach	
 		</table>
 
-
-
-
 	</div>
 </div>
+
+<script>
+$(document).ready(function(){
+
+	$('.datepickerDeb').datepicker({
+		language: 'fr'
+	});
+	$('.datepickerFin').datepicker({
+		language: 'fr'
+	});
+});
+</script>
 
 @stop

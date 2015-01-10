@@ -13,7 +13,7 @@ class ConfigurationController extends BaseController {
       $tabRoles = DB::table('roles')->whereNotIn('id', array(Constantes::ETUDIANT))->get();
 
       // Récupération de la valeur de la config sendMailsToGestionnaires
-      $active = $this->getValueOfConfiguration()->active;
+      $properties = $this->getValueOfConfiguration();
 
       //Tableau temporaire à remplacer par ce que l'on réupère dans redmine
       $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
@@ -26,21 +26,54 @@ class ConfigurationController extends BaseController {
 
       //Récupération dans la table associative des couples Année/Fillière du user courant
        $coupleAnneeFilliere= DB::table('correspondances')
-      ->where('iduser', Auth::user()->id)->get();
+      ->where('utilisateur_id', Auth::user()->id)->get();
 
       return View::make('pages.gestion.configuration')
-      ->with(array('sendMailsGestionnaires' => $active, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
-        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'coupleAnneeFilliere' => $coupleAnneeFilliere, 'annee_convoitee' => $annee_convoitee));
+      ->with(array('properties' => $properties, 'gestionnairesAndAdmins' => $gestionnairesAndAdmins, 
+        'tabRoles' => $tabRoles, 'tabFiliere' => $tabFilliere, 'coupleAnneeFilliere' => $coupleAnneeFilliere, 
+        'annee_convoitee' => $annee_convoitee));
     }
 
 
     public function postConfiguration(){
 
-      $value = $this->getValueOfConfiguration();
-      $value->active = Input::get('sendMailsGestionnaires');
+      $validator = Validator::make(Input::all(),
+        array('date_deb' => 'date_format:d/m/Y',
+          'date_fin' => 'date_format:d/m/Y'));
 
-      if($value->save()){
-        return Redirect::route('configuration-get')->with('configuration-enregistre', 'Configuration enregistrée');
+      // Si la validation échoue, on redirige vers la même page avec les erreurs
+      if($validator->fails()){
+        return Redirect::route('configuration-get')->with('configuration-erreur_date', 'Format de date incorrect')
+        ->withErrors($validator)
+        ->withInput();
+      }else{
+
+        // On set les valeurs de configuration
+        $value = $this->getValueOfConfiguration();
+        $value->active = Input::get('sendMailsGestionnaires');
+
+        // Traitement de la date de début de période 
+        if(Input::get('date_deb') != ''){
+          $dateDebSplite = explode("/", Input::get('date_deb'));
+          $dateDeb = $dateDebSplite[2].'-'.$dateDebSplite[1].'-'.$dateDebSplite[0];
+        }else{
+          $dateDeb = null;
+        }
+        // Traitement de la date de fin de période
+        if(Input::get('date_fin') != ''){
+          $dateFinSplite = explode("/", Input::get('date_fin'));
+          $dateFin = $dateFinSplite[2].'-'.$dateFinSplite[1].'-'.$dateFinSplite[0];
+        }else{
+          $dateFin = null;
+        }
+
+
+        $value->date_debut_periode = $dateDeb;
+        $value->date_fin_periode = $dateFin;
+
+        if($value->save()){
+          return Redirect::route('configuration-get')->with('configuration-enregistre', 'Configuration enregistrée');
+        }
       }
     }
 
@@ -118,9 +151,9 @@ class ConfigurationController extends BaseController {
 
       //Insert Bdd
       $create = Correspondance::create(array(
-        'iduser' => $idUser,
-        'filieres_resp' =>  $filliere,
-        'annees_resp' => $annee,
+        'utilisateur_id' => $idUser,
+        'filiere_resp' =>  $filliere,
+        'annee_resp' => $annee,
         ));
 
       if($create){
