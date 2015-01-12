@@ -28,7 +28,9 @@ class DatabaseSeeder extends Seeder {
 	
 		Configuration::create(array(
 			'libelle' => 'sendMailsToGestionnaires',
-			'active' => true
+			'active' => true,
+			'date_debut_periode' => '2015-01-01',
+			'date_fin_periode' => '2015-12-31'
 			));
 	}
 }

@@ -170,6 +170,11 @@ Route::group(array('before' => 'auth'), function(){
 		 	Route::post("gestion/actionCandidature/{id}", array(
 			'as' => 'actionCandidature-post',
 			'uses' => 'DetailCandidatureController@postActionCandidature'));
+
+			// POST Ajout de couple Annee/Filliere au Gestionnaire courant
+			Route::post('/ajouterCoupleAnneeFiliere', array(
+				'as' => 'ajouterCoupleAnneeFiliere-post',
+				'uses' => 'ConfigurationController@postAddCoupleAnneeFilliere'));
 		});
 	});
 
@@ -210,25 +215,34 @@ Route::group(array('before' => 'auth'), function(){
 	// SI c'est un administrateur
 	Route::group(array('before' => 'administrateur'), function() {
 
-	    // POST Configuration
-		 Route::post("/gestion/configuration", array(
-		'as' => 'configuration-post',
-		'uses' => 'ConfigurationController@postConfiguration'));
-	});
-
 		// GET Suppression d'un gestionnaire
-	    Route::get("/compte/gestionnaire/delete/{id}", array(
+		Route::get("/gestion/configuration/supprimerUtilisateur/delete/{id}", array(
 			'as' => 'deletegestionnaire',
 			'uses' => 'ConfigurationController@deleteGestionnaire'));
 
-		// POST Création de compte gestionnaire
-		Route::post('/creerCompteGestionnaire', array(
-		'as' => 'creerCompteGestionnaire-post',
-		'uses' => 'ConfigurationController@postCreateCompteGestionnaire'));
+	    // GET Confirmation supression des données
+		Route::get("/gestion/configuration/supprimerDonnees", array(
+			'as' => 'deleteDonnees',
+			'uses' => 'ConfigurationController@getConfirmationSuppression'));
 
-		// POST Ajout de couple Annee/Filliere au Gestionnaire courant
-		Route::post('/ajouterCoupleAnneeFiliere', array(
-		'as' => 'ajouterCoupleAnneeFiliere-post',
-		'uses' => 'ConfigurationController@postAddCoupleAnneeFilliere'));
+		// Ensemble des routes de formulaire
+		Route::group(array('before' => 'csrf'), function(){
+
+	 	   // POST Configuration
+			Route::post("/gestion/configuration", array(
+				'as' => 'configuration-post',
+				'uses' => 'ConfigurationController@postConfiguration'));
+		});
+
+		 	 // POST Confirmer suppression données
+			Route::post("/gestion/configuration/confirmerSuppression", array(
+				'as' => 'suppression-post',
+				'uses' => 'ConfigurationController@postSuppression'));
+
+			// POST Création de compte gestionnaire
+			Route::post('/creerCompteGestionnaire', array(
+			'as' => 'creerCompteGestionnaire-post',
+			'uses' => 'ConfigurationController@postCreateCompteGestionnaire'));
+	});
 
 });

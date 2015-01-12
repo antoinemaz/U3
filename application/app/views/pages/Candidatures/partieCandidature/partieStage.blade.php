@@ -48,12 +48,12 @@
 
             <tr>
               <td>
-                <input type="text"class="datepickerDeb form-control mydate" style="width:90px;" name="date_debut[]" 
+                <input type="text"class="datepickerDeb form-control mydate" style="width:100px;" name="date_debut[]" 
                   value="{{ $date_debut }}" {{$readonly}} />
                   
               </td>
               <td>
-                <input type="text" class="datepickerFin form-control mydate" style="width:90px;" name="date_fin[]" 
+                <input type="text" class="datepickerFin form-control mydate" style="width:100px;" name="date_fin[]" 
                     value="{{ $date_fin }}" {{$readonly}} />
               </td>
               <td>

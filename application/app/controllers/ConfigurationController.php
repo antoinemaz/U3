@@ -34,59 +34,71 @@ class ConfigurationController extends BaseController {
         'annee_convoitee' => $annee_convoitee));
     }
 
+    // Suppression des données
+    public function getConfirmationSuppression(){
+      return View::make('pages.gestion.confirmationSuppression');
+    }
 
     public function postConfiguration(){
 
-      $validator = Validator::make(Input::all(),
-        array('date_deb' => 'date_format:d/m/Y',
-          'date_fin' => 'date_format:d/m/Y'));
+      // On purge les candidature
+      if(Input::get('btnDelete')){
+        // Page de confirmation de la suppression des données
+        return Redirect::route('deleteDonnees');
+  
+      // On sauvegarder les configurations
+     }else{
 
-      // Si la validation échoue, on redirige vers la même page avec les erreurs
-      if($validator->fails()){
-        return Redirect::route('configuration-get')->with('configuration-erreur_date', 'Format de date incorrect')
-        ->withErrors($validator)
-        ->withInput();
-      }else{
+        $validator = Validator::make(Input::all(),
+          array('date_deb' => 'date_format:d/m/Y',
+            'date_fin' => 'date_format:d/m/Y'));
 
-        // On set les valeurs de configuration
-        $value = $this->getValueOfConfiguration();
-        $value->active = Input::get('sendMailsGestionnaires');
-
-        // Traitement de la date de début de période 
-        if(Input::get('date_deb') != ''){
-          $dateDebSplite = explode("/", Input::get('date_deb'));
-          $dateDeb = $dateDebSplite[2].'-'.$dateDebSplite[1].'-'.$dateDebSplite[0];
+        // Si la validation échoue, on redirige vers la même page avec les erreurs
+        if($validator->fails()){
+            return Redirect::route('configuration-get')->with('configuration-erreur_date', 'Format de date incorrect')
+            ->withErrors($validator)
+            ->withInput();
         }else{
-          $dateDeb = null;
-        }
-        // Traitement de la date de fin de période
-        if(Input::get('date_fin') != ''){
-          $dateFinSplite = explode("/", Input::get('date_fin'));
-          $dateFin = $dateFinSplite[2].'-'.$dateFinSplite[1].'-'.$dateFinSplite[0];
-        }else{
-          $dateFin = null;
-        }
+              // On set les valeurs de configuration
+            $value = $this->getValueOfConfiguration();
+            $value->active = Input::get('sendMailsGestionnaires');
+
+              // Traitement de la date de début de période 
+            if(Input::get('date_deb') != ''){
+              $dateDebSplite = explode("/", Input::get('date_deb'));
+              $dateDeb = $dateDebSplite[2].'-'.$dateDebSplite[1].'-'.$dateDebSplite[0];
+            }else{
+              $dateDeb = null;
+            }
+              // Traitement de la date de fin de période
+            if(Input::get('date_fin') != ''){
+              $dateFinSplite = explode("/", Input::get('date_fin'));
+              $dateFin = $dateFinSplite[2].'-'.$dateFinSplite[1].'-'.$dateFinSplite[0];
+            }else{
+              $dateFin = null;
+            }
 
 
-        $value->date_debut_periode = $dateDeb;
-        $value->date_fin_periode = $dateFin;
+            $value->date_debut_periode = $dateDeb;
+            $value->date_fin_periode = $dateFin;
 
-        if($value->save()){
-          return Redirect::route('configuration-get')->with('configuration-enregistre', 'Configuration enregistrée');
+            if($value->save()){
+              return Redirect::route('configuration-get')->with('configuration-enregistre', 'Configuration enregistrée');
+            }
         }
-      }
     }
+  }
 
-    public function getValueOfConfiguration(){
+  public function getValueOfConfiguration(){
       // On va récupérer la seule occurence dans la table configuration qui contient toutes les propriétés
-      $properties = Configuration::where('id', '=', 1);
+    $properties = Configuration::where('id', '=', 1);
 
-      if($properties->count()){ 
-       $properties = $properties->first(); 
-       return $properties;
-     }
-     return null;
+    if($properties->count()){ 
+     $properties = $properties->first(); 
+     return $properties;
    }
+   return null;
+ }
 
    public function postCreateCompteGestionnaire()
    {
@@ -195,24 +207,71 @@ class ConfigurationController extends BaseController {
   }
 
 
-public function deleteCouple($id){
+  public function deleteCouple($id){
 
-      $couple = Correspondance::where('id', '=', $id);
+    $couple = Correspondance::where('id', '=', $id);
 
-      if($couple->count()){
-        $couple = $couple->first();
+    if($couple->count()){
+      $couple = $couple->first();
 
-        $couple->delete();
+      $couple->delete();
 
-        return Redirect::route('configuration-get')
-        ->with('CoupleAnneeFilliere-supprime', 'Le couple a été supprimé');
+      return Redirect::route('configuration-get')
+      ->with('CoupleAnneeFilliere-supprime', 'Le couple a été supprimé');
 
-      }else{
-        return Redirect::route('configuration-get');
-      }
-    
+    }else{
+      return Redirect::route('configuration-get');
+    }
+
   }
 
+  public function postSuppression(){
 
+    // Obtention du password tapé dans le champ
+    $passwordInput = Input::get('password');
+
+    // Si on est admin et que le mot de passe est bon, ok on supprime
+    if(Auth::user()->role_id == Constantes::ADMINISTRATEUR and Hash::check($passwordInput, Auth::user()->password)){
+         
+          // On rentre dans une transaction
+         DB::transaction(function(){
+           // Suppression de tous les diplomes
+           $diplomes = DB::table('diplomes')->delete();
+
+           // Suppression de tous les stages
+           $stages = DB::table('stages')->delete();
+
+           // Suppression de toutes les pièces jointes dans le file system
+           $deletefile = File::deleteDirectory('uploads/', true);
+
+           if($deletefile){
+              // Suppression de tous les pieces jointes en base
+              $pjs = DB::table('pieces')->delete();
+           }
+
+            // Récupération de tous les utilisateurs étudiants
+           $etudiants =DB::table('utilisateurs')->where('role_id', '=', Constantes::ETUDIANT)->get();
+
+           // Pour tous les étudiants
+           foreach ($etudiants as $key => $value) {
+              
+             // Récupération de la candidature de l'étudiant
+             $candidature = DB::table('candidatures')->where('utilisateur_id', '=', $value->id);
+
+              if($candidature->count()){
+                 // Suppression de la candidature
+                 $candidature->delete(); 
+              }
+
+              // Puis suppression de l'utilisateur
+              $utilisateur = Utilisateur::find($value->id);
+              $utilisateur->delete();
+           }
+         });
+           return Redirect::route('configuration-get')->with('configuration-delete', 'Suppression des données terminée');
+    }else{
+      return Redirect::route('deleteDonnees')->with('delete-impossible', 'Mauvais mot de passe');
+    }
+  }
 
 }

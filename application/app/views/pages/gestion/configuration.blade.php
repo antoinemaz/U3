@@ -23,6 +23,9 @@
 @if(Session::has('configuration-enregistre'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('configuration-enregistre')}}</div>
 @endif
+@if(Session::has('configuration-delete'))
+	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('configuration-delete')}}</div>
+@endif
 
 @if(Auth::user()->role_id == Constantes::ADMINISTRATEUR)
 	<div class="panel panel-default custom-panel">
@@ -72,7 +75,7 @@
             				<div class="form-group">
             					<label for="date_deb">Date de début</label>
             					<input type="text" class="datepickerDeb form-control mydate" style="width:100px;" name="date_deb" 
-            					value="{{ $date_fin_periode }}" />
+            					value="{{ $date_debut_periode }}" />
             					@if($errors->has('date_deb'))
             						<div class="alert alert-danger custom-alert" role="alert">{{$errors->first('date_deb')}}</div>
             					@endif
@@ -93,6 +96,12 @@
             	</div>
 
 				{{Form::token()}}
+			
+				  <div style="text-align:right;">
+            		<button id="clickDelete" type="submit" class="btn btn-danger" name = "btnDelete" value="btnEnreg">
+            			Supprimer toutes les candidatures
+            		</button>
+            	</div>
 			</form>
 		</div>
 	</div>	
