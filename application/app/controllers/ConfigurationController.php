@@ -36,7 +36,11 @@ class ConfigurationController extends BaseController {
 
     // Suppression des données
     public function getConfirmationSuppression(){
-      return View::make('pages.gestion.confirmationSuppression');
+
+      // Récupération de la valeur de la config sendMailsToGestionnaires
+      $properties = $this->getValueOfConfiguration();
+
+      return View::make('pages.gestion.confirmationSuppression')->with(array('properties' => $properties));
     }
 
     public function postConfiguration(){

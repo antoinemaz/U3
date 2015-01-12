@@ -15,6 +15,7 @@ class CompteController extends BaseController {
     	$config = $config->getValueOfConfiguration();
     	
     	// On va tester si la date du jour est compris dans la période d'inscription
+    	date_default_timezone_set('Europe/Paris');
     	$now = date("Y-m-d");
     	if($now >= $config->date_debut_periode && $now <= $config->date_fin_periode ){
 

@@ -44,7 +44,17 @@
 						<a href="{{URL::route('listeCandidatures-get')}}">Gérer les candidatures</a>
 					</li>
 				@endif
-				<li class="{{Active::route(array('configuration-get'), 'active')}}"><a href="{{URL::route('configuration-get')}}">Configuration</a></li>
+
+				@if(Route::currentRouteName() == 'configuration-get' or Route::currentRouteName() == 'deleteDonnees')
+					<li class="active">
+						<a href="{{URL::route('configuration-get')}}">Configuration</a>
+					</li>
+				@else
+					<li>
+						<a href="{{URL::route('listeCandidatures-get')}}">Configuration</a>
+					</li>
+				@endif
+				
 			@endif
 
 		@else

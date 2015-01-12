@@ -34,6 +34,15 @@
 
 		   <?php
 
+		   		// On va disabled le bouton qui permet de supprimer les données
+		   		// si on est hors de la période d'inscription
+		   		$disabledDelete = '';
+		    	date_default_timezone_set('Europe/Paris');
+		    	$now = date("Y-m-d");
+		    	if($now >= $properties->date_debut_periode && $now <= $properties->date_fin_periode ){
+		    		$disabledDelete = 'disabled';
+		    	}
+
               $date_debut_periode = null;
               $date_fin_periode = null;
 
@@ -98,9 +107,17 @@
 				{{Form::token()}}
 			
 				  <div style="text-align:right;">
-            		<button id="clickDelete" type="submit" class="btn btn-danger" name = "btnDelete" value="btnEnreg">
+            		<button id="clickDelete" type="submit" class="btn btn-danger" name = "btnDelete" value="btnDelete" {{$disabledDelete}}>
             			Supprimer toutes les candidatures
             		</button>
+            		<div><i style="font-size:11px;">
+            			@if($disabledDelete)
+            				La période d'inscription n'est pas terminée. Vous ne pouvez pas supprimer les données
+            			@else
+            				La période d'inscription est close.
+            				Vous avez la possibilité de supprimer les données de l'application.
+            			@endIf
+            		</i></div>
             	</div>
 			</form>
 		</div>
