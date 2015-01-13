@@ -48,7 +48,7 @@ class PieceController extends BaseController {
                     
                     $filename = strtr( $filename, $unwanted_array );
 
-					$path = 'uploads';
+					$path = $properties['uploadsPath'];
 
 					// code de fichier
 					$code = str_random(15);
@@ -85,7 +85,11 @@ class PieceController extends BaseController {
     				$candidature = $candidature->first();
 
     					if(Auth::user()->id == $candidature->utilisateur_id){
-    						File::delete('uploads/'.$piece->uid);
+
+                            $properties = parse_ini_file("properties.ini");
+                            $path = $properties['uploadsPath'];
+
+    						File::delete($path.$piece->uid);
     						DB::table('pieces')->where('id', '=', $id)->delete();
     					}else{
     						App::abort(403, 'Unauthorized action.');

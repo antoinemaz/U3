@@ -50,10 +50,10 @@ class CompteController extends BaseController {
 
     				$candidature = Candidature::create(array(
     					'utilisateur_id' => $create->id,
-    					'Pays' => 'France',
+    					'pays' => 'France',
     					'nationalite' => 'France',
     					'sexe' => 'masculin',
-    					'save' => 0,
+    					'complet' => 0,
     					'etat_id' => Constantes::BROUILLON));
 
 					// Création de 6 lignes (pour formations et diplomes) : BAC, jusqu'à BAC+5

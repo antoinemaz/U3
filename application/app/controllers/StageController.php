@@ -21,7 +21,7 @@ class StageController extends BaseController {
 
     public function postStage($idCandidature = null){
          // On clique sur le bouton Enregistrer
-        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
+        if(Input::get('btnEnreg') or Input::get('btnSuivant') or Input::get('btnEnregAdmin')) {
             if($idCandidature != null){
                 $candidature = $this->getCandidatureById($idCandidature);
             }else{
@@ -30,7 +30,7 @@ class StageController extends BaseController {
             }
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-             if(Input::get('btnEnreg') and ($candidature->etat_id == Constantes::ENVOYE 
+             if((Input::get('btnEnreg') or Input::get('btnSuivant')) and ($candidature->etat_id == Constantes::ENVOYE 
                 or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE)){
                  return Redirect::route('stage-get');
 
@@ -180,13 +180,13 @@ class StageController extends BaseController {
 
                 if(Input::get('btnEnreg')){
                     return Redirect::route('stage-get')->with('succes', 'Modifications effectuées');
+                }else{
+                    return Redirect::route('piece-get');
                 }
              }
 
         }elseif(Input::get('btnPrecedent')){
             return Redirect::route('diplome-get');
-        }else{
-            return Redirect::route('piece-get');
         }
     }
 

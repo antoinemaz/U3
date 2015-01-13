@@ -4,9 +4,16 @@
 
 @include('workflow')
 
+
+
 <div class="panel panel-default custom-panel">
-  <div class="panel-heading"> <span class="glyphicon glyphicon-upload"></span> Formulaire dépôt de pièces jointes</div>
+  <div class="panel-heading"> <span class="glyphicon glyphicon-upload"></span> Dépôt de pièces jointes</div>
   <div class="panel-body">
+
+     @if(Session::has('maxPjs'))
+      <div class="alert alert-success custom-danger center" role="alert">{{Session::get('maxPjs')}}</div>
+    @endif
+
     {{ Form::open(array('files'=>true, 'id' => 'form', 'class'=>'form-horizontal inscription center', 'style' => 'max-width:none;')) }}
 
        <?php
@@ -26,7 +33,7 @@
           class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent"  >Précédent</button>
 
           {{ Form::submit('Ajouter',array('id'=>'addFile', 'class' => 'btn btn-primary', $readonly)) }} 
-          {{ Form::reset('Vider', array('class'=>'btn btn-info', $readonly)) }}
+          {{ Form::reset('Annuler', array('class'=>'btn btn-info', $readonly)) }}
 
           <button type=button onclick="window.location='{{ route("finalisation-get") }}'" 
           class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
@@ -57,6 +64,20 @@
           ?>
           var sizeMaxUploadFile = "<?php Print($properties['sizeMaxUploadFile']); ?>";
 
+          <?php 
+
+             $idUser = Auth::user()->id;
+             $candidature = Candidature::where('utilisateur_id', '=', $idUser)->first();
+
+             // On va compter les pieces jointes
+             $sommePjs = Piece::where('candidature_id', '=', $candidature->id)->count();
+
+             // Obtention du nombre max de pjs
+             $maxFiles = $properties['maxFiles'];
+          ?>
+
+          var sommePjs = <?php Print($sommePjs); ?>;
+          var maxFiles = <?php Print($maxFiles); ?>;
 
           if(!$('#file').val()){
               $("#erreurPj").show();
@@ -73,6 +94,13 @@
             $("#erreurPj").show();
             $("#erreurPj").html("Le fichier doit être au format PDF")
             $("#charg").hide();
+
+            // Test sur le nombre de pjs max
+           }else if(sommePjs >= maxFiles){
+            $("#erreurPj").show();
+            $("#erreurPj").html("Le nombre limite de pièces jointes est de "+ maxFiles)
+            $("#charg").hide();
+
           }else{
 
           // Fonction ajax de jquery  

@@ -27,8 +27,8 @@ class CreateCandidatures extends Migration {
 		    $table->string('telephone');
 		    $table->string('adresse');
 		    $table->string('codePostal');
-		    $table->string('Ville');
-		    $table->string('Pays');
+		    $table->string('ville');
+		    $table->string('pays');
 		    $table->string('filiere');
 		    $table->date('date_dernier_diplome')->nullable();
 		    $table->longtext('commentaire_gestionnaire');

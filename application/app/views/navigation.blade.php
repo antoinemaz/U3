@@ -51,7 +51,7 @@
 					</li>
 				@else
 					<li>
-						<a href="{{URL::route('listeCandidatures-get')}}">Configuration</a>
+						<a href="{{URL::route('configuration-get')}}">Configuration</a>
 					</li>
 				@endif
 				

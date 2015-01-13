@@ -92,7 +92,6 @@
 				@endIf
 			</div>
 
-			<span class="label label-primary custom-label">Informations élémentaires</span>
 		 	<div style="max-width:300px;margin: 0 auto;">
 		 		@include('pages.Candidatures.partieCandidature.partieCandidature')
 		 	</div>

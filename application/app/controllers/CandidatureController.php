@@ -56,7 +56,7 @@ class CandidatureController extends BaseController {
 	public function creerCandidature($idCandidature = null)
 	{
          // On clique sur le bouton Enregistrer
-        if(Input::get('btnEnreg') or Input::get('btnEnregAdmin')) {
+        if(Input::get('btnEnreg') or Input::get('btnSuiv') or Input::get('btnEnregAdmin')) {
             if($idCandidature != null){
                 $candidature = $this->getCandidatureById($idCandidature);
             }else{
@@ -64,7 +64,7 @@ class CandidatureController extends BaseController {
             }
 
             // Si l'état est validé ou à refusé, l'étudiant ne pourra plus modifié sa candidature
-             if(Input::get('btnEnreg') and ($candidature->etat_id == Constantes::ENVOYE 
+             if((Input::get('btnEnreg') or Input::get('btnSuiv')) and ($candidature->etat_id == Constantes::ENVOYE 
                 or $candidature->etat_id == Constantes::VALIDE or $candidature->etat_id == Constantes::REFUSE)){
                  return Redirect::route('creationCandidature-get');
 
@@ -141,23 +141,23 @@ class CandidatureController extends BaseController {
 				     $candidature -> Pays = Input::get('InputPays');
 				     $candidature -> date_dernier_diplome = $date_diplome;
 				     $candidature -> annee_convoitee = Input::get('InputAnnee');
-				     $candidature -> save = 1;
+				     $candidature -> complet = 1;
 
-					     if($filiere != null){
-					     	 $candidature -> filiere = $Finalchaine;	
-					     }
+				     if($filiere != null){
+				     	$candidature -> filiere = $Finalchaine;	
+				     }
 
-			             if($candidature->save()){
-			             	if(Input::get('btnEnreg')){
-							 	return Redirect::route('creationCandidature-get')->with('succes', 'Modifications effectuées');
-					     	}
-					     }
+				     if($candidature->save()){
+				     	if(Input::get('btnEnreg')){
+				     		return Redirect::route('creationCandidature-get')->with('succes', 'Modifications effectuées');
+				     	}else{
+				     		return Redirect::route('diplome-get');
+				     	}
+
+				     }
+				 }
+				 
 				}
-					
-			}
-
-        }else{
-        	return Redirect::route('diplome-get');
         }
 	}
 
@@ -180,20 +180,25 @@ class CandidatureController extends BaseController {
 
 		// Si on est a brouillon ou a revoir, on permet la finalisation de la candidature	
 		if($candidature->etat_id == Constantes::BROUILLON and $candidature->etat_id == Constantes::AREVOIR){
-         	 return Redirect::route('creationCandidature-get');
-         }else{
-	        $candidature -> etat_id = Constantes::ENVOYE;
-	        if($candidature->save()){
+			return Redirect::route('creationCandidature-get');
+		}else{
 
-	        	// Envoi d'un mail selon la valeur dans configs
-	        	$config = new ConfigurationController();
-	        	if ($config->getValueOfConfiguration()->active == 1){
-	        		// TODO : SEND MAIL AUX GESTIONNAIRES
-	        	}	
+			if($candidature->complet == 0){
+				return Redirect::route('finalisation-get')->with(array('candidature-incomplete','Votre candidature est incomplète'));
+			}else{
+				$candidature -> etat_id = Constantes::ENVOYE;
+				if($candidature->save()){
 
-			 	return Redirect::route('finalisation-get');
-	    	}
-         }
+	        		// Envoi d'un mail selon la valeur dans configs
+					$config = new ConfigurationController();
+					if ($config->getValueOfConfiguration()->active == 1){
+	        			// TODO : SEND MAIL AUX GESTIONNAIRES
+					}	
+
+					return Redirect::route('finalisation-get');
+				}
+			}
+		}
 	}
 
     public function getCandidatureByUserLogged(){

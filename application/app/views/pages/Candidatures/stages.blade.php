@@ -5,7 +5,7 @@
 @include('workflow')
 
 <div class="panel panel-default custom-panel" style="max-width:980px;">
-    <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
+    <div class="panel-heading"> <span class="glyphicon glyphicon-align-justify"></span> Liste des stages</div>
     <div class="panel-body">
 
     @if(Session::has('succes'))
@@ -33,8 +33,8 @@
         @include('pages.Candidatures.partieCandidature.partieStage')
 
         <button type="submit" class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
-        <button id="clickStage" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
-        <button type="submit" class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
+        <button id="clickStage" type="submit" class="clickStage btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
+        <button type="submit" class="clickStage btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
 
   </form>
 
@@ -49,7 +49,7 @@
 
        var dateDDMMYYYRegex = '^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)dd$';
 
-        $('#clickStage').click(function(){
+        $('.clickStage').click(function(){
 
           // variable qui servira à submit le formulaire ou pas
           var erreur = false;

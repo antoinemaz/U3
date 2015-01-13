@@ -5,7 +5,7 @@
 @include('workflow')
 
 <div class="panel panel-default custom-panel">
-    <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
+    <div class="panel-heading"> <span class="glyphicon glyphicon-align-justify"></span> Liste des diplômes</div>
     <div class="panel-body">
 
     @if(Session::has('succes'))
@@ -34,8 +34,8 @@
       @include('pages.Candidatures.partieCandidature.partieDiplome')
 
         <button type="submit" class="btn btn-primary" name = "btnPrecedent" value="btnPrecedent" >Précédent</button>
-        <button id="clickDiplome" type="submit" class="btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
-        <button type="submit" class="btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
+        <button id="clickDiplome" type="submit" class="clickDiplome btn btn-primary" name = "btnEnreg" value="btnEnreg" {{$readonly}} >Enregistrer</button>
+        <button type="submit" class="clickDiplome btn btn-primary" name = "btnSuivant" value="btnSuivant" >Suivant</button>
     {{Form::token()}}
    </form>
 
@@ -48,7 +48,7 @@
 
       $('#error').hide();
 
-      $('#clickDiplome').click(function(){
+      $('.clickDiplome').click(function(){
 
         // variable qui servira à submit le formulaire ou pas
         var erreur = false;

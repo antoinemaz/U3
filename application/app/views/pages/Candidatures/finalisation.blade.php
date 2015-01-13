@@ -4,11 +4,17 @@
 
 @include('workflow')
 
+@if(Session::has('candidature-incomplete'))
+    <div class="alert alert-danger custom-alert center" role="alert">
+      {{Session::get('candidature-incomplete')}}
+    </div>
+@endIf
+
 <div class="panel panel-default custom-panel">
-    <div class="panel-heading"> <span class="glyphicon glyphicon-user"></span> Formulaire de candidature</div>
+    <div class="panel-heading"> <span class="glyphicon glyphicon-share"></span> Finalisation</div>
     <div class="panel-body" style="text-align: center;line-height: 26px;">
 
-      @if($candidature->save == 0)
+      @if($candidature->complet == 0)
         Vous devez remplir toutes les informations nécéssaires afin que l'on puisse traiter votre candidature
       @else
         @if($candidature->etat_id == Constantes::ENVOYE)

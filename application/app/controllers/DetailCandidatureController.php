@@ -173,7 +173,10 @@ class DetailCandidatureController extends BaseController {
 			
 			if($value->uid != null){
 				// Suppression du fichier dans le file system
-				File::delete('uploads/'.$value->uid);		
+				$properties = parse_ini_file("properties.ini");
+        		$path = $properties['uploadsPath'];
+
+				File::delete($path.$value->uid);		
 				// Puis en base 
 				DB::table('pieces')->where('id', '=', $value->id)->delete();		
 			}
@@ -207,7 +210,11 @@ class DetailCandidatureController extends BaseController {
 				$piece = $piece->first();
 
 				if(Auth::user()->role_id == 2){
-					File::delete('uploads/'.$piece->uid);
+
+					$properties = parse_ini_file("properties.ini");
+        		    $path = $properties['uploadsPath'];
+
+					File::delete($path.$piece->uid);
 					DB::table('pieces')->where('id', '=', $id)->delete();
 
 					return Redirect::route('detailCandidature-get',$piece->candidature_id)

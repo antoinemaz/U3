@@ -245,8 +245,11 @@ class ConfigurationController extends BaseController {
            // Suppression de tous les stages
            $stages = DB::table('stages')->delete();
 
+            $properties = parse_ini_file("properties.ini");
+            $path = $properties['uploadsPath'];
+
            // Suppression de toutes les pièces jointes dans le file system
-           $deletefile = File::deleteDirectory('uploads/', true);
+           $deletefile = File::deleteDirectory($path, true);
 
            if($deletefile){
               // Suppression de tous les pieces jointes en base

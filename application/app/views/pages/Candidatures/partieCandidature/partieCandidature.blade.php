@@ -44,6 +44,9 @@
            }
          }
     ?>
+
+     <span class="label label-default custom-label" style="margin: 0 auto 12px;">Vous</span>
+    
     <div class="form-group" style="margin-bottom: 4px;">
       <label>Email :</label>
       {{$email}}
@@ -141,7 +144,7 @@
 
     <div class="form-group" {{$hidden}}>
       <label for="InputVille">Ville :</label>
-      {{ Form::text("InputVille", $candidature->Ville, array('class' => 'form-control', $readonly)) }}
+      {{ Form::text("InputVille", $candidature->ville, array('class' => 'form-control', $readonly)) }}
       @if($errors->has('InputVille'))
         <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputVille')}}</div>
       @endif
@@ -161,7 +164,7 @@
             @foreach($tabPays as $pays)
 
               <?php
-                if ($pays!=$candidature->Pays){
+                if ($pays!=$candidature->pays){
                   ?> <option value="{{$pays}}">{{$pays}}</option> <?php
               }else{ ?>
                 <option value="{{$pays}}" selected="selected">{{$pays}}</option> <?php
@@ -179,6 +182,8 @@
         <div class="alert alert-danger custom-alert" role="alert">{{$errors->first('InputDateDernDiplome')}}</div>
        @endif
     </div>
+
+    <span class="label label-default custom-label" style="margin: 28px auto 10px;">Formation(s) désireé(s)</span>
 
     <div class="form-group">
       <label for="InputAnnee">Année :</label>

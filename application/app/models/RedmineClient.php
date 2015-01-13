@@ -102,7 +102,11 @@ class RedmineClient {
 
 		foreach ($pjs as $key => $value) {
 		 	// Obtention du fichier parcouru
-			$contents = File::get('uploads/'.$value->uid);
+
+		 	$properties = parse_ini_file("properties.ini");
+        	$path = $properties['uploadsPath'];
+
+			$contents = File::get($path.$value->uid);
 
 			// Initialisation session CURL
 			$ch = curl_init();
@@ -220,6 +224,8 @@ class RedmineClient {
 			$stagesEnBase = DB::table('stages')->where('candidature_id', $candidature->id)->get();
 			$listOfStages = $this->getStagesFormates($stagesEnBase);
 
+			$properties = parse_ini_file("properties.ini");
+
 			$data = array();
 			// had to create the string this way to make sure it got valid json format
 			 $data['issue'] = array(
@@ -234,22 +240,22 @@ class RedmineClient {
 			'done_ratio'=> 0,
 			'is_private'=> 0,
 			'custom_fields'=> array( 
-				array('id'=>1, 'value'=> $filieres),
-				array('id'=>2, 'value'=> $candidature->prenom),
-				array('id'=>3, 'value'=> $candidature->date_naissance),
-				array('id'=>4,'value'=> $candidature->sexe),
-				array('id'=>5,'value'=> $candidature->nationalite),
-				array('id'=>8, 'value'=> $candidature->dossier_etrange),
-				array('id'=>10, 'value'=> $user->email),
-				array('id'=>11, 'value'=> $candidature->telephone),
-				array('id'=>12, 'value'=> $candidature->adresse),
-				array('id'=>13, 'value'=> $candidature->ville),
-				array('id'=>14, 'value'=> $candidature->codePostal),
-				array('id'=>15, 'value'=> $candidature->pays),
-				array('id'=>18, 'value'=> $candidature->regime_inscription),
-				array('id'=>20, 'value'=> $listOfDiplomes),
-				array('id'=>21, 'value'=> $listOfStages),
-				array('id'=>22, 'value'=> $candidature->date_dernier_diplome)
+				array('id'=>$properties['filieres'], 'value'=> $filieres),
+				array('id'=>$properties['prenom'], 'value'=> $candidature->prenom),
+				array('id'=>$properties['date_naissance'], 'value'=> $candidature->date_naissance),
+				array('id'=>$properties['sexe'], 'value'=> $candidature->sexe),
+				array('id'=>$properties['nationalite'], 'value'=> $candidature->nationalite),
+				array('id'=>$properties['dossier_etrange'], 'value'=> $candidature->dossier_etrange),
+				array('id'=>$properties['email'], 'value'=> $user->email),
+				array('id'=>$properties['telephone'], 'value'=> $candidature->telephone),
+				array('id'=>$properties['adresse'], 'value'=> $candidature->adresse),
+				array('id'=>$properties['ville'], 'value'=> $candidature->ville),
+				array('id'=>$properties['codepostal'], 'value'=> $candidature->codePostal),
+				array('id'=>$properties['pays'], 'value'=> $candidature->pays),
+				array('id'=>$properties['regime_inscription'], 'value'=> $candidature->regime_inscription),
+				array('id'=>$properties['diplomes'], 'value'=> $listOfDiplomes),
+				array('id'=>$properties['stages'], 'value'=> $listOfStages),
+				array('id'=>$properties['date_dernier_diplome'], 'value'=> $candidature->date_dernier_diplome)
 				 ),
 				'uploads' => $listOfPjs);
 		
