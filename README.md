@@ -1,15 +1,10 @@
-U3 est un projet informatique en cours de développement.
-
-Il a pour but de livrer une plateforme de dépot de candidatures.
-
-
 ### Contexte
 
 U3 est un projet informatique qui a pour but de traiter des candidatures de différentes filières de l'université d'Evry.
 
 Actuellement, les candidatures reçues sont rescenceés dans un outil nommé Redmine. Chaque responsable doit reprendre chaque candidature papier pour les insérer dans cet outil.
 
-La plateforme en cours de développement est un espace permettant de gérer les candidatures, avant qu'elles soient intégrées dans Redmine.
+La plateforme en cours de développement est un espace permettant de gérer les candidatures, avant qu'elles soient intégrées dans Redmine. Les candidatures transférées dans Redmine sont alors acceptées administrativement.
 
 ### Outils et langages utilisés
 
@@ -21,6 +16,7 @@ La plateforme en cours de développement est un espace permettant de gérer les 
 - VMWare : nous avons récupéré une image Ubuntu avec Redmine d'installé 
 - Redmine et l'utilisation de ses web services à disposition
 - SublimeText (éditeur texte)
+- Des APIs pour le datepicker, l'ouverture des PDFs sur la page web...
 
 ### Fonctionnalités développées
 
