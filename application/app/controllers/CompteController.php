@@ -78,7 +78,7 @@ class CompteController extends BaseController {
 
 					// On redirige vers la page d'accueil
     				return Redirect::route('index')
-    				->with('global', 'Compte créé');
+    				->with(array('compte-cree' => 'Votre compte a été créé. Veuillez l\'activer par mail'));
     			}
     		}
 

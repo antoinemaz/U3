@@ -3,6 +3,11 @@
 @section('content')
 
 <div class="panel panel-default custom-panel center">
+	@if(Session::has('compte-cree'))
+		<div class="alert alert-success custom-alert center" role="alert">
+			{{Session::get('compte-cree')}}
+		</div>
+	@endif
 	@if(Session::has('compte-impossible-active'))
 		<div class="alert alert-danger custom-alert center" role="alert">
 			{{Session::get('compte-impossible-active')}}
@@ -33,6 +38,7 @@
 			{{Session::get('error_forget_password_init')}}
 		</div>
 	@endif
+
 	@if(Auth::check())
 		<p>Bonjour, vous êtes connecté avec l'adresse mail suivante : {{Auth::user()->email}} </p>
 	@else

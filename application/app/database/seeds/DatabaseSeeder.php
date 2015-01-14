@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder {
 
 		Utilisateur::create(array(
 			'email' => 'admin@admin.fr',
-			'password' => Hash::make('aaaaaa'),
+			'password' => Hash::make('adminpwd'),
 			'active' => 1,
 			'role_id' => 3));
 	
