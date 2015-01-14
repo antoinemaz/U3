@@ -24,27 +24,30 @@ La plateforme en cours de développement est un espace permettant de gérer les 
 - Inscription de l'utilisateur
 - Mot de passe oublié
 - Connexion utilisateur
+- Changer mot de passe
 
 **Partie Candidature :**
-- Renseignement des informations d'une candidature
-- Liste des stages
-- Liste des diplomes
+- Formulaire de candidature : informations de l'étudiant et formation(s) désirée(s)
+- Renseignement des stages
+- Renseignement des diplomes
 - Ajout de pièces jointes (CV, lettre de motivation...)
+- Page d'envoie de la candidature
 
 **Partie gestionnaire :**
-- Création de compte gestionnaire
-- Liste des candidatures soumises
-- Détail de chaque candidature 
+- Page de configuration : 
+  -> Filtre des candidatures : choix de plusieurs couples filiere/année afin de pouvoir afficher les candidatures qui concernent les gestionnaires
+- Liste des candidatures filtrées 
+- Détail de chaque candidature : Informations de la candidatures, diplômes, stages et PJs (PDFs) ouvertes direcement dans la page. Toutes ces informations sont présentes sur une seule page. 
+- Pour une candidature, le gestionnaire peut choisir l'état : A revoir, validée, ou refusée. En cas de validation, la candidature est transférée dans Redmine.
+
+**Partie administrateur :**
+Hérite des actions du gestionnaires.  
+- Page de configuration : 
+  -> Création de compte gestionnaire ou administrateurs
+  -> Choix de la période d'inscription et option d'envoi de mails aux gestionnaires en cas de nouvelles candidatures
+  -> Purge des données (étudiants/candidatures/stages/diplômes/pièces jointes)
 
 ### Reste à faire
 
-- Modification de candidature côté gestionnaire
-- Marquage "à revoir" de la candidature
-- Changer le type en "longtext" pour Commentaire et tâches, "string" pour CP
-- Regex pour le renseignement du téléphone dans la candidature
-- Affichage du commentaire du gestionnaire coté étudiant ( en cas de candidature "à revoir")
-- Faire apparaitre les états des candidatures
-- Une fois les candidatures validées : suppression des informations dans notre base de données, à l'exception du nom, prénom, de l'état, de la filière et de l'année convoitée 
-- Insertion de la candidature dans Redmine une fois validée
-- Notification de nouvelles candidature : prévoir une configuration pour l'envoi de mails automatique (si pic de candidature, on pourra cocher non pour éviter d'être spammer de mails)
-- Possibilité pour le gestionnaire, d'indiquer le(s) filière(s) et le(s) année(s) qu'ils gèrent afin de lister seuelement les candidatures qui lui intérèsse
+- Choix d'un répertoire pour stocker les pièces jointes
+- Intégration de l'application sur un serveur 
