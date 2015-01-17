@@ -46,8 +46,3 @@ Hérite des actions du gestionnaire.
   -> Création de comptes gestionnaires et administrateurs
   -> Choix de la période d'inscription et option d'envoi de mails aux gestionnaires en cas de nouvelles candidatures
   -> Purge des données (étudiants/candidatures/stages/diplômes/pièces jointes)
-
-### Reste à faire
-
-- Choix d'un répertoire pour stocker les pièces jointes
-- Intégration de l'application sur un serveur 
