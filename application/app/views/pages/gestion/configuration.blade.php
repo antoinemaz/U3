@@ -9,7 +9,7 @@
 @endif
 
 @if(Session::has('CoupleAnneeFilliere-addexiste'))
-	<div class="alert alert-danger custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
+	<div class="alert alert-danger custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-addexiste')}}</div>
 @endif
 @if(Session::has('CoupleAnneeFilliere-add'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
@@ -233,6 +233,12 @@
 			</tr>
 			@endforeach	
 		</table>
+
+		<div style="text-align:right;">
+			<div><i style="font-size:11px;">
+				Si aucun couple n'est ajouté, toutes les candidatures seront affichées. <br/> De plus, vous serez alerté par mail de chaque nouvelle candidature quelque soit l'année et les filières
+			</i></div>
+		</div>
 
 	</div>
 </div>

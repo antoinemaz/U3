@@ -18,31 +18,35 @@ class GestionController extends BaseController {
 		// Liste  des correspondances 
 		$correspondancesUser = DB::table('correspondances')->where('utilisateur_id', array($idUtilisateur))->get();
 
-		// Parcours des correspondances du user
-		foreach ($correspondancesUser as $keyCo => $valueCo) {
+		// S'il n'y a pas de correspondances ajoutées, le gestionnaire/admin voit toutes les candidatures
+		if(empty($correspondancesUser)){
+			$getListeCandidaturesTriees = $candidaturesSaufBrouillon;
+		}else{
+			// Parcours des correspondances du user
+			foreach ($correspondancesUser as $keyCo => $valueCo) {
 
-			// Parcours de toutes les candidatures sauf brouillon
-			foreach ($candidaturesSaufBrouillon as $keyCan => $valueCan) {
-					
-				// Meme année, ok 
-				if($valueCan->annee_convoitee == $valueCo->annee_resp){
-
-					// Liste des filières
-					$listeFilieres = explode("|", $valueCan->filiere);
-
-					// Parcours de toutes les filières
-					foreach ($listeFilieres as $keyFil => $valueFil) {
+				// Parcours de toutes les candidatures sauf brouillon
+				foreach ($candidaturesSaufBrouillon as $keyCan => $valueCan) {
 						
-						if($valueCo->filiere_resp == $valueFil){
-							array_push($getListeCandidaturesTriees, $valueCan);
-							break;
+					// Meme année, ok 
+					if($valueCan->annee_convoitee == $valueCo->annee_resp){
+
+						// Liste des filières
+						$listeFilieres = explode("|", $valueCan->filiere);
+
+						// Parcours de toutes les filières
+						foreach ($listeFilieres as $keyFil => $valueFil) {
+							
+							if($valueCo->filiere_resp == $valueFil){
+								array_push($getListeCandidaturesTriees, $valueCan);
+								break;
+							}
 						}
 					}
-				}
 
+				}
 			}
 		}
-
 		return View::make('pages.gestion.gestionCandidatures')->with('candidatures', $getListeCandidaturesTriees);
 	}
 }

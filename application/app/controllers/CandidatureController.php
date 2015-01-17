@@ -181,67 +181,64 @@ class CandidatureController extends BaseController {
 		$candidature = $this->getCandidatureByUserLogged();
 
 		// Si on est a brouillon ou a revoir, on permet la finalisation de la candidature	
-		if($candidature->etat_id == Constantes::BROUILLON and $candidature->etat_id == Constantes::AREVOIR){
-         	 return Redirect::route('creationCandidature-get');
-         }else{
-	        $candidature -> etat_id = Constantes::ENVOYE;
-	        if($candidature->save()){
+		if($candidature->etat_id != Constantes::BROUILLON and $candidature->etat_id != Constantes::AREVOIR){
+			return Redirect::route('creationCandidature-get');
+		}else{
+			$candidature -> etat_id = Constantes::ENVOYE;
+			if($candidature->save()){
 
 	        	// Envoi d'un mail selon la valeur dans configs
-	        	$config = new ConfigurationController();
-	        	if ($config->getSendMailsGestionnairesValue()->active == 1){
+				$config = new ConfigurationController();
+				if ($config->getValueOfConfiguration()->active == 1){
 
-	        	$idUser = Auth::user()->id;
+					$tabfiliere = explode("|", $candidature->filiere);
+					$annee = $candidature->annee_convoitee;
 
-	        	//On va d'abord chercher en bdd pour quelle couple année filliere l'étudiant courant à postulé
-	        	$couplesCand = DB::select('select id, filiere,annee_convoitee from candidatures where utilisateur_id = ?', array($idUser));
+						// obtention de tous les gestionnaires et administrateurs
+					$gestAndAdmins = DB::table('utilisateurs')->whereIn('role_id', 
+						array(Constantes::GESTIONNAIRE, Constantes::ADMINISTRATEUR))->get();
 
-	        	if($couplesCand->count()){
-
-	        		$couplesCand = $couplesCand->first();
-
-                    $tabfiliere = explode("|", $couplesCand->filiere);
-					$annee->$couple->annee_convoitee;
-
-					//On a maintenant un tableau avec les fillières pour lequel il à postulé
-					// et l'année convoitée
-
-					// obtention de tous les gestionnaires et administrateurs
-					$gestAndAdmins = DB::select('select * from utilisateurs where role_id = ? or role_id = ? ', 
-						array($Constantes::GESTIONNAIRE, $Constantes::ADMINISTRATEUR))->get();
-
-					// Parcours de tous les gestionnaires/admins
+						// Parcours de tous les gestionnaires/admins
 					foreach ($gestAndAdmins as $key => $valueGest) {
-						
+
 						// get correspondances de chacun
-						$correspondances = DB::select('select * from correspondances where utilisateur_id = ?', 
-						array($valueGest->id))->get();
+						$correspondances = DB::table('correspondances')->where('utilisateur_id', array($valueGest->id))->get();
 
-						// Parcours de toutes les correspondances
-						foreach ($correspondances as $key => $valueCo) {
+						// Pas de correspondances, on envoie notification
+						if(empty($correspondances)){
+							// couple valide, ok on envoie le mail :
+							$mailService = new MailService();
+							$mailService->sendMailFinalisationGestionnaire($valueGest, $candidature->id);
+						}else{
 
-							if($annee == $valueCo->annee_resp){
+							// Parcours de toutes les correspondances
+							foreach ($correspondances as $key => $valueCo) {
+
+								if($annee == $valueCo->annee_resp){
 
 								// Parcours de toutes les filières de la candidature
-								foreach ($variable as $key => $valueFil) {
-									
-									if($valueFil == $valueCo->filiere_resp){
-										
-										// couple valide, ok on envoie le mail :
-										$mailService = new MailService();
-										$mailService->sendMailFinalisationGestionnaire($valueGest, $couplesCand->id);
+									foreach ($tabfiliere as $key => $valueFil) {
 
-										break;
+										if($valueFil == $valueCo->filiere_resp){
+
+										// couple valide, ok on envoie le mail :
+											$mailService = new MailService();
+											$mailService->sendMailFinalisationGestionnaire($valueGest, $candidature->id);
+
+											break;
+										}
 									}
 								}
 							}
+
 						}
 					}
-	        	}	
+				}	
 
-			 	return Redirect::route('finalisation-get');
-	    	}
-         }
+				return Redirect::route('finalisation-get');
+			}
+		}
+		
 	}
 
     public function getCandidatureByUserLogged(){

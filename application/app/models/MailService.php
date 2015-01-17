@@ -7,8 +7,8 @@ class MailService {
 	public function sendMailFinalisationGestionnaire($user, $idCandidature){
 		// Envoi du mail d'activation du compte
 		Mail::send('emails.finalisationCandidature', array('lien' => URL::route('detailCandidature-get', $idCandidature)), 
-			function($message) use (){
-			$message->to($user->email, $user->username)->subject('Nouvelle candidature');
+			function($message) use ($user){
+			$message->to($user->email, $user->email)->subject('Nouvelle candidature');
 		});
 	}
 
@@ -16,7 +16,7 @@ class MailService {
 		// Envoi du mail d'activation du compte
 		Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
 			function($message) use ($user){
-			$message->to($user->email, $user->username)->subject('Activation du compte');
+			$message->to($user->email, $user->email)->subject('Activation du compte');
 		});
 	}
 
@@ -25,7 +25,7 @@ class MailService {
 		Mail::send('emails.activerCompteGestionnaire', 
 			array('lien' => URL::route('activerCompte', $code), 'password' => $password, 'libelleRole' => $libelleRole), 
 			function($message) use ($user, $libelleRole){
-			$message->to($user->email, $user->username)->subject('Activation du compte '. $libelleRole);
+			$message->to($user->email, $user->email)->subject('Activation du compte '. $libelleRole);
 		});
 	}
 

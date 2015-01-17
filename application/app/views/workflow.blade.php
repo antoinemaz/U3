@@ -2,7 +2,7 @@
 <style>
 
 .crumbs li a {  
-    background-image: url('../style/images/bg-crumbs.png')!important;
+    background-image: url('../js-css-img/images/bg-crumbs.png')!important;
 }
 
 </style>

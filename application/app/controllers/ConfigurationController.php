@@ -171,13 +171,13 @@ class ConfigurationController extends BaseController {
       $idUser = Auth::user()->id;
 
       //Verification en base de donnée si la correpondance idUser/filiere_resp/annees_resp existe deja
-      $results = DB::select('select * from correspondances where iduser = ? and filieres_resp = ? and annees_resp = ?', array($idUser,$filliere,$annee));
+      $results = DB::select('select * from correspondances where utilisateur_id = ? and filiere_resp = ? and annee_resp = ?', array($idUser,$filliere,$annee));
       //Si il y a un résultat à la requête, c'est que le couple existe déjà pour ce gestionnaire dc
       //message d'erreur
       if($results){
           
           return Redirect::route('configuration-get')
-        ->with('CoupleAnneeFilliere-addexiste', 'Le couple que vous souhaiter ajouter existe déjà pour ce gestionnaire !');
+        ->with('CoupleAnneeFilliere-addexiste', 'Le couple que vous souhaitez ajouter existe déjà pour ce gestionnaire');
 
       //Sinon traitement normal et ajout dans la base de données    
       }else{
@@ -193,11 +193,11 @@ class ConfigurationController extends BaseController {
 
         //Redirection page configuration
         return Redirect::route('configuration-get')
-        ->with('CoupleAnneeFilliere-add', 'Couple Année/Filliere ajouté !');
+        ->with('CoupleAnneeFilliere-add', 'Couple Année/Filliere ajouté ');
       }else{
 
         return Redirect::route('configuration-get')
-        ->with('CoupleAnneeFilliere-add', 'Une erreur s est produite lors de l ajout du couple !');
+        ->with('CoupleAnneeFilliere-add', 'Une erreur s est produite lors de l ajout du couple ');
 
       }
 
