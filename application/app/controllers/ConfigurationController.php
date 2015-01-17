@@ -170,6 +170,18 @@ class ConfigurationController extends BaseController {
 
       $idUser = Auth::user()->id;
 
+      //Verification en base de donnée si la correpondance idUser/filiere_resp/annees_resp existe deja
+      $results = DB::select('select * from correspondances where iduser = ? and filieres_resp = ? and annees_resp = ?', array($idUser,$filliere,$annee));
+      //Si il y a un résultat à la requête, c'est que le couple existe déjà pour ce gestionnaire dc
+      //message d'erreur
+      if($results){
+          
+          return Redirect::route('configuration-get')
+        ->with('CoupleAnneeFilliere-addexiste', 'Le couple que vous souhaiter ajouter existe déjà pour ce gestionnaire !');
+
+      //Sinon traitement normal et ajout dans la base de données    
+      }else{
+
       //Insert Bdd
       $create = Correspondance::create(array(
         'utilisateur_id' => $idUser,
@@ -188,6 +200,9 @@ class ConfigurationController extends BaseController {
         ->with('CoupleAnneeFilliere-add', 'Une erreur s est produite lors de l ajout du couple !');
 
       }
+
+    }
+    
     }
 
 
