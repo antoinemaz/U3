@@ -8,6 +8,9 @@
   </div>
 @endif
 
+@if(Session::has('CoupleAnneeFilliere-addexiste'))
+	<div class="alert alert-danger custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
+@endif
 @if(Session::has('CoupleAnneeFilliere-add'))
 	<div class="alert alert-success custom-alert center" role="alert">{{Session::get('CoupleAnneeFilliere-add')}}</div>
 @endif

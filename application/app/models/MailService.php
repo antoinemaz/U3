@@ -4,6 +4,14 @@ header('Content-type: text/plain; charset=utf-8');
 
 class MailService {
 
+	public function sendMailFinalisationGestionnaire($user, $idCandidature){
+		// Envoi du mail d'activation du compte
+		Mail::send('emails.finalisationCandidature', array('lien' => URL::route('detailCandidature-get', $idCandidature)), 
+			function($message) use (){
+			$message->to($user->email, $user->username)->subject('Nouvelle candidature');
+		});
+	}
+
 	public function sendMailActivationCompte($user, $code){
 		// Envoi du mail d'activation du compte
 		Mail::send('emails.activerCompte', array('lien' => URL::route('activerCompte', $code)), 
