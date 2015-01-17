@@ -8,13 +8,17 @@
 
         <?php
 
+		  # obtention du nom du répertoire d'uploads
+		  $properties = parse_ini_file("properties.ini");
+	      $path = $properties['uploadsPath'];
+
           $count = 0;
 
           foreach ($pieces as $key => $value) {
             $count++;
             ?>
             // Javascript : instance d'un objet PDFObject pour l'affichage du PDF dans la page
-            var myPDF = new PDFObject({ url: '../../uploads/<?php echo $value->uid ?>' })
+            var myPDF = new PDFObject({ url: '../../{{$path}}<?php echo $value->uid ?>' })
             .embed('pdf'+<?php echo $count;  ?> );
             <?php
           }

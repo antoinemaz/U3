@@ -16,13 +16,18 @@ class ConfigurationController extends BaseController {
       $properties = $this->getValueOfConfiguration();
 
       //Tableau temporaire à remplacer par ce que l'on réupère dans redmine
-      $tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];
+      $client = new RedmineClient();
+      $tabFilliere = $client->getFilieres();
 
-      $annee_convoitee[2] = ('Année L2');
+      /*$tabFilliere = ["MIAGE","MIAGE App","ASR","Info","FC"];*/
+
+      $annee_convoitee = $client->getAnneesUniversite();
+
+/*      $annee_convoitee[2] = ('Année L2');
       $annee_convoitee[3] = 'Année L3';
       $annee_convoitee[4] = 'Année M1';
       $annee_convoitee[5] = 'Année M2';
-      $annee_convoitee[6] = 'Information sur le site';
+      $annee_convoitee[6] = 'Information sur le site';*/
 
       //Récupération dans la table associative des couples Année/Fillière du user courant
        $coupleAnneeFilliere= DB::table('correspondances')

@@ -10,7 +10,14 @@
 @foreach ($pjs as $pj)
 	<tr>
 		<td>{{ $pj->filename }}</td>
-		<td><a class="file" href="../uploads/{{$pj->uid}}">Télécharger</a></td>
+
+		<?php
+			# obtention du nom du répertoire d'uploads
+			$properties = parse_ini_file("properties.ini");
+            $path = $properties['uploadsPath'];
+		?>
+
+		<td><a class="file" href="../{{$path}}{{$pj->uid}}">Télécharger</a></td>
 
 		@if($readonly == false)
 			<td><a class="cn" id="{{$pj->id}}" class="file" href="">Supprimer</a></td>
