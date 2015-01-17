@@ -2,7 +2,7 @@
 
 U3 est un projet informatique qui a pour but de traiter des candidatures de différentes filières de l'université d'Evry.
 
-Actuellement, les candidatures reçues sont rescenceés dans un outil nommé Redmine. Chaque responsable doit reprendre chaque candidature papier pour les insérer dans cet outil.
+Actuellement, les candidatures reçues sont rescencées dans un outil nommé Redmine. Chaque responsable doit reprendre chaque candidature papier pour les insérer dans cet outil.
 
 La plateforme en cours de développement est un espace permettant de gérer les candidatures, avant qu'elles soient intégrées dans Redmine. Les candidatures transférées dans Redmine sont alors acceptées administrativement.
 
@@ -31,19 +31,19 @@ La plateforme en cours de développement est un espace permettant de gérer les 
 - Renseignement des stages
 - Renseignement des diplomes
 - Ajout de pièces jointes (CV, lettre de motivation...)
-- Page d'envoie de la candidature
+- Page d'envoi de la candidature
 
 **Partie gestionnaire :**
 - Page de configuration : 
   -> Filtre des candidatures : choix de plusieurs couples filiere/année afin de pouvoir afficher les candidatures qui concernent les gestionnaires
 - Liste des candidatures filtrées 
-- Détail de chaque candidature : Informations de la candidatures, diplômes, stages et PJs (PDFs) ouvertes direcement dans la page. Toutes ces informations sont présentes sur une seule page. 
+- Détail de chaque candidature : Informations de la candidature, diplômes, stages et PJs (PDFs) ouvertes direcement dans la page. Toutes ces informations sont présentes sur une seule page. 
 - Pour une candidature, le gestionnaire peut choisir l'état : A revoir, validée, ou refusée. En cas de validation, la candidature est transférée dans Redmine.
 
 **Partie administrateur :**
-Hérite des actions du gestionnaires.  
+Hérite des actions du gestionnaire.  
 - Page de configuration : 
-  -> Création de compte gestionnaire ou administrateurs
+  -> Création de comptes gestionnaires et administrateurs
   -> Choix de la période d'inscription et option d'envoi de mails aux gestionnaires en cas de nouvelles candidatures
   -> Purge des données (étudiants/candidatures/stages/diplômes/pièces jointes)
 
