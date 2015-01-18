@@ -13,10 +13,14 @@
 		<div class="panel-body">
 
 		@if(Session::has('error_change_password'))
-			<p>{{Session::get('error_change_password')}}</p>
+			<div class="alert alert-danger custom-alert center" role="alert">
+				{{Session::get('error_change_password')}}
+			</div>
 		@endif
 		@if(Session::has('ancien_passord_incorrect'))
-			<p>{{Session::get('ancien_passord_incorrect')}}</p>
+			<div class="alert alert-danger custom-alert center" role="alert">
+				{{Session::get('ancien_passord_incorrect')}}
+			</div>
 		@endif
 		<form action="{{URL::route('password-oublie-post')}}" method="POST" class="form-horizontal inscription">
 			

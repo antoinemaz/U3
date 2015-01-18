@@ -230,7 +230,7 @@ class RedmineClient {
 			// had to create the string this way to make sure it got valid json format
 			 $data['issue'] = array(
 		 	// A automatiser : correpond à l'année postulée
-			'project_id' => 3,
+			'project_id' => $candidature->annee_convoitee,
 			'tracker_id' => 4,
 			'status_id' => 1,
 			'priority_id' => 2, 

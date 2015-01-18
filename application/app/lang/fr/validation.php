@@ -151,6 +151,7 @@ return array(
 "nom" => "Nom",
 "adresse" => "Adresse",
 "travail_effectue" => "Travail effectué",
-"file" => "Fichier"
+"file" => "Fichier",
+"password_again" => "Confirmation Mot de passe"
 ),
 );

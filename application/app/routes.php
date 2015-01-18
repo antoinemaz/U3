@@ -125,11 +125,6 @@ Route::group(array('before' => 'auth'), function(){
 	'as' => 'finalisation-get',
 	'uses' => 'CandidatureController@getFinalisation'));
 
-	// GET Page de test
-	Route::get('/testDiplome', array(
-	'as' => 'testDiplome-get',
-	'uses' => 'HomeController@getDiplome'));
-
 	// SI c'est un gestionnaire
 	Route::group(array('before' => 'gestionnaire'), function() {
 

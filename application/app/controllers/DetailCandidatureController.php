@@ -209,7 +209,7 @@ class DetailCandidatureController extends BaseController {
 	    		if($piece->count()){
 				$piece = $piece->first();
 
-				if(Auth::user()->role_id == 2){
+				if(Auth::user()->role_id == Constantes::GESTIONNAIRE or Auth::user()->role_id == Constantes::ADMINISTRATEUR){
 
 					$properties = parse_ini_file("properties.ini");
         		    $path = $properties['uploadsPath'];

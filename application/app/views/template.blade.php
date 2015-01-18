@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Laravel PHP Framework</title>
+	<title>Evry - Portail de dépôt de candidature</title>
 
 	{{ HTML::script('js-css-img/js/jquery-1.11.1.min.js') }}
 	{{ HTML::script('js-css-img/js/bootstrap.js') }}

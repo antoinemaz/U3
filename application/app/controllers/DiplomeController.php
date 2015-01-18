@@ -185,13 +185,13 @@ class DiplomeController extends BaseController {
                             $diplome->rang = $value;
                             $diplome->save();
                         }
+                    }
 
                     if(Input::get('btnEnreg')){
                         return Redirect::route('diplome-get')->with('succes', 'Modifications effectuées');
                      }else{
                          return Redirect::route('stage-get');
                      }
-                }
             }
 
         }elseif(Input::get('btnPrecedent')){
