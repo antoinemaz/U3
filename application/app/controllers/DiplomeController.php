@@ -39,6 +39,21 @@ class DiplomeController extends BaseController {
 
                  // VALIDATOR COTE SERVEUR : cas particulier car on traite des tableaux d'input 
 
+                 // BAC VALIDATOR
+                foreach (Input::get('bac') as $bacInput) {
+
+                   $validator = Validator::make(
+                        array('bac' => $bacInput),
+                        array('bac' => array('numeric'))
+                        );
+
+                        if($validator->fails()){
+                        return Redirect::route('diplome-get')
+                        ->withErrors($validator)
+                        ->withInput();
+                       } 
+                 }
+
                 // ANNEE VALIDATOR
                 foreach (Input::get('annee') as $anneeInput) {
 
@@ -133,6 +148,15 @@ class DiplomeController extends BaseController {
                     $candidature_id = $candidature->id; 
 
                     // Diplomes
+                    foreach (Input::get('bac') as $key => $value) {
+                        $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
+                        if($diplome->count()){
+                            $diplome = $diplome->first();
+                            $diplome->numero = $value;
+                            $diplome->save();
+                        }
+                    }
+
                     foreach (Input::get('annee') as $key => $value) {
                         $diplome = Diplome::where('candidature_id', $candidature_id)->where('numero', '=', $key+1);
                         if($diplome->count()){

@@ -23,16 +23,10 @@
           @foreach($diplomes as $diplome)
           <tr>
             <td>
-              <p style="width:60px;margin-bottom: 8px;margin-top: 8px;">BAC 
-                <?php 
-                  // Si le numéro est égal à 1, cela équivaut au niveau BAC
-                  if($diplome->numero == 1){ 
-                    Print("");
-                  }else{  
-                    // sinon c'est de BAC+1 à BAC+5
-                    Print(" +"). ($diplome->numero - 1); 
-                  }
-                ?></p>
+                <div style="width: 80px;">
+                  <p style="display: inline-block;width: 45px;">BAC + </p>
+                   <input type="text" maxlength="1" class="form-control bac" style="display: inline-block;padding: 4px;width: 19px;" name="bac[]" value="{{ $diplome->numero}}" {{$readonly}} />
+                </div>
             </td>
             <td>
               <input type="text" maxlength="4" class="form-control annee" style="width:70px;" name="annee[]" value="{{ $diplome->annee}}" {{$readonly}} />

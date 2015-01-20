@@ -55,6 +55,26 @@
 
         $('#error').hide();
 
+           // On va tester le numéro du bac (BAC +1 ...) : il faut que ca soit un integer
+          // On parcours alors tous les champs annees
+          $('.bac').each(function(index) {
+
+            var bac = $(this).val();
+
+            // Champ vide : on laissera passé
+            if(bac != ''){
+              // Il faut que ça soit un integer
+              if(bac != parseInt(bac)){
+                $('#error').text('Vous devez renseigner des numéros de BAC corrects')
+                $('#error').show();
+                $('#succes').hide();
+                $('#errorServer').hide();
+                erreur = true;
+                return false;
+              };
+            }
+          });
+
           // On va tester l'année : il faut que ca soit un integer
           // On parcours alors tous les champs annees
           $('.annee').each(function(index) {
